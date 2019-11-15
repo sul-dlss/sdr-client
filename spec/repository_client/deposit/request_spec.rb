@@ -11,7 +11,7 @@ RSpec.describe RepositoryClient::Deposit::Request do
     RepositoryClient::Deposit::Files::DirectUploadResponse.new(
       checksum: '',
       byte_size: '',
-      file_name: 'file1.png',
+      filename: 'file1.png',
       content_type: '',
       signed_id: 'foo-file1'
     )
@@ -21,7 +21,7 @@ RSpec.describe RepositoryClient::Deposit::Request do
     RepositoryClient::Deposit::Files::DirectUploadResponse.new(
       checksum: '',
       byte_size: '',
-      file_name: 'file2.png',
+      filename: 'file2.png',
       content_type: '',
       signed_id: 'bar-file2'
     )

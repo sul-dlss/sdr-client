@@ -2,6 +2,8 @@
 
 require 'repository_client/version'
 require 'repository_client/deposit'
+require 'repository_client/cli'
+require 'faraday'
 
 module RepositoryClient
   class Error < StandardError; end

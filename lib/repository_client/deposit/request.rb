@@ -40,7 +40,7 @@ module RepositoryClient
           {
             "@context": CONTEXT,
             "@type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-            label: upload.file_name,
+            label: upload.filename,
             structural: {
               hasMember: [upload.signed_id]
             }
