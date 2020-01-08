@@ -1,4 +1,6 @@
-require "repository/client/version"
+# frozen_string_literal: true
+
+require 'repository/client/version'
 
 module Repository
   module Client
