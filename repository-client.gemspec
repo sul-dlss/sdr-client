@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Justin Coyne']
   spec.email         = ['jcoyne@justincoyne.com']
 
-  spec.summary       = %q{The CLI for https://github.com/sul-dlss/repository-api}
-  spec.description   = %q{This provides a way to deposit repository objects into the Stanford Digital Repository}
+  spec.summary       = 'The CLI for https://github.com/sul-dlss/repository-api'
+  spec.description   = 'This provides a way to deposit repository objects into the Stanford Digital Repository'
   spec.homepage      = 'https://github.com/sul-dlss/repository-client'
 
   spec.metadata['homepage_uri'] = spec.homepage
