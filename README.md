@@ -1,16 +1,16 @@
-[![Build Status](https://travis-ci.org/sul-dlss/repository-client.svg?branch=master)](https://travis-ci.org/sul-dlss/repository-client)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b5c93aeca1371e8fee2e/maintainability)](https://codeclimate.com/github/sul-dlss/repository-client/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/b5c93aeca1371e8fee2e/test_coverage)](https://codeclimate.com/github/sul-dlss/repository-client/test_coverage)
-[![Gem Version](https://badge.fury.io/rb/repository-client.svg)](https://badge.fury.io/rb/repository-client)
+[![Build Status](https://travis-ci.org/sul-dlss/sdr-client.svg?branch=master)](https://travis-ci.org/sul-dlss/sdr-client)
+[![Maintainability](https://api.codeclimate.com/v1/badges/1210855d46d4f424bf30/maintainability)](https://codeclimate.com/github/sul-dlss/sdr-client/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/1210855d46d4f424bf30/test_coverage)](https://codeclimate.com/github/sul-dlss/sdr-client/test_coverage)
+[![Gem Version](https://badge.fury.io/rb/sdr-client.svg)](https://badge.fury.io/rb/sdr-client)
 
-# Repository::Client
+# Sdr::Client
 
-This is a CLI for interacting with the Stanford digital repository API.
-The code for the repository API server is at https://github.com/sul-dlss/repository-api
+This is a CLI for interacting with the Stanford Digital Repository API.
+The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
 ## Usage
 
 Deposit a new object:
 ```
-sdr --service-url http://repository-api-server:3000 deposit --label 'hey there' file1.png file2.png
+sdr --service-url http://sdr-api-server:3000 deposit --label 'hey there' file1.png file2.png
 ```

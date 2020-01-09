@@ -2,7 +2,7 @@
 
 require 'logger'
 
-module RepositoryClient
+module SdrClient
   module Deposit
     # The process for doing a deposit
     class Process

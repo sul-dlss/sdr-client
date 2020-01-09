@@ -2,21 +2,21 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'repository_client/version'
+require 'sdr_client/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'repository-client'
-  spec.version       = RepositoryClient::VERSION
+  spec.name          = 'sdr-client'
+  spec.version       = SdrClient::VERSION
   spec.authors       = ['Justin Coyne']
   spec.email         = ['jcoyne@justincoyne.com']
 
-  spec.summary       = 'The CLI for https://github.com/sul-dlss/repository-api'
+  spec.summary       = 'The CLI for https://github.com/sul-dlss/sdr-api'
   spec.description   = 'This provides a way to deposit repository objects into the Stanford Digital Repository'
-  spec.homepage      = 'https://github.com/sul-dlss/repository-client'
+  spec.homepage      = 'https://github.com/sul-dlss/sdr-client'
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/sul-dlss/repository-client'
-  spec.metadata['changelog_uri'] = 'https://github.com/sul-dlss/repository-client/releases'
+  spec.metadata['source_code_uri'] = 'https://github.com/sul-dlss/sdr-client'
+  spec.metadata['changelog_uri'] = 'https://github.com/sul-dlss/sdr-client/releases'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

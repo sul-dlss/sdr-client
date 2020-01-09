@@ -2,7 +2,7 @@
 
 require 'digest'
 
-module RepositoryClient
+module SdrClient
   module Deposit
     module Files
       DirectUploadRequest = Struct.new(:checksum, :byte_size, :content_type, :filename, keyword_init: true) do
