@@ -89,11 +89,18 @@ module RepositoryClient
         logger.info("Starting upload metadata: #{metadata}")
         request_json = JSON.generate(metadata)
         response = Faraday.post(url + DRO_PATH, request_json, 'Content-Type' => 'application/json')
-        raise "unexpected response: #{response.inspect}" unless response.status == 200
+        unexpected_response(response) unless response.status == 200
 
         logger.info("Response from server: #{response.body}")
 
         JSON.parse(response.body)
+      end
+
+      def unexpected_response(response)
+        raise "unexpected response: #{response.inspect}" unless response.status == 400
+
+        puts "\nThere was an error with your request: #{response.body}"
+        exit(1)
       end
     end
   end
