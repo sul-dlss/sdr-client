@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe RepositoryClient::Deposit::Process do
+RSpec.describe SdrClient::Deposit::Process do
   let(:instance) do
     described_class.new(label: 'This is my object',
                         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',

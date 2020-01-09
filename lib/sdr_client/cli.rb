@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module RepositoryClient
+module SdrClient
   # The command line interface
   module CLI
     def self.start(command, options)
       case command
       when 'deposit'
-        RepositoryClient::Deposit.run(options)
+        SdrClient::Deposit.run(options)
       end
     end
   end

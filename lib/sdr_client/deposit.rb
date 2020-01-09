@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RepositoryClient
+module SdrClient
   # The namespace for the "deposit" command
   module Deposit
     def self.run(label:,
@@ -11,7 +11,7 @@ module RepositoryClient
   end
 end
 require 'json'
-require 'repository_client/deposit/files/direct_upload_request'
-require 'repository_client/deposit/files/direct_upload_response'
-require 'repository_client/deposit/request'
-require 'repository_client/deposit/process'
+require 'sdr_client/deposit/files/direct_upload_request'
+require 'sdr_client/deposit/files/direct_upload_response'
+require 'sdr_client/deposit/request'
+require 'sdr_client/deposit/process'

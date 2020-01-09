@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe RepositoryClient::Deposit::Request do
+RSpec.describe SdrClient::Deposit::Request do
   let(:instance) do
     described_class.new(label: 'This is my object',
                         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
@@ -8,7 +8,7 @@ RSpec.describe RepositoryClient::Deposit::Request do
   end
 
   let(:upload1) do
-    RepositoryClient::Deposit::Files::DirectUploadResponse.new(
+    SdrClient::Deposit::Files::DirectUploadResponse.new(
       checksum: '',
       byte_size: '',
       filename: 'file1.png',
@@ -18,7 +18,7 @@ RSpec.describe RepositoryClient::Deposit::Request do
   end
 
   let(:upload2) do
-    RepositoryClient::Deposit::Files::DirectUploadResponse.new(
+    SdrClient::Deposit::Files::DirectUploadResponse.new(
       checksum: '',
       byte_size: '',
       filename: 'file2.png',

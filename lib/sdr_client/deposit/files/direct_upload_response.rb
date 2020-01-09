@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RepositoryClient
+module SdrClient
   module Deposit
     module Files
       DirectUploadResponse = Struct.new(:id, :key, :checksum, :byte_size, :content_type,

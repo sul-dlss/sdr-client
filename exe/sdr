@@ -37,6 +37,6 @@ end
 
 subcommands[command].order!
 
-require 'repository_client'
+require 'sdr_client'
 options[:files] = ARGV unless ARGV.empty?
-RepositoryClient::CLI.start(command, options)
+SdrClient::CLI.start(command, options)

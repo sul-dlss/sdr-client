@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RepositoryClient
+module SdrClient
   module Deposit
     # This represents the metadata that we send to the server for doing a deposit
     class Request
@@ -8,7 +8,7 @@ module RepositoryClient
 
       # @param [String] label the required object label
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
-      # @param [Array<RepositoryClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
+      # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
       def initialize(label:,
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
                      uploads: [])

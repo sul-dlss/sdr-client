@@ -11,7 +11,7 @@
 # Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
 Layout/ExtraSpacing:
   Exclude:
-    - 'repository-client.gemspec'
+    - 'sdr-client.gemspec'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -19,4 +19,4 @@ Layout/ExtraSpacing:
 # SupportedStylesForExponentOperator: space, no_space
 Layout/SpaceAroundOperators:
   Exclude:
-    - 'repository-client.gemspec'
+    - 'sdr-client.gemspec'

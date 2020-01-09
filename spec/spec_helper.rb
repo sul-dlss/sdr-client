@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'repository_client'
+require 'sdr_client'
 require 'byebug'
 require 'webmock/rspec'
 
