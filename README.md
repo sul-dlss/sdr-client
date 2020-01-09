@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/sul-dlss/repository-client.svg?branch=master)](https://travis-ci.org/sul-dlss/repository-client)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b5c93aeca1371e8fee2e/maintainability)](https://codeclimate.com/github/sul-dlss/repository-client/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b5c93aeca1371e8fee2e/test_coverage)](https://codeclimate.com/github/sul-dlss/repository-client/test_coverage)
-(TODO: gem version badge here)
+[![Gem Version](https://badge.fury.io/rb/repository-client.svg)](https://badge.fury.io/rb/repository-client)
 
 # Repository::Client
 
