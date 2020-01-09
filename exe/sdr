@@ -10,7 +10,28 @@ global = OptionParser.new do |opts|
     options[:url] = url
   end
   opts.on('-h', '--help', 'Display this screen') do
-    puts opts
+    puts <<~HELP
+      DESCRIPTION:
+        The SDR Command Line Interface is a tool to interact with the Stanford Digital Repository.
+
+      SYNOPSIS:
+        sdr [options] <command>
+
+      OPTIONS:
+        --service-url (string)
+        Override the command's default URL with the given URL.
+
+        -h, --help
+        Displays this screen
+
+      COMMANDS
+        deposit
+        deposit files to the SDR
+
+        login
+        Will prompt for email & password and exchange it for an login token, which it saves in ~/.sdr/token
+
+    HELP
     exit
   end
 end
