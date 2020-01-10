@@ -81,15 +81,16 @@ module SdrClient
         raise "unexpected response: #{upload_response.inspect}" unless upload_response.status == 204
       end
 
+      # @return [Hash<Symbol,String>] the result of the metadata call
       def upload_metadata(metadata)
         logger.info("Starting upload metadata: #{metadata}")
         request_json = JSON.generate(metadata)
         response = connection.post(DRO_PATH, request_json, 'Content-Type' => 'application/json')
-        unexpected_response(response) unless response.status == 200
+        unexpected_response(response) unless response.status == 201
 
         logger.info("Response from server: #{response.body}")
 
-        JSON.parse(response.body)
+        { druid: JSON.parse(response.body)['druid'], background_job: response.headers['Location'] }
       end
 
       def unexpected_response(response)
