@@ -5,6 +5,9 @@ RSpec.describe SdrClient::Deposit::Process do
     described_class.new(label: 'This is my object',
                         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                         url: 'http://example.com:3000',
+                        apo: 'druid:bc123df4567',
+                        collection: 'druid:gh123df4567',
+                        source_id: 'googlebooks:12345',
                         files: files,
                         logger: logger)
   end
@@ -80,17 +83,16 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"@context":"http://cocina.sul.stanford.edu/contexts/cocina-base.jsonld",' \
-                    '"@type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
-                    '"label":"This is my object",' \
-                    '"structural":{"hasMember":[' \
-                    '{"@context":"http://cocina.sul.stanford.edu/contexts/cocina-base.jsonld",' \
-                    '"@type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"file1.txt",' \
-                    '"structural":{"hasMember":["BaHBLZz09Iiw"]}},'\
-                    '{"@context":"http://cocina.sul.stanford.edu/contexts/cocina-base.jsonld",' \
-                    '"@type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"file2.txt",' \
-                    '"structural":{"hasMember":["dz09IiwiZXhwIjpudWxsLC"]}}' \
-                    ']}}',
+              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
+                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
+                    '"identification":{"sourceId":"googlebooks:12345"},' \
+                    '"structural":' \
+                    '{"isMemberOf":"druid:gh123df4567",' \
+                    '"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+                    '"label":"file1.txt","structural":{"hasMember":["BaHBLZz09Iiw"]}},' \
+                    '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+                    '"label":"file2.txt","structural":{"hasMember":["dz09IiwiZXhwIjpudWxsLC"]}}]},' \
+                    '"label":"This is my object"}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200, body: '{"status":"accepted"}')

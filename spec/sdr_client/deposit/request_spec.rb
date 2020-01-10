@@ -4,6 +4,9 @@ RSpec.describe SdrClient::Deposit::Request do
   let(:instance) do
     described_class.new(label: 'This is my object',
                         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                        apo: 'druid:bc123df4567',
+                        collection: 'druid:gh123df4567',
+                        source_id: 'googlebooks:12345',
                         uploads: [upload1, upload2])
   end
 
@@ -31,22 +34,22 @@ RSpec.describe SdrClient::Deposit::Request do
     subject { instance.as_json }
     let(:expected) do
       {
-        :@context => 'http://cocina.sul.stanford.edu/contexts/cocina-base.jsonld',
-        :@type => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+        type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
         label: 'This is my object',
+        administrative: { hasAdminPolicy: 'druid:bc123df4567' },
+        identification: { sourceId: 'googlebooks:12345' },
         structural: {
+          isMemberOf: 'druid:gh123df4567',
           hasMember: [
             {
-              :@context => 'http://cocina.sul.stanford.edu/contexts/cocina-base.jsonld',
-              :@type => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-              :label => 'file1.png',
-              :structural => { hasMember: ['foo-file1'] }
+              type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+              label: 'file1.png',
+              structural: { hasMember: ['foo-file1'] }
             },
             {
-              :@context => 'http://cocina.sul.stanford.edu/contexts/cocina-base.jsonld',
-              :@type => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-              :label => 'file2.png',
-              :structural => { hasMember: ['bar-file2'] }
+              type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+              label: 'file2.png',
+              structural: { hasMember: ['bar-file2'] }
             }
           ]
         }

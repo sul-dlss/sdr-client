@@ -8,11 +8,17 @@ module SdrClient
     class Process
       BLOB_PATH = '/rails/active_storage/direct_uploads'
       DRO_PATH = '/v1/resources'
-      def initialize(label:, type:, url:, files: [], logger: Logger.new(STDOUT))
+      def initialize(label: nil, type:, url:,
+                     apo:, collection:, source_id:, catkey: nil,
+                     files: [], logger: Logger.new(STDOUT))
         @label = label
         @type = type
         @files = files
         @url = url
+        @apo = apo
+        @collection = collection
+        @source_id = source_id
+        @catkey = catkey
         @logger = logger
       end
 
@@ -23,13 +29,17 @@ module SdrClient
         upload_files(upload_responses)
         metadata = Request.new(label: label,
                                type: type,
+                               apo: apo,
+                               collection: collection,
+                               source_id: source_id,
+                               catkey: catkey,
                                uploads: upload_responses.values)
         upload_metadata(metadata.as_json)
       end
 
       private
 
-      attr_reader :label, :type, :files, :url, :logger
+      attr_reader :label, :type, :apo, :collection, :source_id, :catkey, :files, :url, :logger
 
       def check_files_exist
         logger.info('checking to see if files exist')
