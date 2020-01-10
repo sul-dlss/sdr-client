@@ -7,7 +7,7 @@ module SdrClient
                  type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                  apo:,
                  collection:,
-                 catkey:,
+                 catkey: nil,
                  source_id:,
                  url:, files: [])
 
