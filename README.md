@@ -12,5 +12,8 @@ The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
 Deposit a new object:
 ```
-sdr --service-url http://sdr-api-server:3000 deposit --label 'hey there' file1.png file2.png
+sdr --service-url https://sdr-api-server:3000 deposit --label 'hey there' \
+  --admin-policy 'druid:bk123gh4567' \
+  --collection 'druid:gh456kw9876' \
+  --source-id 'googlebooks:stanford_12345' file1.png file2.png
 ```
