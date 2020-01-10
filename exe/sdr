@@ -64,7 +64,8 @@ subcommands = {
       puts opts
       exit
     end
-  end
+  end,
+  'login' => OptionParser.new
 }
 
 unless subcommands.key?(command)

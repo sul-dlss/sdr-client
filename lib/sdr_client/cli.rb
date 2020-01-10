@@ -7,6 +7,10 @@ module SdrClient
       case command
       when 'deposit'
         SdrClient::Deposit.run(options)
+      when 'login'
+        SdrClient::Login.run(options)
+      else
+        raise "Unknown command #{command}"
       end
     end
   end

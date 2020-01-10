@@ -8,9 +8,10 @@ module SdrClient
     class Process
       BLOB_PATH = '/rails/active_storage/direct_uploads'
       DRO_PATH = '/v1/resources'
-      def initialize(metadata:, url:, files: [], logger: Logger.new(STDOUT))
+      def initialize(metadata:, url:, token:, files: [], logger: Logger.new(STDOUT))
         @files = files
         @url = url
+        @token = token
         @metadata = metadata
         @logger = logger
       end
@@ -26,7 +27,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :files, :url, :logger
+      attr_reader :metadata, :files, :url, :token, :logger
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -48,7 +49,7 @@ module SdrClient
 
       def direct_upload(metadata_json)
         logger.info("Starting an upload request: #{metadata_json}")
-        response = Faraday.post(url + BLOB_PATH, metadata_json, 'Content-Type' => 'application/json')
+        response = connection.post(BLOB_PATH, metadata_json, 'Content-Type' => 'application/json')
         raise "unexpected response: #{response.inspect}" unless response.status == 200
 
         logger.info("Response from server: #{response.body}")
@@ -70,10 +71,8 @@ module SdrClient
 
       def upload_file(filename:, url:, content_type:, content_length:)
         logger.info("Uploading `#{filename}' to #{url}")
-        conn = Faraday.new(url) do |builder|
-          builder.adapter :net_http
-        end
-        upload_response = conn.put(url) do |req|
+
+        upload_response = connection.put(url) do |req|
           req.body = File.open(filename)
           req.headers['Content-Type'] = content_type
           req.headers['Content-Length'] = content_length.to_s
@@ -85,7 +84,7 @@ module SdrClient
       def upload_metadata(metadata)
         logger.info("Starting upload metadata: #{metadata}")
         request_json = JSON.generate(metadata)
-        response = Faraday.post(url + DRO_PATH, request_json, 'Content-Type' => 'application/json')
+        response = connection.post(DRO_PATH, request_json, 'Content-Type' => 'application/json')
         unexpected_response(response) unless response.status == 200
 
         logger.info("Response from server: #{response.body}")
@@ -98,6 +97,13 @@ module SdrClient
 
         puts "\nThere was an error with your request: #{response.body}"
         exit(1)
+      end
+
+      def connection
+        @connection ||= Faraday.new(url: url) do |conn|
+          conn.authorization :Bearer, token
+          conn.adapter :net_http
+        end
       end
     end
   end

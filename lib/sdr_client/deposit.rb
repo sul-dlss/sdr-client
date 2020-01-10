@@ -10,6 +10,7 @@ module SdrClient
                  catkey:,
                  source_id:,
                  url:, files: [])
+      token = Credentials.read
 
       metadata = Request.new(label: label,
                              type: type,
@@ -17,7 +18,7 @@ module SdrClient
                              collection: collection,
                              source_id: source_id,
                              catkey: catkey)
-      Process.new(metadata: metadata, url: url, files: files).run
+      Process.new(metadata: metadata, url: url, token: token, files: files).run
     end
   end
 end

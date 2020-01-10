@@ -10,6 +10,12 @@ The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
 ## Usage
 
+Log in:
+```
+sdr --service-url http://sdr-api-server:3000 login
+```
+
+
 Deposit a new object:
 ```
 sdr --service-url http://sdr-api-server:3000 deposit --label 'hey there' file1.png file2.png
