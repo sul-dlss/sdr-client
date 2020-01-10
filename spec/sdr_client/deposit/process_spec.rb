@@ -88,7 +88,8 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
+              body: '{"access":{},' \
+                    '"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
                     '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
                     '"identification":{"sourceId":"googlebooks:12345"},' \
                     '"structural":' \

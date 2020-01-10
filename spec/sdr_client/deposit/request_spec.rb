@@ -36,6 +36,7 @@ RSpec.describe SdrClient::Deposit::Request do
       {
         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
         label: 'This is my object',
+        access: {},
         administrative: { hasAdminPolicy: 'druid:bc123df4567' },
         identification: { sourceId: 'googlebooks:12345' },
         structural: {

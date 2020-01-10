@@ -25,6 +25,7 @@ module SdrClient
 
       def as_json
         {
+          access: {},
           type: type,
           administrative: administrative,
           identification: identification,
