@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 RSpec.describe SdrClient::Deposit::Process do
+  let(:metadata) do
+    SdrClient::Deposit::Request.new(label: 'This is my object',
+                                    type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                                    apo: 'druid:bc123df4567',
+                                    collection: 'druid:gh123df4567',
+                                    source_id: 'googlebooks:12345')
+  end
+
   let(:instance) do
-    described_class.new(label: 'This is my object',
-                        type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+    described_class.new(metadata: metadata,
                         url: 'http://example.com:3000',
-                        apo: 'druid:bc123df4567',
-                        collection: 'druid:gh123df4567',
-                        source_id: 'googlebooks:12345',
                         files: files,
                         logger: logger)
   end

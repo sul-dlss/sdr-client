@@ -24,27 +24,49 @@ module SdrClient
       end
 
       def as_json
-        json = {
+        {
           type: type,
-          administrative: {
-            hasAdminPolicy: apo
-          },
-          identification: {
-            sourceId: source_id
-          },
-          structural: {
-            isMemberOf: collection,
-            hasMember: file_sets_as_json
-          }
-        }
-        json[:label] = label if label
-        json[:identification][:catkey] = catkey if catkey
-        json
+          administrative: administrative,
+          identification: identification,
+          structural: structural
+        }.tap do |json|
+          json[:label] = label if label
+        end
+      end
+
+      # @return [Request] a clone of this request with the uploads added
+      def with_uploads(uploads)
+        Request.new(label: label,
+                    apo: apo,
+                    collection: collection,
+                    source_id: source_id,
+                    catkey: catkey,
+                    type: type,
+                    uploads: uploads)
       end
 
       private
 
       attr_reader :label, :uploads, :source_id, :catkey, :apo, :collection, :type
+
+      def administrative
+        {
+          hasAdminPolicy: apo
+        }
+      end
+
+      def identification
+        { sourceId: source_id }.tap do |json|
+          json[:catkey] = catkey if catkey
+        end
+      end
+
+      def structural
+        {
+          isMemberOf: collection,
+          hasMember: file_sets_as_json
+        }
+      end
 
       # In this case there is a 1-1 mapping between Files and FileSets,
       # but this doesn't always have to be the case.  We could change this in the

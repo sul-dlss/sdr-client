@@ -10,8 +10,14 @@ module SdrClient
                  catkey:,
                  source_id:,
                  url:, files: [])
-      Process.new(label: label, type: type, url: url, files: files,
-                  apo: apo, collection: collection, catkey: catkey, source_id: source_id).run
+
+      metadata = Request.new(label: label,
+                             type: type,
+                             apo: apo,
+                             collection: collection,
+                             source_id: source_id,
+                             catkey: catkey)
+      Process.new(metadata: metadata, url: url, files: files).run
     end
   end
 end
