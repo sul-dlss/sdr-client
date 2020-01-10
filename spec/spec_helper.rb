@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'sdr_client'
 require 'byebug'
 require 'webmock/rspec'
-
 require 'simplecov'
-SimpleCov.start
+
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
+require 'sdr_client'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
