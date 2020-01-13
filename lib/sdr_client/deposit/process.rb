@@ -6,7 +6,7 @@ module SdrClient
   module Deposit
     # The process for doing a deposit
     class Process
-      BLOB_PATH = '/rails/active_storage/direct_uploads'
+      BLOB_PATH = '/v1/direct_uploads'
       DRO_PATH = '/v1/resources'
       def initialize(metadata:, url:, token:, files: [], logger: Logger.new(STDOUT))
         @files = files
