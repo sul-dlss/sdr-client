@@ -8,6 +8,11 @@ module SdrClient
     class Process
       BLOB_PATH = '/v1/direct_uploads'
       DRO_PATH = '/v1/resources'
+      # @param [Request] metadata information about the object
+      # @param [String] url the server to send to
+      # @param [String] token the bearer auth token for the server
+      # @param [Array<String>] files a list of file names to upload
+      # @param [Logger] logger the logger to use
       def initialize(metadata:, url:, token:, files: [], logger: Logger.new(STDOUT))
         @files = files
         @url = url
