@@ -32,10 +32,10 @@ RSpec.describe SdrClient::Deposit::Process do
 
     context 'when files exist' do
       let(:files) { ['spec/fixtures/file1.txt', 'spec/fixtures/file2.txt'] }
-      let(:upload_url1) { 'http://localhost:3000/rails/active_storage/disk/GpscGFUTmxO' }
-      let(:upload_url2) { 'http://localhost:3000/rails/active_storage/disk/npoa1pIVjZP' }
+      let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
+      let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' }
       before do
-        stub_request(:post, 'http://example.com:3000/rails/active_storage/direct_uploads')
+        stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
           .with(
             body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",'\
                   '"content_type":"text/html"}}',
@@ -49,7 +49,7 @@ RSpec.describe SdrClient::Deposit::Process do
                            '"direct_upload":{"url":"' + upload_url1 + '","headers":{"Content-Type":"text/html"}}}',
                      headers: {})
 
-        stub_request(:post, 'http://example.com:3000/rails/active_storage/direct_uploads')
+        stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
           .with(
             body: '{"blob":{"filename":"file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",'\
                   '"content_type":"text/html"}}',
