@@ -8,7 +8,8 @@ module SdrClient
       when 'deposit'
         SdrClient::Deposit.run(options)
       when 'login'
-        SdrClient::Login.run(options)
+        status = SdrClient::Login.run(options)
+        puts status.value if status.failure?
       else
         raise "Unknown command #{command}"
       end
