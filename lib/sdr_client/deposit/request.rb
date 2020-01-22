@@ -73,15 +73,7 @@ module SdrClient
       # but this doesn't always have to be the case.  We could change this in the
       # future so that we have one FileSet that has an Image and its OCR file.
       def file_sets_as_json
-        uploads.map do |upload|
-          {
-            "type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-            label: upload.filename,
-            structural: {
-              hasMember: [upload.signed_id]
-            }
-          }
-        end
+        uploads.map { |upload| FileSet.new(uploads: [upload]).as_json }
       end
     end
   end

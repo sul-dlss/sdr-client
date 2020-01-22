@@ -25,5 +25,6 @@ end
 require 'json'
 require 'sdr_client/deposit/files/direct_upload_request'
 require 'sdr_client/deposit/files/direct_upload_response'
+require 'sdr_client/deposit/file_set'
 require 'sdr_client/deposit/request'
 require 'sdr_client/deposit/process'
