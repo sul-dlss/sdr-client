@@ -6,8 +6,8 @@ RSpec.describe SdrClient::Deposit::Request do
                         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                         apo: 'druid:bc123df4567',
                         collection: 'druid:gh123df4567',
-                        source_id: 'googlebooks:12345',
-                        uploads: [upload1, upload2])
+                        source_id: 'googlebooks:12345')
+                   .with_uploads([upload1, upload2])
   end
 
   let(:upload1) do
