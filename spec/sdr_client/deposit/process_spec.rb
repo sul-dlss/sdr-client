@@ -88,17 +88,19 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"access":{},' \
-                    '"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
-                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
-                    '"identification":{"sourceId":"googlebooks:12345"},' \
-                    '"structural":' \
-                    '{"isMemberOf":"druid:gh123df4567",' \
-                    '"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
-                    '"label":"file1.txt","structural":{"hasMember":["BaHBLZz09Iiw"]}},' \
-                    '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
-                    '"label":"file2.txt","structural":{"hasMember":["dz09IiwiZXhwIjpudWxsLC"]}}]},' \
-                    '"label":"This is my object"}',
+              body: '{"access":{},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
+              '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
+              '"identification":{"sourceId":"googlebooks:12345"},' \
+              '"structural":{"isMemberOf":"druid:gh123df4567",' \
+              '"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+              '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+              '"label":"file1.txt","filename":"file1.txt","externalIdentifier":"BaHBLZz09Iiw",' \
+              '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},' \
+              '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+              '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+              '"label":"file2.txt","filename":"file2.txt","externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
+              '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}]},' \
+              '"label":"This is my object"}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',

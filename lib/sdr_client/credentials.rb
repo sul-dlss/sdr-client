@@ -14,7 +14,7 @@ module SdrClient
     end
 
     def self.read
-      return IO.readlines(credentials_file, chomp: true).first if File.exist?(credentials_file)
+      return IO.readlines(credentials_file, chomp: true).first if ::File.exist?(credentials_file)
 
       puts 'Log in first'
       exit(1)

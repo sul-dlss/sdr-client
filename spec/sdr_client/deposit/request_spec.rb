@@ -44,13 +44,29 @@ RSpec.describe SdrClient::Deposit::Request do
           hasMember: [
             {
               type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-              label: 'file1.png',
-              structural: { hasMember: ['foo-file1'] }
+              structural: { hasMember:
+                [
+                  {
+                    type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                    label: 'file1.png',
+                    filename: 'file1.png',
+                    access: { access: 'dark' }, administrative: { sdrPreserve: false, shelve: false },
+                    externalIdentifier: 'foo-file1'
+                  }
+                ] }
             },
             {
               type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-              label: 'file2.png',
-              structural: { hasMember: ['bar-file2'] }
+              structural: { hasMember:
+                [
+                  {
+                    type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                    label: 'file2.png',
+                    filename: 'file2.png',
+                    access: { access: 'dark' }, administrative: { sdrPreserve: false, shelve: false },
+                    externalIdentifier: 'bar-file2'
+                  }
+                ] }
             }
           ]
         }
