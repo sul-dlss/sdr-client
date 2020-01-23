@@ -8,6 +8,10 @@
 This is a CLI for interacting with the Stanford Digital Repository API.
 The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
+## Install
+
+`gem install sdr-client`
+
 ## Usage
 
 Log in:
