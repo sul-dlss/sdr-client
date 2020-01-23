@@ -6,21 +6,21 @@ module SdrClient
     class Request
       # @param [String] label the required object label
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
-      # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
+      # @param [Array<FileSet>] file_sets the file sets to attach.
       def initialize(label: nil,
                      apo:,
                      collection:,
                      source_id:,
                      catkey: nil,
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
-                     uploads: [])
+                     file_sets: [])
         @label = label
         @type = type
         @source_id = source_id
         @collection = collection
         @catkey = catkey
         @apo = apo
-        @uploads = uploads
+        @file_sets = file_sets
       end
 
       def as_json
@@ -35,20 +35,28 @@ module SdrClient
         end
       end
 
+      # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
       # @return [Request] a clone of this request with the uploads added
       def with_uploads(uploads)
+        file_sets = uploads.map { |upload| FileSet.new(uploads: [upload]) }
+
         Request.new(label: label,
                     apo: apo,
                     collection: collection,
                     source_id: source_id,
                     catkey: catkey,
                     type: type,
-                    uploads: uploads)
+                    file_sets: file_sets)
       end
+
+      # In this case there is a 1-1 mapping between Files and FileSets,
+      # but this doesn't always have to be the case.  We could change this in the
+      # future so that we have one FileSet that has an Image and its OCR file.
+      def add_uploads_each_as_resource(uploads); end
 
       private
 
-      attr_reader :label, :uploads, :source_id, :catkey, :apo, :collection, :type
+      attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection, :type
 
       def administrative
         {
@@ -65,23 +73,8 @@ module SdrClient
       def structural
         {
           isMemberOf: collection,
-          hasMember: file_sets_as_json
+          hasMember: file_sets.map(&:as_json)
         }
-      end
-
-      # In this case there is a 1-1 mapping between Files and FileSets,
-      # but this doesn't always have to be the case.  We could change this in the
-      # future so that we have one FileSet that has an Image and its OCR file.
-      def file_sets_as_json
-        uploads.map do |upload|
-          {
-            "type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-            label: upload.filename,
-            structural: {
-              hasMember: [upload.signed_id]
-            }
-          }
-        end
       end
     end
   end

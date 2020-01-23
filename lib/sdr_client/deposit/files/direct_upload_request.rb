@@ -9,9 +9,9 @@ module SdrClient
         def self.from_file(filename)
           checksum = Digest::MD5.file(filename).base64digest
           new(checksum: checksum,
-              byte_size: File.size(filename),
+              byte_size: ::File.size(filename),
               content_type: 'text/html',
-              filename: File.basename(filename))
+              filename: ::File.basename(filename))
         end
 
         def as_json

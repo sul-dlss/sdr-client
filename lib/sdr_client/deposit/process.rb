@@ -37,7 +37,7 @@ module SdrClient
       def check_files_exist
         logger.info('checking to see if files exist')
         files.each do |file_name|
-          raise Errno::ENOENT, file_name unless File.exist?(file_name)
+          raise Errno::ENOENT, file_name unless ::File.exist?(file_name)
         end
       end
 
@@ -78,7 +78,7 @@ module SdrClient
         logger.info("Uploading `#{filename}' to #{url}")
 
         upload_response = connection.put(url) do |req|
-          req.body = File.open(filename)
+          req.body = ::File.open(filename)
           req.headers['Content-Type'] = content_type
           req.headers['Content-Length'] = content_length.to_s
         end
