@@ -7,7 +7,9 @@ RSpec.describe SdrClient::Deposit::Request do
                         apo: 'druid:bc123df4567',
                         collection: 'druid:gh123df4567',
                         source_id: 'googlebooks:12345')
-                   .with_uploads([upload1, upload2])
+  end
+  let(:with_file_sets) do
+    SdrClient::Deposit::DefaultFileSetBuilder.run(request: instance, uploads: [upload1, upload2])
   end
 
   let(:upload1) do
@@ -31,7 +33,7 @@ RSpec.describe SdrClient::Deposit::Request do
   end
 
   describe 'as_json' do
-    subject { instance.as_json }
+    subject { with_file_sets.as_json }
     let(:expected) do
       {
         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
