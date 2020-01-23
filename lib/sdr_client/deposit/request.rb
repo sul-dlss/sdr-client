@@ -38,7 +38,9 @@ module SdrClient
       # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
       # @return [Request] a clone of this request with the uploads added
       def with_uploads(uploads)
-        file_sets = uploads.map { |upload| FileSet.new(uploads: [upload]) }
+        file_sets = uploads.each_with_index.map do |upload, i|
+          FileSet.new(uploads: [upload], label: "Object #{i + 1}")
+        end
 
         Request.new(label: label,
                     apo: apo,
