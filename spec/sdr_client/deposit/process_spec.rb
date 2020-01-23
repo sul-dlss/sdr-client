@@ -93,10 +93,12 @@ RSpec.describe SdrClient::Deposit::Process do
               '"identification":{"sourceId":"googlebooks:12345"},' \
               '"structural":{"isMemberOf":"druid:gh123df4567",' \
               '"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+              '"label":"Object 1",' \
               '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
               '"label":"file1.txt","filename":"file1.txt","externalIdentifier":"BaHBLZz09Iiw",' \
               '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},' \
               '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+              '"label":"Object 2",' \
               '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
               '"label":"file2.txt","filename":"file2.txt","externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
               '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}]},' \

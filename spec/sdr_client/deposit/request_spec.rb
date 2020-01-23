@@ -44,6 +44,7 @@ RSpec.describe SdrClient::Deposit::Request do
           hasMember: [
             {
               type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+              label: 'Object 1',
               structural: { hasMember:
                 [
                   {
@@ -57,6 +58,7 @@ RSpec.describe SdrClient::Deposit::Request do
             },
             {
               type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+              label: 'Object 2',
               structural: { hasMember:
                 [
                   {

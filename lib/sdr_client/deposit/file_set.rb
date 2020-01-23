@@ -4,7 +4,8 @@ module SdrClient
   module Deposit
     # This represents the FileSet metadata that we send to the server for doing a deposit
     class FileSet
-      def initialize(uploads: [], files: [])
+      def initialize(uploads: [], files: [], label:)
+        @label = label
         @files = if !uploads.empty?
                    uploads.map do |upload|
                      File.new(external_identifier: upload.signed_id, label: upload.filename, filename: upload.filename)
@@ -17,6 +18,7 @@ module SdrClient
       def as_json
         {
           "type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+          "label": label,
           structural: {
             hasMember: files.map(&:as_json)
           }
@@ -25,7 +27,7 @@ module SdrClient
 
       private
 
-      attr_reader :files
+      attr_reader :files, :label
     end
   end
 end
