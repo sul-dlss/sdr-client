@@ -23,6 +23,7 @@ module SdrClient
   end
 end
 require 'json'
+require 'sdr_client/deposit/default_file_set_builder'
 require 'sdr_client/deposit/files/direct_upload_request'
 require 'sdr_client/deposit/files/direct_upload_response'
 require 'sdr_client/deposit/file'

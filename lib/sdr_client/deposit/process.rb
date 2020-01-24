@@ -9,16 +9,19 @@ module SdrClient
       BLOB_PATH = '/v1/direct_uploads'
       DRO_PATH = '/v1/resources'
       # @param [Request] metadata information about the object
+      # @param [#build] file_set_builder a strategy for constructing FileSets
       # @param [String] url the server to send to
       # @param [String] token the bearer auth token for the server
       # @param [Array<String>] files a list of file names to upload
       # @param [Logger] logger the logger to use
-      def initialize(metadata:, url:, token:, files: [], logger: Logger.new(STDOUT))
+      def initialize(metadata:, file_set_builder: DefaultFileSetBuilder, url:,
+                     token:, files: [], logger: Logger.new(STDOUT))
         @files = files
         @url = url
         @token = token
         @metadata = metadata
         @logger = logger
+        @file_set_builder = file_set_builder
       end
 
       def run
@@ -26,13 +29,13 @@ module SdrClient
         file_metadata = collect_file_metadata
         upload_responses = upload_file_metadata(file_metadata)
         upload_files(upload_responses)
-        request = metadata.with_uploads(upload_responses.values)
+        request = file_set_builder.run(request: metadata, uploads: upload_responses.values)
         upload_metadata(request.as_json)
       end
 
       private
 
-      attr_reader :metadata, :files, :url, :token, :logger
+      attr_reader :metadata, :files, :url, :token, :logger, :file_set_builder
 
       def check_files_exist
         logger.info('checking to see if files exist')

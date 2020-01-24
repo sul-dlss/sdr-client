@@ -35,13 +35,8 @@ module SdrClient
         end
       end
 
-      # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
-      # @return [Request] a clone of this request with the uploads added
-      def with_uploads(uploads)
-        file_sets = uploads.each_with_index.map do |upload, i|
-          FileSet.new(uploads: [upload], label: "Object #{i + 1}")
-        end
-
+      # @return [Request] a clone of this request with the file_sets added
+      def with_file_sets(file_sets)
         Request.new(label: label,
                     apo: apo,
                     collection: collection,
@@ -50,11 +45,6 @@ module SdrClient
                     type: type,
                     file_sets: file_sets)
       end
-
-      # In this case there is a 1-1 mapping between Files and FileSets,
-      # but this doesn't always have to be the case.  We could change this in the
-      # future so that we have one FileSet that has an Image and its OCR file.
-      def add_uploads_each_as_resource(uploads); end
 
       private
 
