@@ -29,7 +29,7 @@ module SdrClient
         file_metadata = collect_file_metadata
         upload_responses = upload_file_metadata(file_metadata)
         upload_files(upload_responses)
-        request = file_set_builder.run(request: metadata, uploads: upload_responses.values)
+        request = metadata.with_file_sets(file_set_builder.run(uploads: upload_responses.values))
         upload_metadata(request.as_json)
       end
 
