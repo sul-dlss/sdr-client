@@ -2,7 +2,7 @@
 
 module SdrClient
   module Deposit
-    # This stragegy is for building one file set per uploaded file
+    # This strategy is for building one file set per uploaded file
     class DefaultFileSetBuilder
       # @return [Request] request The initial request
       # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
