@@ -13,15 +13,18 @@ module SdrClient
       # @param [String] url the server to send to
       # @param [String] token the bearer auth token for the server
       # @param [Array<String>] files a list of file names to upload
+      # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
+      # Additional metadata includes access, preserve, shelve, md5, sha1
       # @param [Logger] logger the logger to use
       def initialize(metadata:, file_set_builder: DefaultFileSetBuilder, url:,
-                     token:, files: [], logger: Logger.new(STDOUT))
+                     token:, files: [], files_metadata: {}, logger: Logger.new(STDOUT))
         @files = files
         @url = url
         @token = token
         @metadata = metadata
         @logger = logger
         @file_set_builder = file_set_builder
+        @files_metadata = files_metadata
       end
 
       def run
@@ -29,13 +32,14 @@ module SdrClient
         file_metadata = collect_file_metadata
         upload_responses = upload_file_metadata(file_metadata)
         upload_files(upload_responses)
-        request = metadata.with_file_sets(file_set_builder.run(uploads: upload_responses.values))
+        request = metadata.with_file_sets(file_set_builder.run(uploads: upload_responses.values,
+                                                               uploads_metadata: files_metadata))
         upload_metadata(request.as_json)
       end
 
       private
 
-      attr_reader :metadata, :files, :url, :token, :logger, :file_set_builder
+      attr_reader :metadata, :files, :url, :token, :logger, :file_set_builder, :files_metadata
 
       def check_files_exist
         logger.info('checking to see if files exist')
