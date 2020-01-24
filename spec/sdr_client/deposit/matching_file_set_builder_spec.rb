@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe SdrClient::Deposit::MatchingFileSetBuilder do
-  let(:request) { described_class.run(request: initial_request, uploads: uploads) }
+  let(:file_sets) { described_class.run(uploads: uploads) }
   let(:initial_request) do
     SdrClient::Deposit::Request.new(label: 'This is my object',
                                     type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
@@ -31,6 +31,6 @@ RSpec.describe SdrClient::Deposit::MatchingFileSetBuilder do
   end
 
   it 'creates filesets' do
-    expect(request.as_json[:structural][:hasMember].size).to eq 3
+    expect(file_sets.size).to eq 3
   end
 end
