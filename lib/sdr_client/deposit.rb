@@ -3,13 +3,16 @@
 module SdrClient
   # The namespace for the "deposit" command
   module Deposit
+    # rubocop:disable Metrics/ParameterLists
     def self.run(label: nil,
                  type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                  apo:,
                  collection:,
                  catkey: nil,
                  source_id:,
-                 url:, files: [])
+                 url:,
+                 files: [],
+                 file_set_builder: DefaultFileSetBuilder)
       token = Credentials.read
 
       metadata = Request.new(label: label,
@@ -18,8 +21,9 @@ module SdrClient
                              collection: collection,
                              source_id: source_id,
                              catkey: catkey)
-      Process.new(metadata: metadata, url: url, token: token, files: files).run
+      Process.new(metadata: metadata, url: url, token: token, files: files, file_set_builder: file_set_builder).run
     end
+    # rubocop:enable Metrics/ParameterLists
   end
 end
 require 'json'

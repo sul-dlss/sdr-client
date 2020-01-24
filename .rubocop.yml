@@ -13,3 +13,5 @@ Layout/LineLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+  ExcludedMethods:
+    - 'OptionParser.new'
