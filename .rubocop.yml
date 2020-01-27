@@ -15,3 +15,7 @@ Metrics/BlockLength:
     - 'spec/**/*'
   ExcludedMethods:
     - 'OptionParser.new'
+
+Naming/FileName:
+  Exclude:
+    - 'lib/sdr-client.rb'
