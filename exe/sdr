@@ -65,14 +65,14 @@ subcommands = {
             'The strategy to use for distributing files into filesets. Either "default" or "filename"') do |strategy|
       strategy_class = case strategy
                        when 'filename'
-                         SdrClient::Deposit::MatchingFileSetBuilder
+                         SdrClient::Deposit::MatchingFileGroupingStrategy
                        when 'default'
-                         SdrClient::Deposit::DefaultFileSetBuilder
+                         SdrClient::Deposit::SingleFileGroupingStrategy
                        else
                          warn "Unknown strategy #{strategy}"
                          exit(1)
                        end
-      options[:file_set_builder] = strategy_class
+      options[:grouping_strategy] = strategy_class
     end
 
     opts.on('-h', '--help', 'Display this screen') do

@@ -1,14 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe SdrClient::Deposit::MatchingFileSetBuilder do
+RSpec.describe SdrClient::Deposit::SingleFileGroupingStrategy do
   let(:file_sets) { described_class.run(uploads: uploads) }
-  let(:initial_request) do
-    SdrClient::Deposit::Request.new(label: 'This is my object',
-                                    type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
-                                    source_id: 'googlebooks:12345',
-                                    collection: 'druid:gh123df4567',
-                                    apo: 'druid:bc123df4567')
-  end
 
   let(:uploads) do
     [
@@ -31,6 +24,6 @@ RSpec.describe SdrClient::Deposit::MatchingFileSetBuilder do
   end
 
   it 'creates filesets' do
-    expect(file_sets.size).to eq 3
+    expect(file_sets.size).to eq 5
   end
 end

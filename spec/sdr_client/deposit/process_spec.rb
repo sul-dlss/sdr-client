@@ -14,10 +14,13 @@ RSpec.describe SdrClient::Deposit::Process do
                         url: 'http://example.com:3000',
                         token: 'eyJhbGci',
                         files: files,
-                        logger: logger)
+                        logger: logger,
+                        files_metadata: files_metadata)
   end
 
   let(:logger) { instance_double(Logger, info: nil) }
+
+  let(:files_metadata) { {} }
 
   describe '.run' do
     subject { instance.run }
@@ -84,7 +87,7 @@ RSpec.describe SdrClient::Deposit::Process do
           .to_return(status: 204)
       end
 
-      context 'when metadata upload succeedes' do
+      context 'when metadata upload succeeds' do
         before do
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
@@ -103,6 +106,50 @@ RSpec.describe SdrClient::Deposit::Process do
               '"label":"file2.txt","filename":"file2.txt","externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
               '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}]},' \
               '"label":"This is my object"}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
+                       headers: { 'Location' => 'http://example.com/background_job/1' })
+        end
+
+        it 'uploads files' do
+          expect(subject).to eq(background_job: 'http://example.com/background_job/1',
+                                druid: 'druid:bc333df7777')
+        end
+      end
+
+      context 'when metadata upload succeeds with additional file metadata' do
+        let(:files_metadata) do
+          {
+            'file1.txt' => {
+              md5: 'abc123',
+              sha1: 'def456',
+              access: 'public',
+              preserve: true,
+              shelve: true
+            }
+          }
+        end
+
+        before do
+          stub_request(:post, 'http://example.com:3000/v1/resources')
+            .with(
+              body: '{"access":{},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
+          '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
+          '"identification":{"sourceId":"googlebooks:12345"},' \
+          '"structural":{"isMemberOf":"druid:gh123df4567",' \
+          '"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+          '"label":"Object 1",' \
+          '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+          '"label":"file1.txt","filename":"file1.txt","externalIdentifier":"BaHBLZz09Iiw",' \
+          '"access":{"access":"public"},"administrative":{"sdrPreserve":true,"shelve":true},' \
+          '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}]}]}},' \
+          '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
+          '"label":"Object 2",' \
+          '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+          '"label":"file2.txt","filename":"file2.txt","externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
+          '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}]},' \
+          '"label":"This is my object"}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',

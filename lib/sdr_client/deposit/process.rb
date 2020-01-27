@@ -9,19 +9,22 @@ module SdrClient
       BLOB_PATH = '/v1/direct_uploads'
       DRO_PATH = '/v1/resources'
       # @param [Request] metadata information about the object
-      # @param [#build] file_set_builder a strategy for constructing FileSets
+      # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [String] url the server to send to
       # @param [String] token the bearer auth token for the server
       # @param [Array<String>] files a list of file names to upload
+      # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
+      # Additional metadata includes access, preserve, shelve, md5, sha1
       # @param [Logger] logger the logger to use
-      def initialize(metadata:, file_set_builder: DefaultFileSetBuilder, url:,
-                     token:, files: [], logger: Logger.new(STDOUT))
+      def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy, url:,
+                     token:, files: [], files_metadata: {}, logger: Logger.new(STDOUT))
         @files = files
         @url = url
         @token = token
         @metadata = metadata
         @logger = logger
-        @file_set_builder = file_set_builder
+        @grouping_strategy = grouping_strategy
+        @files_metadata = files_metadata
       end
 
       def run
@@ -29,13 +32,14 @@ module SdrClient
         file_metadata = collect_file_metadata
         upload_responses = upload_file_metadata(file_metadata)
         upload_files(upload_responses)
-        request = metadata.with_file_sets(file_set_builder.run(uploads: upload_responses.values))
+        file_sets = build_filesets(uploads: upload_responses.values, files_metadata: files_metadata)
+        request = metadata.with_file_sets(file_sets)
         upload_metadata(request.as_json)
       end
 
       private
 
-      attr_reader :metadata, :files, :url, :token, :logger, :file_set_builder
+      attr_reader :metadata, :files, :url, :token, :logger, :grouping_strategy, :files_metadata
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -112,6 +116,18 @@ module SdrClient
         @connection ||= Faraday.new(url: url) do |conn|
           conn.authorization :Bearer, token
           conn.adapter :net_http
+        end
+      end
+
+      # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
+      # @param [Hash<String,Hash<String, String>>] files_metadata filename, hash of additional file metadata.
+      # @return [Array<SdrClient::Deposit::FileSet>] the uploads transformed to filesets
+      def build_filesets(uploads:, files_metadata:)
+        grouped_uploads = grouping_strategy.run(uploads: uploads)
+        grouped_uploads.each_with_index.map do |upload_group, i|
+          metadata_group = {}
+          upload_group.each { |upload| metadata_group[upload.filename] = files_metadata.fetch(upload.filename, {}) }
+          FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i + 1}")
         end
       end
     end
