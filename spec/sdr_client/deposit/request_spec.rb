@@ -9,11 +9,14 @@ RSpec.describe SdrClient::Deposit::Request do
                         source_id: 'googlebooks:12345')
   end
   let(:with_file_sets) do
-    instance.with_file_sets(file_set_builder)
+    instance.with_file_sets(file_sets)
   end
 
-  let(:file_set_builder) do
-    SdrClient::Deposit::DefaultFileSetBuilder.run(uploads: [upload1, upload2])
+  let(:file_sets) do
+    [
+      SdrClient::Deposit::FileSet.new(uploads: [upload1], label: 'Object 1'),
+      SdrClient::Deposit::FileSet.new(uploads: [upload2], label: 'Object 2')
+    ]
   end
 
   let(:upload1) do

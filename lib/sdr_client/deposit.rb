@@ -12,7 +12,7 @@ module SdrClient
                  source_id:,
                  url:,
                  files: [],
-                 file_set_builder: DefaultFileSetBuilder)
+                 grouping_strategy: SingleFileGroupingStrategy)
       token = Credentials.read
 
       metadata = Request.new(label: label,
@@ -21,14 +21,14 @@ module SdrClient
                              collection: collection,
                              source_id: source_id,
                              catkey: catkey)
-      Process.new(metadata: metadata, url: url, token: token, files: files, file_set_builder: file_set_builder).run
+      Process.new(metadata: metadata, url: url, token: token, files: files, grouping_strategy: grouping_strategy).run
     end
     # rubocop:enable Metrics/ParameterLists
   end
 end
 require 'json'
-require 'sdr_client/deposit/default_file_set_builder'
-require 'sdr_client/deposit/matching_file_set_builder'
+require 'sdr_client/deposit/single_file_grouping_strategy'
+require 'sdr_client/deposit/matching_file_grouping_strategy'
 require 'sdr_client/deposit/files/direct_upload_request'
 require 'sdr_client/deposit/files/direct_upload_response'
 require 'sdr_client/deposit/file'

@@ -12,7 +12,7 @@ RSpec.describe SdrClient::Deposit do
       allow(SdrClient::Deposit::Process).to receive(:new).and_return(process)
     end
 
-    context 'without a file_set_builder' do
+    context 'without a grouping_strategy' do
       subject(:run) do
         described_class.run(apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
@@ -20,10 +20,10 @@ RSpec.describe SdrClient::Deposit do
                             url: 'http://example.com/')
       end
 
-      it 'runs the process with the default file_set_builder' do
+      it 'runs the process with the default grouping_strategy' do
         run
         expect(SdrClient::Deposit::Process).to have_received(:new)
-          .with(file_set_builder: SdrClient::Deposit::DefaultFileSetBuilder,
+          .with(grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 files: [],
                 metadata: request,
                 token: 'token',
@@ -33,19 +33,19 @@ RSpec.describe SdrClient::Deposit do
       end
     end
 
-    context 'with a file_set_builder' do
+    context 'with a grouping_strategy' do
       subject(:run) do
         described_class.run(apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/',
-                            file_set_builder: SdrClient::Deposit::MatchingFileSetBuilder)
+                            grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
       end
 
-      it 'runs the process with the specified file_set_builder' do
+      it 'runs the process with the specified grouping_strategy' do
         run
         expect(SdrClient::Deposit::Process).to have_received(:new)
-          .with(file_set_builder: SdrClient::Deposit::MatchingFileSetBuilder,
+          .with(grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy,
                 files: [],
                 metadata: request,
                 token: 'token',
