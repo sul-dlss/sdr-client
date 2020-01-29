@@ -50,11 +50,11 @@ RSpec.describe SdrClient::Deposit::Request do
         identification: { sourceId: 'googlebooks:12345' },
         structural: {
           isMemberOf: 'druid:gh123df4567',
-          hasMember: [
+          contains: [
             {
               type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
               label: 'Object 1',
-              structural: { hasMember:
+              structural: { contains:
                 [
                   {
                     type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
@@ -68,7 +68,7 @@ RSpec.describe SdrClient::Deposit::Request do
             {
               type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
               label: 'Object 2',
-              structural: { hasMember:
+              structural: { contains:
                 [
                   {
                     type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
