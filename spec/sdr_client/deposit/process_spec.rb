@@ -124,6 +124,7 @@ RSpec.describe SdrClient::Deposit::Process do
             'file1.txt' => {
               md5: 'abc123',
               sha1: 'def456',
+              mime_type: 'image/tiff',
               access: 'public',
               preserve: true,
               shelve: true
@@ -143,7 +144,8 @@ RSpec.describe SdrClient::Deposit::Process do
           '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
           '"label":"file1.txt","filename":"file1.txt","externalIdentifier":"BaHBLZz09Iiw",' \
           '"access":{"access":"public"},"administrative":{"sdrPreserve":true,"shelve":true},' \
-          '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}]}]}},' \
+          '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],' \
+          '"hasMimeType":"image/tiff"}]}},' \
           '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
           '"label":"Object 2",' \
           '"structural":{"hasMember":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \

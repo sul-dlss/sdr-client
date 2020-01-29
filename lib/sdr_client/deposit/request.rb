@@ -7,6 +7,7 @@ module SdrClient
       # @param [String] label the required object label
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
       # @param [Array<FileSet>] file_sets the file sets to attach.
+      # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
                      apo:,
                      collection:,
@@ -22,6 +23,7 @@ module SdrClient
         @apo = apo
         @file_sets = file_sets
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def as_json
         {

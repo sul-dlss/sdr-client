@@ -4,21 +4,25 @@ module SdrClient
   module Deposit
     # This represents the File metadata that we send to the server for doing a deposit
     class File
-      def initialize(external_identifier:, label:, filename:, access: 'dark', preserve: false, shelve: false,
-                     md5: nil, sha1: nil)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(external_identifier:, label:, filename:,
+                     access: 'dark', preserve: false, shelve: false,
+                     mime_type: nil, md5: nil, sha1: nil)
         @external_identifier = external_identifier
         @label = label
         @filename = filename
         @access = access
         @preserve = preserve
         @shelve = shelve
+        @mime_type = mime_type
         @md5 = md5
         @sha1 = sha1
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # rubocop:disable Metrics/MethodLength
       def as_json
-        json = {
+        {
           "type": 'http://cocina.sul.stanford.edu/models/file.jsonld',
           label: @label,
           filename: @filename,
@@ -30,9 +34,10 @@ module SdrClient
             sdrPreserve: @preserve,
             shelve: @shelve
           }
-        }
-        json['hasMessageDigests'] = message_digests unless message_digests.empty?
-        json
+        }.tap do |json|
+          json['hasMessageDigests'] = message_digests unless message_digests.empty?
+          json['hasMimeType'] = @mime_type if @mime_type
+        end
       end
       # rubocop:enable Metrics/MethodLength
 

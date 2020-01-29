@@ -16,6 +16,7 @@ module SdrClient
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
       # Additional metadata includes access, preserve, shelve, md5, sha1
       # @param [Logger] logger the logger to use
+      # rubocop:disable Metrics/ParameterLists
       def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy, url:,
                      token:, files: [], files_metadata: {}, logger: Logger.new(STDOUT))
         @files = files
@@ -26,6 +27,7 @@ module SdrClient
         @grouping_strategy = grouping_strategy
         @files_metadata = files_metadata
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def run
         check_files_exist
