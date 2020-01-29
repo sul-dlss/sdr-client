@@ -67,7 +67,7 @@ module SdrClient
       def structural
         {
           isMemberOf: collection,
-          hasMember: file_sets.map(&:as_json)
+          contains: file_sets.map(&:as_json)
         }
       end
     end

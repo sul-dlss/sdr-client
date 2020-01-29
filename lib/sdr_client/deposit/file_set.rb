@@ -20,7 +20,7 @@ module SdrClient
           "type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
           "label": label,
           structural: {
-            hasMember: files.map(&:as_json)
+            contains: files.map(&:as_json)
           }
         }
       end
