@@ -14,8 +14,3 @@ Metrics/AbcSize:
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
   Max: 13
-
-# Offense count: 2
-# Configuration parameters: CountKeywordArgs.
-Metrics/ParameterLists:
-  Max: 8
