@@ -70,7 +70,8 @@ RSpec.describe SdrClient::Deposit do
                 files_metadata: {},
                 metadata: request,
                 token: 'token',
-                url: 'http://example.com/')
+                url: 'http://example.com/',
+                logger: Logger)
 
         expect(process).to have_received(:run)
       end
@@ -93,7 +94,8 @@ RSpec.describe SdrClient::Deposit do
                 files_metadata: {},
                 metadata: request,
                 token: 'token',
-                url: 'http://example.com/')
+                url: 'http://example.com/',
+                logger: Logger)
 
         expect(process).to have_received(:run)
       end
