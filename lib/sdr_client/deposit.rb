@@ -12,6 +12,7 @@ module SdrClient
                  source_id:,
                  url:,
                  files: [],
+                 files_metadata: {},
                  grouping_strategy: SingleFileGroupingStrategy)
       token = Credentials.read
 
@@ -21,7 +22,8 @@ module SdrClient
                              collection: collection,
                              source_id: source_id,
                              catkey: catkey)
-      Process.new(metadata: metadata, url: url, token: token, files: files, grouping_strategy: grouping_strategy).run
+      Process.new(metadata: metadata, url: url, token: token,
+                  files: files, files_metadata: files_metadata, grouping_strategy: grouping_strategy).run
     end
     # rubocop:enable Metrics/ParameterLists
   end
