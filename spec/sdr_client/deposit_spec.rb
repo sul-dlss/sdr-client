@@ -27,7 +27,8 @@ RSpec.describe SdrClient::Deposit do
         external_identifier: 'BaHBLZz09Iiw',
         filename: 'file1.txt',
         label: 'file1.txt',
-        mime_type: 'text/plain'
+        md5: 'foobar',
+        sha1: 'bazquux'
       ).and_call_original
       described_class.run(apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
@@ -36,7 +37,8 @@ RSpec.describe SdrClient::Deposit do
                           files: ['spec/fixtures/file1.txt'],
                           files_metadata: {
                             'file1.txt' => {
-                              mime_type: 'text/plain'
+                              md5: 'foobar',
+                              sha1: 'bazquux'
                             }
                           },
                           grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
