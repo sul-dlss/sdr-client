@@ -1,6 +1,48 @@
 # frozen_string_literal: true
 
 RSpec.describe SdrClient::Deposit do
+  describe 'integration tests' do
+    let(:upload_url) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
+
+    before do
+      stub_request(:post, 'http://example.com/v1/resources')
+        .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
+                   headers: { 'Location' => 'http://example.com/background_job/1' })
+      stub_request(:post, 'http://example.com/v1/direct_uploads')
+        .to_return(
+          status: 200,
+          body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",'\
+                '"content_type":"text/html","metadata":{},"byte_size":27,' \
+                '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
+                '"signed_id":"BaHBLZz09Iiw",'\
+                '"direct_upload":{"url":"' + upload_url + '","headers":{"Content-Type":"text/html"}}}',
+          headers: {}
+        )
+      stub_request(:put, 'http://localhost:3000/v1/disk/GpscGFUTmxO')
+        .to_return(status: 204, body: '', headers: {})
+    end
+
+    it 'passes files metadata through to Process' do
+      expect(SdrClient::Deposit::File).to receive(:new).with(
+        external_identifier: 'BaHBLZz09Iiw',
+        filename: 'file1.txt',
+        label: 'file1.txt',
+        mime_type: 'text/plain'
+      ).and_call_original
+      described_class.run(apo: 'druid:bc123df4567',
+                          collection: 'druid:gh123df4567',
+                          source_id: 'googlebooks:12345',
+                          url: 'http://example.com/',
+                          files: ['spec/fixtures/file1.txt'],
+                          files_metadata: {
+                            'file1.txt' => {
+                              mime_type: 'text/plain'
+                            }
+                          },
+                          grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
+    end
+  end
+
   describe '.run' do
     let(:process) { instance_double(SdrClient::Deposit::Process, run: true) }
     let(:request) { instance_double(SdrClient::Deposit::Request, with_file_sets: second_request) }
@@ -25,6 +67,7 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 files: [],
+                files_metadata: {},
                 metadata: request,
                 token: 'token',
                 url: 'http://example.com/')
@@ -47,6 +90,7 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy,
                 files: [],
+                files_metadata: {},
                 metadata: request,
                 token: 'token',
                 url: 'http://example.com/')

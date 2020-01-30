@@ -7,7 +7,10 @@ module SdrClient
       # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
       # @return [Array<Array<SdrClient::Deposit::Files::DirectUploadResponse>>] uploads the grouped uploaded files.
       def self.run(uploads: [])
-        uploads.group_by { |ul| ::File.basename(ul.filename, '.*') }
+        # Call `#values` on the result of the grouping operation because 1)
+        # `Process#build_filesets` expects an array of arrays, not an array of
+        # hashes, and 2) the keys aren't used anywhere
+        uploads.group_by { |ul| ::File.basename(ul.filename, '.*') }.values
       end
     end
   end

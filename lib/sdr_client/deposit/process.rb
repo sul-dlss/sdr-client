@@ -126,10 +126,10 @@ module SdrClient
       # @return [Array<SdrClient::Deposit::FileSet>] the uploads transformed to filesets
       def build_filesets(uploads:, files_metadata:)
         grouped_uploads = grouping_strategy.run(uploads: uploads)
-        grouped_uploads.each_with_index.map do |upload_group, i|
+        grouped_uploads.map.with_index(1) do |upload_group, i|
           metadata_group = {}
           upload_group.each { |upload| metadata_group[upload.filename] = files_metadata.fetch(upload.filename, {}) }
-          FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i + 1}")
+          FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i}")
         end
       end
     end
