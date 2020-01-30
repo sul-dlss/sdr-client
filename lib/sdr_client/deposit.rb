@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'logger'
+
 module SdrClient
   # The namespace for the "deposit" command
   module Deposit
@@ -13,7 +15,8 @@ module SdrClient
                  url:,
                  files: [],
                  files_metadata: {},
-                 grouping_strategy: SingleFileGroupingStrategy)
+                 grouping_strategy: SingleFileGroupingStrategy,
+                 logger: Logger.new(STDOUT))
       token = Credentials.read
 
       metadata = Request.new(label: label,
@@ -22,8 +25,8 @@ module SdrClient
                              collection: collection,
                              source_id: source_id,
                              catkey: catkey)
-      Process.new(metadata: metadata, url: url, token: token,
-                  files: files, files_metadata: files_metadata, grouping_strategy: grouping_strategy).run
+      Process.new(metadata: metadata, url: url, token: token, files: files,
+                  files_metadata: files_metadata, grouping_strategy: grouping_strategy, logger: logger).run
     end
     # rubocop:enable Metrics/ParameterLists
   end
