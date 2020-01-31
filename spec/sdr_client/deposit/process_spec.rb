@@ -38,57 +38,60 @@ RSpec.describe SdrClient::Deposit::Process do
       let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
       let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' }
       before do
-        stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
-          .with(
-            body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",'\
-                  '"content_type":"text/html"}}',
-            headers: { 'Content-Type' => 'application/json' }
-          )
-          .to_return(status: 200,
-                     body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",'\
-                           '"content_type":"text/html","metadata":{},"byte_size":27,' \
-                           '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
-                           '"signed_id":"BaHBLZz09Iiw",'\
-                           '"direct_upload":{"url":"' + upload_url1 + '","headers":{"Content-Type":"text/html"}}}',
-                     headers: {})
-
-        stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
-          .with(
-            body: '{"blob":{"filename":"file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",'\
-                  '"content_type":"text/html"}}',
-            headers: { 'Content-Type' => 'application/json' }
-          )
-          .to_return(status: 200,
-                     body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"file2.txt",'\
-                           '"content_type":"text/html","metadata":{},"byte_size":36,'\
-                           '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
-                           '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
-                           '"direct_upload":{"url":"' + upload_url2 + '","headers":{"Content-Type":"text/html"}}}',
-                     headers: {})
-
-        stub_request(:put, upload_url1)
-          .with(
-            body: "This is a fixture file ...\n",
-            headers: {
-              'Content-Length' => '27',
-              'Content-Type' => 'text/html'
-            }
-          )
-          .to_return(status: 204)
-
-        stub_request(:put, upload_url2)
-          .with(
-            body: "This is a fixture file for testing.\n",
-            headers: {
-              'Content-Length' => '36',
-              'Content-Type' => 'text/html'
-            }
-          )
-          .to_return(status: 204)
       end
 
       context 'when metadata upload succeeds' do
         before do
+          stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
+            .with(
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",'\
+                    '"content_type":"application/octet-stream"}}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 200,
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",'\
+                             '"content_type":"application/octet-stream","metadata":{},"byte_size":27,' \
+                             '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
+                             '"signed_id":"BaHBLZz09Iiw",'\
+                             '"direct_upload":{"url":"' + upload_url1 + '",'\
+                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                       headers: {})
+
+          stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
+            .with(
+              body: '{"blob":{"filename":"file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",'\
+                    '"content_type":"application/octet-stream"}}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 200,
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"file2.txt",'\
+                             '"content_type":"application/octet-stream","metadata":{},"byte_size":36,'\
+                             '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
+                             '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
+                             '"direct_upload":{"url":"' + upload_url2 + '",'\
+                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                       headers: {})
+
+          stub_request(:put, upload_url1)
+            .with(
+              body: "This is a fixture file ...\n",
+              headers: {
+                'Content-Length' => '27',
+                'Content-Type' => 'application/octet-stream'
+              }
+            )
+            .to_return(status: 204)
+
+          stub_request(:put, upload_url2)
+            .with(
+              body: "This is a fixture file for testing.\n",
+              headers: {
+                'Content-Length' => '36',
+                'Content-Type' => 'application/octet-stream'
+              }
+            )
+            .to_return(status: 204)
+
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
               body: '{"access":{},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
@@ -133,6 +136,56 @@ RSpec.describe SdrClient::Deposit::Process do
         end
 
         before do
+          stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
+            .with(
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",'\
+                    '"content_type":"image/tiff"}}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 200,
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",'\
+                             '"content_type":"image/tiff","metadata":{},"byte_size":27,' \
+                             '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
+                             '"signed_id":"BaHBLZz09Iiw",'\
+                             '"direct_upload":{"url":"' + upload_url1 + '",'\
+                             '"headers":{"Content-Type":"image/tiff"}}}',
+                       headers: {})
+
+          stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
+            .with(
+              body: '{"blob":{"filename":"file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",'\
+                    '"content_type":"application/octet-stream"}}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 200,
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"file2.txt",'\
+                             '"content_type":"application/octet-stream","metadata":{},"byte_size":36,'\
+                             '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
+                             '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
+                             '"direct_upload":{"url":"' + upload_url2 + '",'\
+                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                       headers: {})
+
+          stub_request(:put, upload_url1)
+            .with(
+              body: "This is a fixture file ...\n",
+              headers: {
+                'Content-Length' => '27',
+                'Content-Type' => 'image/tiff'
+              }
+            )
+            .to_return(status: 204)
+
+          stub_request(:put, upload_url2)
+            .with(
+              body: "This is a fixture file for testing.\n",
+              headers: {
+                'Content-Length' => '36',
+                'Content-Type' => 'application/octet-stream'
+              }
+            )
+            .to_return(status: 204)
+
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
               body: '{"access":{},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
@@ -166,6 +219,56 @@ RSpec.describe SdrClient::Deposit::Process do
 
       context 'when metadata upload fails' do
         before do
+          stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
+            .with(
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",'\
+                    '"content_type":"application/octet-stream"}}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 200,
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",'\
+                             '"content_type":"application/octet-stream","metadata":{},"byte_size":27,' \
+                             '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
+                             '"signed_id":"BaHBLZz09Iiw",'\
+                             '"direct_upload":{"url":"' + upload_url1 + '",'\
+                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                       headers: {})
+
+          stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
+            .with(
+              body: '{"blob":{"filename":"file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",'\
+                    '"content_type":"application/octet-stream"}}',
+              headers: { 'Content-Type' => 'application/json' }
+            )
+            .to_return(status: 200,
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"file2.txt",'\
+                             '"content_type":"application/octet-stream","metadata":{},"byte_size":36,'\
+                             '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
+                             '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
+                             '"direct_upload":{"url":"' + upload_url2 + '",'\
+                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                       headers: {})
+
+          stub_request(:put, upload_url1)
+            .with(
+              body: "This is a fixture file ...\n",
+              headers: {
+                'Content-Length' => '27',
+                'Content-Type' => 'application/octet-stream'
+              }
+            )
+            .to_return(status: 204)
+
+          stub_request(:put, upload_url2)
+            .with(
+              body: "This is a fixture file for testing.\n",
+              headers: {
+                'Content-Length' => '36',
+                'Content-Type' => 'application/octet-stream'
+              }
+            )
+            .to_return(status: 204)
+
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .to_return(status: 400, body: '{"id":"bad_request",' \
               '"message":"#/components/schemas/DROStructural missing required parameters: isMemberOf"}')
