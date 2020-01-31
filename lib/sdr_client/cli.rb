@@ -13,6 +13,9 @@ module SdrClient
       else
         raise "Unknown command #{command}"
       end
+    rescue SdrClient::Credentials::NoCredentialsError
+      puts 'Log in first'
+      exit(1)
     end
   end
 end
