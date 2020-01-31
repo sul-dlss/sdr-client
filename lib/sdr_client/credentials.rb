@@ -3,6 +3,8 @@
 module SdrClient
   # The stored credentials
   class Credentials
+    class NoCredentialsError < StandardError; end
+
     # @param [String] a json string that contains a field 'token'
     def self.write(body)
       json = JSON.parse(body)
@@ -10,14 +12,12 @@ module SdrClient
       File.open(credentials_file, 'w', 0o600) do |file|
         file.write(json.fetch('token'))
       end
-      puts 'Signed in.'
     end
 
     def self.read
-      return IO.readlines(credentials_file, chomp: true).first if ::File.exist?(credentials_file)
+      raise NoCredentialsError unless ::File.exist?(credentials_file)
 
-      puts 'Log in first'
-      exit(1)
+      IO.readlines(credentials_file, chomp: true).first
     end
 
     def self.credentials_path
