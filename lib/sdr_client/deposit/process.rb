@@ -30,7 +30,8 @@ module SdrClient
 
       def run
         check_files_exist
-        upload_responses = UploadFiles.new(files: files, logger: logger, connection: connection).run
+        upload_responses = UploadFiles.new(files: files, logger: logger,
+                                           connection: connection, files_metadata: files_metadata).run
         metadata_builder = MetadataBuilder.new(metadata: metadata,
                                                grouping_strategy: grouping_strategy,
                                                files_metadata: files_metadata,
@@ -77,15 +78,19 @@ module SdrClient
       end
 
       # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
-      # @param [Hash<String,Hash<String, String>>] files_metadata filename, hash of additional file metadata.
       # @return [Array<SdrClient::Deposit::FileSet>] the uploads transformed to filesets
-      def build_filesets(uploads:, files_metadata:)
+      def build_filesets(uploads:)
         grouped_uploads = grouping_strategy.run(uploads: uploads)
         grouped_uploads.map.with_index(1) do |upload_group, i|
           metadata_group = {}
-          upload_group.each { |upload| metadata_group[upload.filename] = files_metadata.fetch(upload.filename, {}) }
+          upload_group.each { |upload| metadata_group[upload.filename] = file_metadata_for(upload.filename) }
           FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i}")
         end
+      end
+
+      # @return [Hash<Symbol,String>] the file metadata for this file
+      def file_metadata_for(filename)
+        files_metadata.fetch(filename, {})
       end
     end
   end

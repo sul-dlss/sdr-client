@@ -9,8 +9,11 @@ module SdrClient
       BLOB_PATH = '/v1/direct_uploads'
       # @param [Array<String>] files a list of file names to upload
       # @param [Logger] logger the logger to use
-      def initialize(files:, logger:, connection:)
+      # @param [Faraday::Connection] connection
+      # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
+      def initialize(files:, files_metadata:, logger:, connection:)
         @files = files
+        @files_metadata = files_metadata
         @logger = logger
         @connection = connection
       end
@@ -25,11 +28,14 @@ module SdrClient
 
       private
 
-      attr_reader :files, :logger, :connection
+      attr_reader :files, :files_metadata, :logger, :connection
 
       def collect_file_metadata
-        files.each_with_object({}) do |filename, obj|
-          obj[filename] = Files::DirectUploadRequest.from_file(filename)
+        files.each_with_object({}) do |path, obj|
+          file_name = ::File.basename(path)
+          obj[path] = Files::DirectUploadRequest.from_file(path,
+                                                           file_name: file_name,
+                                                           content_type: file_metadata_for(file_name)[:mime_type])
         end
       end
 
@@ -70,6 +76,11 @@ module SdrClient
         end
 
         raise "unexpected response: #{upload_response.inspect}" unless upload_response.status == 204
+      end
+
+      # @return [Hash<Symbol,String>] the file metadata for this file
+      def file_metadata_for(filename)
+        files_metadata.fetch(filename, {})
       end
     end
   end
