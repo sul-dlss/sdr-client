@@ -24,9 +24,10 @@ module SdrClient
                              apo: apo,
                              collection: collection,
                              source_id: source_id,
-                             catkey: catkey)
+                             catkey: catkey,
+                             files_metadata: files_metadata)
       Process.new(metadata: metadata, url: url, token: token, files: files,
-                  files_metadata: files_metadata, grouping_strategy: grouping_strategy, logger: logger).run
+                  grouping_strategy: grouping_strategy, logger: logger).run
     end
     # rubocop:enable Metrics/ParameterLists
   end

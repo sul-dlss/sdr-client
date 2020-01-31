@@ -7,6 +7,8 @@ module SdrClient
       # @param [String] label the required object label
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
       # @param [Array<FileSet>] file_sets the file sets to attach.
+      # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
+      # Additional metadata includes access, preserve, shelve, md5, sha1
       # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
                      apo:,
@@ -14,7 +16,8 @@ module SdrClient
                      source_id:,
                      catkey: nil,
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
-                     file_sets: [])
+                     file_sets: [],
+                     files_metadata: {})
         @label = label
         @type = type
         @source_id = source_id
@@ -22,6 +25,7 @@ module SdrClient
         @catkey = catkey
         @apo = apo
         @file_sets = file_sets
+        @files_metadata = files_metadata
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -45,12 +49,20 @@ module SdrClient
                     source_id: source_id,
                     catkey: catkey,
                     type: type,
-                    file_sets: file_sets)
+                    file_sets: file_sets,
+                    files_metadata: files_metadata)
+      end
+
+      # @param [String] filename
+      # @return [Hash] the metadata for the file
+      def for(filename)
+        files_metadata.fetch(filename, {})
       end
 
       private
 
-      attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection, :type
+      attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection,
+                  :type, :files_metadata
 
       def administrative
         {

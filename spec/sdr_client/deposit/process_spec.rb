@@ -6,7 +6,8 @@ RSpec.describe SdrClient::Deposit::Process do
                                     type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                                     apo: 'druid:bc123df4567',
                                     collection: 'druid:gh123df4567',
-                                    source_id: 'googlebooks:12345')
+                                    source_id: 'googlebooks:12345',
+                                    files_metadata: files_metadata)
   end
 
   let(:instance) do
@@ -14,8 +15,7 @@ RSpec.describe SdrClient::Deposit::Process do
                         url: 'http://example.com:3000',
                         token: 'eyJhbGci',
                         files: files,
-                        logger: logger,
-                        files_metadata: files_metadata)
+                        logger: logger)
   end
 
   let(:logger) { instance_double(Logger, info: nil) }

@@ -12,29 +12,27 @@ module SdrClient
       # @param [String] url the server to send to
       # @param [String] token the bearer auth token for the server
       # @param [Array<String>] files a list of file names to upload
-      # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
-      # Additional metadata includes access, preserve, shelve, md5, sha1
       # @param [Logger] logger the logger to use
       # rubocop:disable Metrics/ParameterLists
       def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy, url:,
-                     token:, files: [], files_metadata: {}, logger: Logger.new(STDOUT))
+                     token:, files: [], logger: Logger.new(STDOUT))
         @files = files
         @url = url
         @token = token
         @metadata = metadata
         @logger = logger
         @grouping_strategy = grouping_strategy
-        @files_metadata = files_metadata
       end
       # rubocop:enable Metrics/ParameterLists
 
       def run
         check_files_exist
-        upload_responses = UploadFiles.new(files: files, logger: logger,
-                                           connection: connection, files_metadata: files_metadata).run
+        upload_responses = UploadFiles.new(files: files,
+                                           logger: logger,
+                                           connection: connection,
+                                           metadata: metadata).run
         metadata_builder = MetadataBuilder.new(metadata: metadata,
                                                grouping_strategy: grouping_strategy,
-                                               files_metadata: files_metadata,
                                                logger: logger)
         request = metadata_builder.with_uploads(upload_responses)
         upload_metadata(request.as_json)
@@ -42,7 +40,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :files, :url, :token, :logger, :grouping_strategy, :files_metadata
+      attr_reader :metadata, :files, :url, :token, :logger, :grouping_strategy
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -75,22 +73,6 @@ module SdrClient
           conn.authorization :Bearer, token
           conn.adapter :net_http
         end
-      end
-
-      # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
-      # @return [Array<SdrClient::Deposit::FileSet>] the uploads transformed to filesets
-      def build_filesets(uploads:)
-        grouped_uploads = grouping_strategy.run(uploads: uploads)
-        grouped_uploads.map.with_index(1) do |upload_group, i|
-          metadata_group = {}
-          upload_group.each { |upload| metadata_group[upload.filename] = file_metadata_for(upload.filename) }
-          FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i}")
-        end
-      end
-
-      # @return [Hash<Symbol,String>] the file metadata for this file
-      def file_metadata_for(filename)
-        files_metadata.fetch(filename, {})
       end
     end
   end
