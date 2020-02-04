@@ -27,3 +27,12 @@ sdr --service-url https://sdr-api-server:3000 deposit --label 'hey there' \
   --collection 'druid:gh456kw9876' \
   --source-id 'googlebooks:stanford_12345' file1.png file2.png
 ```
+
+Deposit a new object, providing metadata for files:
+```
+sdr --service-url https://sdr-api-server:3000 deposit --label 'hey there' \
+  --files-metadata '{"image42.jp2":{"mime_type":"image/jp2"},"ocr.html":{"use":"transcription"}}'
+  --admin-policy 'druid:bk123gh4567' \
+  --collection 'druid:gh456kw9876' \
+  --source-id 'googlebooks:stanford_12345' image42.jp2 ocr.html
+```
