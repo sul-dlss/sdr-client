@@ -8,7 +8,7 @@ module SdrClient
         @label = label
         @files = if !uploads.empty?
                    uploads.map do |upload|
-                     File.new(file_args(upload, uploads_metadata.fetch(upload.filename, {})))
+                     File.new(**file_args(upload, uploads_metadata.fetch(upload.filename, {})))
                    end
                  else
                    files
@@ -35,7 +35,9 @@ module SdrClient
           label: upload.filename,
           filename: upload.filename
         }
-        args.merge(upload_metadata)
+        args.merge!(upload_metadata)
+        # Symbolize
+        Hash[args.map { |k, v| [k.to_sym, v] }]
       end
     end
   end
