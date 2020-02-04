@@ -49,6 +49,7 @@ subcommands = {
     opts.on('--admin-policy ADMIN_POLICY', 'The druid identifier of the admin policy object') do |apo|
       options[:apo] = apo
     end
+
     opts.on('--collection COLLECTION', 'The druid identifier of the collection object') do |collection|
       options[:collection] = collection
     end
@@ -59,6 +60,10 @@ subcommands = {
 
     opts.on('--source-id SOURCE_ID', 'The source id for this object') do |source_id|
       options[:source_id] = source_id
+    end
+
+    opts.on('--files-metadata FILES_METADATA', 'A JSON object representing per-file metadata') do |files_metadata|
+      options[:files_metadata] = JSON.parse(files_metadata)
     end
 
     opts.on('--strategy STRATEGY',
