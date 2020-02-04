@@ -8,14 +8,12 @@ module SdrClient
     class MetadataBuilder
       # @param [Request] metadata information about the object
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
-      # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
       # Additional metadata includes access, preserve, shelve, md5, sha1
       # @param [Logger] logger the logger to use
-      def initialize(metadata:, grouping_strategy:, files_metadata:, logger:)
+      def initialize(metadata:, grouping_strategy:, logger:)
         @metadata = metadata
         @logger = logger
         @grouping_strategy = grouping_strategy
-        @files_metadata = files_metadata
       end
 
       def with_uploads(upload_responses)
@@ -25,7 +23,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :files, :logger, :grouping_strategy, :files_metadata
+      attr_reader :metadata, :files, :logger, :grouping_strategy
 
       # @param [Array<SdrClient::Deposit::Files::DirectUploadResponse>] uploads the uploaded files to attach.
       # @return [Array<SdrClient::Deposit::FileSet>] the uploads transformed to filesets
@@ -33,7 +31,7 @@ module SdrClient
         grouped_uploads = grouping_strategy.run(uploads: uploads)
         grouped_uploads.map.with_index(1) do |upload_group, i|
           metadata_group = {}
-          upload_group.each { |upload| metadata_group[upload.filename] = files_metadata.fetch(upload.filename, {}) }
+          upload_group.each { |upload| metadata_group[upload.filename] = metadata.for(upload.filename) }
           FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i}")
         end
       end

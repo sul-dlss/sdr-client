@@ -67,7 +67,6 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 files: [],
-                files_metadata: {},
                 metadata: request,
                 token: 'token',
                 url: 'http://example.com/',
@@ -91,7 +90,6 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy,
                 files: [],
-                files_metadata: {},
                 metadata: request,
                 token: 'token',
                 url: 'http://example.com/',
