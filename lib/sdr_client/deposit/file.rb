@@ -7,7 +7,7 @@ module SdrClient
       # rubocop:disable Metrics/ParameterLists
       def initialize(external_identifier:, label:, filename:,
                      access: 'dark', preserve: false, shelve: false,
-                     mime_type: nil, md5: nil, sha1: nil)
+                     mime_type: nil, md5: nil, sha1: nil, use: nil)
         @external_identifier = external_identifier
         @label = label
         @filename = filename
@@ -17,6 +17,7 @@ module SdrClient
         @mime_type = mime_type
         @md5 = md5
         @sha1 = sha1
+        @use = use
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -37,6 +38,7 @@ module SdrClient
         }.tap do |json|
           json['hasMessageDigests'] = message_digests unless message_digests.empty?
           json['hasMimeType'] = @mime_type if @mime_type
+          json['use'] = @use if @use
         end
       end
       # rubocop:enable Metrics/MethodLength
