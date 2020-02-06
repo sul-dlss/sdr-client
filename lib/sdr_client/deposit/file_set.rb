@@ -4,6 +4,10 @@ module SdrClient
   module Deposit
     # This represents the FileSet metadata that we send to the server for doing a deposit
     class FileSet
+      # @param [Array] uploads
+      # @param [Hash<String,Hash<String,String>>] the file level metadata
+      # @param [Array] files
+      # @param [String] label
       def initialize(uploads: [], uploads_metadata: {}, files: [], label:)
         @label = label
         @files = if !uploads.empty?
@@ -29,6 +33,8 @@ module SdrClient
 
       attr_reader :files, :label
 
+      # This creates the metadata for each file and symbolizes the keys
+      # @return [Hash<Symbol,String>]
       def file_args(upload, upload_metadata)
         args = {
           external_identifier: upload.signed_id,
