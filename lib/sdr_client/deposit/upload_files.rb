@@ -47,11 +47,17 @@ module SdrClient
       def direct_upload(metadata_json)
         logger.info("Starting an upload request: #{metadata_json}")
         response = connection.post(BLOB_PATH, metadata_json, 'Content-Type' => 'application/json')
-        raise "unexpected response: #{response.inspect}" unless response.status == 200
+        unexpected_response(response) unless response.status == 200
 
         logger.info("Response from server: #{response.body}")
 
         Files::DirectUploadResponse.new(JSON.parse(response.body))
+      end
+
+      def unexpected_response(response)
+        raise 'There was an error with your credentials. Perhaps they have expired?' if response.status == 401
+
+        raise "unexpected response: #{response.inspect}"
       end
 
       # @param [Hash<String,Files::DirectUploadResponse>] upload_responses the filenames and their upload response
