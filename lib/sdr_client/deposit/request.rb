@@ -5,6 +5,7 @@ module SdrClient
     # This represents the metadata that we send to the server for doing a deposit
     class Request
       # @param [String] label the required object label
+      # @param [Time|nil] embargo_release_date when the item should be released from embargo or nil if no embargo
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
       # @param [Array<FileSet>] file_sets the file sets to attach.
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
@@ -15,6 +16,7 @@ module SdrClient
                      collection:,
                      source_id:,
                      catkey: nil,
+                     embargo_release_date: nil,
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
                      file_sets: [],
                      files_metadata: {})
@@ -23,6 +25,7 @@ module SdrClient
         @source_id = source_id
         @collection = collection
         @catkey = catkey
+        @embargo_release_date = embargo_release_date
         @apo = apo
         @file_sets = file_sets
         @files_metadata = files_metadata
@@ -31,7 +34,7 @@ module SdrClient
 
       def as_json
         {
-          access: {},
+          access: access,
           type: type,
           administrative: administrative,
           identification: identification,
@@ -48,6 +51,7 @@ module SdrClient
                     collection: collection,
                     source_id: source_id,
                     catkey: catkey,
+                    embargo_release_date: embargo_release_date,
                     type: type,
                     file_sets: file_sets,
                     files_metadata: files_metadata)
@@ -62,7 +66,7 @@ module SdrClient
       private
 
       attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection,
-                  :type, :files_metadata
+                  :type, :files_metadata, :embargo_release_date
 
       def administrative
         {
@@ -81,6 +85,12 @@ module SdrClient
           isMemberOf: collection,
           contains: file_sets.map(&:as_json)
         }
+      end
+
+      def access
+        {}.tap do |json|
+          json[:embargoReleaseDate] = embargo_release_date.strftime('%FT%T%:z') if embargo_release_date
+        end
       end
     end
   end
