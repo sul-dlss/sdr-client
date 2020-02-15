@@ -7,7 +7,8 @@ RSpec.describe SdrClient::Deposit::Request do
                         apo: 'druid:bc123df4567',
                         collection: 'druid:gh123df4567',
                         source_id: 'googlebooks:12345',
-                        embargo_release_date: Time.gm(2045))
+                        embargo_release_date: Time.gm(2045),
+                        embargo_access: 'stanford')
   end
   let(:with_file_sets) do
     instance.with_file_sets(file_sets)
@@ -46,7 +47,12 @@ RSpec.describe SdrClient::Deposit::Request do
       {
         type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
         label: 'This is my object',
-        access: { embargoReleaseDate: '2045-01-01T00:00:00+00:00' },
+        access: {
+          embargo: {
+            releaseDate: '2045-01-01T00:00:00+00:00',
+            access: 'stanford'
+          }
+        },
         administrative: { hasAdminPolicy: 'druid:bc123df4567' },
         identification: { sourceId: 'googlebooks:12345' },
         structural: {
