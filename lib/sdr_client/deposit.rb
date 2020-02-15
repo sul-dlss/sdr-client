@@ -12,6 +12,7 @@ module SdrClient
                  collection:,
                  catkey: nil,
                  embargo_release_date: nil,
+                 embargo_access: 'world',
                  source_id:,
                  url:,
                  files: [],
@@ -27,6 +28,7 @@ module SdrClient
                              source_id: source_id,
                              catkey: catkey,
                              embargo_release_date: embargo_release_date,
+                             embargo_access: embargo_access,
                              files_metadata: files_metadata)
       Process.new(metadata: metadata, url: url, token: token, files: files,
                   grouping_strategy: grouping_strategy, logger: logger).run

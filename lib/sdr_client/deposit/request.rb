@@ -6,6 +6,7 @@ module SdrClient
     class Request
       # @param [String] label the required object label
       # @param [Time|nil] embargo_release_date when the item should be released from embargo or nil if no embargo
+      # @param [String] embargo_access access after embargo has expired if embargoed
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
       # @param [Array<FileSet>] file_sets the file sets to attach.
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
@@ -17,6 +18,7 @@ module SdrClient
                      source_id:,
                      catkey: nil,
                      embargo_release_date: nil,
+                     embargo_access: 'world',
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
                      file_sets: [],
                      files_metadata: {})
@@ -26,6 +28,7 @@ module SdrClient
         @collection = collection
         @catkey = catkey
         @embargo_release_date = embargo_release_date
+        @embargo_access = embargo_access
         @apo = apo
         @file_sets = file_sets
         @files_metadata = files_metadata
@@ -52,6 +55,7 @@ module SdrClient
                     source_id: source_id,
                     catkey: catkey,
                     embargo_release_date: embargo_release_date,
+                    embargo_access: embargo_access,
                     type: type,
                     file_sets: file_sets,
                     files_metadata: files_metadata)
@@ -66,7 +70,7 @@ module SdrClient
       private
 
       attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection,
-                  :type, :files_metadata, :embargo_release_date
+                  :type, :files_metadata, :embargo_release_date, :embargo_access
 
       def administrative
         {
@@ -89,7 +93,12 @@ module SdrClient
 
       def access
         {}.tap do |json|
-          json[:embargoReleaseDate] = embargo_release_date.strftime('%FT%T%:z') if embargo_release_date
+          if embargo_release_date
+            json[:embargo] = {
+              releaseDate: embargo_release_date.strftime('%FT%T%:z'),
+              access: embargo_access
+            }
+          end
         end
       end
     end
