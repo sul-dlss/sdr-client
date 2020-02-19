@@ -9,7 +9,7 @@ module SdrClient
     def self.run(label: nil,
                  type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                  apo:,
-                 collection:,
+                 collection: nil,
                  catkey: nil,
                  embargo_release_date: nil,
                  embargo_access: 'world',

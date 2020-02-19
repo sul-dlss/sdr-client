@@ -14,7 +14,7 @@ module SdrClient
       # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
                      apo:,
-                     collection:,
+                     collection: nil,
                      source_id:,
                      catkey: nil,
                      embargo_release_date: nil,
@@ -85,10 +85,10 @@ module SdrClient
       end
 
       def structural
-        {
-          isMemberOf: collection,
-          contains: file_sets.map(&:as_json)
-        }
+        {}.tap do |json|
+          json[:isMemberOf] = collection if collection
+          json[:contains] = file_sets.map(&:as_json) unless file_sets.empty?
+        end
       end
 
       def access
