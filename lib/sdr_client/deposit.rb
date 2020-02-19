@@ -8,6 +8,7 @@ module SdrClient
     # rubocop:disable Metrics/ParameterLists
     def self.run(label: nil,
                  type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                 viewing_direction: nil,
                  apo:,
                  collection: nil,
                  catkey: nil,
@@ -29,6 +30,7 @@ module SdrClient
                              catkey: catkey,
                              embargo_release_date: embargo_release_date,
                              embargo_access: embargo_access,
+                             viewing_direction: viewing_direction,
                              files_metadata: files_metadata)
       Process.new(metadata: metadata, url: url, token: token, files: files,
                   grouping_strategy: grouping_strategy, logger: logger).run

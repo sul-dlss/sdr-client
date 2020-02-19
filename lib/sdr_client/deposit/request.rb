@@ -20,6 +20,7 @@ module SdrClient
                      embargo_release_date: nil,
                      embargo_access: 'world',
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
+                     viewing_direction: nil,
                      file_sets: [],
                      files_metadata: {})
         @label = label
@@ -32,6 +33,7 @@ module SdrClient
         @apo = apo
         @file_sets = file_sets
         @files_metadata = files_metadata
+        @viewing_direction = viewing_direction
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -57,6 +59,7 @@ module SdrClient
                     embargo_release_date: embargo_release_date,
                     embargo_access: embargo_access,
                     type: type,
+                    viewing_direction: viewing_direction,
                     file_sets: file_sets,
                     files_metadata: files_metadata)
       end
@@ -70,7 +73,8 @@ module SdrClient
       private
 
       attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection,
-                  :type, :files_metadata, :embargo_release_date, :embargo_access
+                  :type, :files_metadata, :embargo_release_date, :embargo_access,
+                  :viewing_direction
 
       def administrative
         {
@@ -88,6 +92,7 @@ module SdrClient
         {}.tap do |json|
           json[:isMemberOf] = collection if collection
           json[:contains] = file_sets.map(&:as_json) unless file_sets.empty?
+          json[:hasMemberOrders] = [{ viewing_direction: viewing_direction }] if viewing_direction
         end
       end
 
