@@ -100,5 +100,35 @@ RSpec.describe SdrClient::Deposit do
         expect(process).to have_received(:run)
       end
     end
+
+    context 'with a viewing_direction' do
+      subject(:run) do
+        described_class.run(apo: 'druid:bc123df4567',
+                            collection: 'druid:gh123df4567',
+                            source_id: 'googlebooks:12345',
+                            url: 'http://example.com/',
+                            viewing_direction: 'left-to-right',
+                            grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
+      end
+
+      it 'runs the process with the specified grouping_strategy' do
+        run
+        expect(SdrClient::Deposit::Request).to have_received(:new)
+          .with(
+            apo: 'druid:bc123df4567',
+            catkey: nil,
+            collection: 'druid:gh123df4567',
+            embargo_access: 'world',
+            embargo_release_date: nil,
+            files_metadata: {},
+            label: nil,
+            source_id: 'googlebooks:12345',
+            type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+            viewing_direction: 'left-to-right'
+          )
+
+        expect(process).to have_received(:run)
+      end
+    end
   end
 end
