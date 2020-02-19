@@ -84,7 +84,7 @@ module SdrClient
 
       def identification
         { sourceId: source_id }.tap do |json|
-          json[:catkey] = catkey if catkey
+          json[:catalogLinks] = [{ catalog: 'symphony', catalogRecordId: catkey }] if catkey
         end
       end
 

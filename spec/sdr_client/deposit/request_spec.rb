@@ -8,6 +8,7 @@ RSpec.describe SdrClient::Deposit::Request do
                           apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
                           source_id: 'googlebooks:12345',
+                          catkey: '11991',
                           embargo_release_date: Time.gm(2045),
                           embargo_access: 'stanford')
     end
@@ -55,7 +56,10 @@ RSpec.describe SdrClient::Deposit::Request do
             }
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
-          identification: { sourceId: 'googlebooks:12345' },
+          identification: {
+            sourceId: 'googlebooks:12345',
+            catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991' }]
+          },
           structural: {
             isMemberOf: 'druid:gh123df4567',
             contains: [
