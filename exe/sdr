@@ -50,6 +50,14 @@ subcommands = {
       options[:apo] = apo
     end
 
+    opts.on('--type TYPE', 'The object type to create. ' \
+            'One of: "image", "book", "document", "map", "manuscript", "media", ' \
+            '"three_dimensional", "collection", or "admin_policy"') do |type|
+      if %w[image book document map manuscript media three_dimensional collection admin_policy].include?(type)
+        options[:type] = "http://cocina.sul.stanford.edu/models/#{type}.jsonld"
+      end
+    end
+
     opts.on('--collection COLLECTION', 'The druid identifier of the collection object') do |collection|
       options[:collection] = collection
     end
