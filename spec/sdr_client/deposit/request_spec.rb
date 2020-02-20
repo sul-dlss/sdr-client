@@ -9,6 +9,7 @@ RSpec.describe SdrClient::Deposit::Request do
                           collection: 'druid:gh123df4567',
                           source_id: 'googlebooks:12345',
                           catkey: '11991',
+                          viewing_direction: 'right-to-left',
                           embargo_release_date: Time.gm(2045),
                           embargo_access: 'stanford')
     end
@@ -61,6 +62,7 @@ RSpec.describe SdrClient::Deposit::Request do
             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991' }]
           },
           structural: {
+            hasMemberOrders: [{ viewingDirection: 'right-to-left' }],
             isMemberOf: 'druid:gh123df4567',
             contains: [
               {
