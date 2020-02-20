@@ -92,7 +92,7 @@ module SdrClient
         {}.tap do |json|
           json[:isMemberOf] = collection if collection
           json[:contains] = file_sets.map(&:as_json) unless file_sets.empty?
-          json[:hasMemberOrders] = [{ viewing_direction: viewing_direction }] if viewing_direction
+          json[:hasMemberOrders] = [{ viewingDirection: viewing_direction }] if viewing_direction
         end
       end
 
