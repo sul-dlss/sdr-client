@@ -51,6 +51,7 @@ RSpec.describe SdrClient::Deposit::Request do
           type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
           label: 'This is my object',
           access: {
+            access: 'dark',
             embargo: {
               releaseDate: '2045-01-01T00:00:00+00:00',
               access: 'stanford'
@@ -115,7 +116,9 @@ RSpec.describe SdrClient::Deposit::Request do
         {
           type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
           label: 'This is my object',
-          access: {},
+          access: {
+            access: 'dark'
+          },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: { sourceId: 'googlebooks:12345' },
           structural: {}

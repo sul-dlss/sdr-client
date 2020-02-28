@@ -13,6 +13,7 @@ module SdrClient
       # Additional metadata includes access, preserve, shelve, md5, sha1
       # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
+                     access: 'dark',
                      apo:,
                      collection: nil,
                      source_id:,
@@ -30,6 +31,7 @@ module SdrClient
         @catkey = catkey
         @embargo_release_date = embargo_release_date
         @embargo_access = embargo_access
+        @access = access
         @apo = apo
         @file_sets = file_sets
         @files_metadata = files_metadata
@@ -39,7 +41,7 @@ module SdrClient
 
       def as_json
         {
-          access: access,
+          access: access_struct,
           type: type,
           administrative: administrative,
           identification: identification,
@@ -52,6 +54,7 @@ module SdrClient
       # @return [Request] a clone of this request with the file_sets added
       def with_file_sets(file_sets)
         Request.new(label: label,
+                    access: access,
                     apo: apo,
                     collection: collection,
                     source_id: source_id,
@@ -72,7 +75,7 @@ module SdrClient
 
       private
 
-      attr_reader :label, :file_sets, :source_id, :catkey, :apo, :collection,
+      attr_reader :access, :label, :file_sets, :source_id, :catkey, :apo, :collection,
                   :type, :files_metadata, :embargo_release_date, :embargo_access,
                   :viewing_direction
 
@@ -96,8 +99,8 @@ module SdrClient
         end
       end
 
-      def access
-        {}.tap do |json|
+      def access_struct
+        { access: access }.tap do |json|
           if embargo_release_date
             json[:embargo] = {
               releaseDate: embargo_release_date.strftime('%FT%T%:z'),
