@@ -4,6 +4,7 @@ RSpec.describe SdrClient::Deposit::Process do
   let(:metadata) do
     SdrClient::Deposit::Request.new(label: 'This is my object',
                                     type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                                    access: 'world',
                                     apo: 'druid:bc123df4567',
                                     collection: 'druid:gh123df4567',
                                     source_id: 'googlebooks:12345',
@@ -94,7 +95,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"access":{},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
+              body: '{"access":{"access":"world"},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
               '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
               '"identification":{"sourceId":"googlebooks:12345"},' \
               '"structural":{"isMemberOf":"druid:gh123df4567",' \
@@ -188,7 +189,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"access":{},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
+              body: '{"access":{"access":"world"},"type":"http://cocina.sul.stanford.edu/models/book.jsonld",'\
           '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
           '"identification":{"sourceId":"googlebooks:12345"},' \
           '"structural":{"isMemberOf":"druid:gh123df4567",' \

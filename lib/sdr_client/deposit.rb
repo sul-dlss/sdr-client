@@ -6,9 +6,11 @@ module SdrClient
   # The namespace for the "deposit" command
   module Deposit
     # rubocop:disable Metrics/ParameterLists
+    # rubocop:disable Metrics/MethodLength
     def self.run(label: nil,
                  type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                  viewing_direction: nil,
+                 access: 'dark',
                  apo:,
                  collection: nil,
                  catkey: nil,
@@ -24,6 +26,7 @@ module SdrClient
 
       metadata = Request.new(label: label,
                              type: type,
+                             access: access,
                              apo: apo,
                              collection: collection,
                              source_id: source_id,
@@ -35,6 +38,7 @@ module SdrClient
       Process.new(metadata: metadata, url: url, token: token, files: files,
                   grouping_strategy: grouping_strategy, logger: logger).run
     end
+    # rubocop:enable Metrics/MethodLength
     # rubocop:enable Metrics/ParameterLists
   end
 end
