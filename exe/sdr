@@ -70,6 +70,14 @@ subcommands = {
       options[:source_id] = source_id
     end
 
+    opts.on('--copyright COPYRIGHT', 'The copyright statement') do |copyright|
+      options[:copyright] = copyright
+    end
+
+    opts.on('--use-statement STATEMENT', 'The use and reproduction statement') do |use_statement|
+      options[:use_statement] = use_statement
+    end
+
     opts.on('--viewing-direction DIRECTION', 'The viewing direction (if a book). ' \
             'Either "left-to-right" or "right-to-left"') do |viewing_direction|
       options[:viewing_direction] = viewing_direction if %w[left-to-right right-to-left].include?(viewing_direction)
