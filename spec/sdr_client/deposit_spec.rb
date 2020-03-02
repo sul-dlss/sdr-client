@@ -119,13 +119,49 @@ RSpec.describe SdrClient::Deposit do
             apo: 'druid:bc123df4567',
             catkey: nil,
             collection: 'druid:gh123df4567',
+            copyright: nil,
             embargo_access: 'world',
             embargo_release_date: nil,
             files_metadata: {},
             label: nil,
             source_id: 'googlebooks:12345',
             type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+            use_statement: nil,
             viewing_direction: 'left-to-right'
+          )
+
+        expect(process).to have_received(:run)
+      end
+    end
+
+    context 'with copyright and use_statement' do
+      subject(:run) do
+        described_class.run(apo: 'druid:bc123df4567',
+                            collection: 'druid:gh123df4567',
+                            copyright: 'All rights reserved unless otherwise indicated.',
+                            use_statement: 'Property rights reside with the repository...',
+                            source_id: 'googlebooks:12345',
+                            url: 'http://example.com/',
+                            grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
+      end
+
+      it 'runs the process with the specified grouping_strategy' do
+        run
+        expect(SdrClient::Deposit::Request).to have_received(:new)
+          .with(
+            access: 'dark',
+            apo: 'druid:bc123df4567',
+            catkey: nil,
+            collection: 'druid:gh123df4567',
+            copyright: 'All rights reserved unless otherwise indicated.',
+            embargo_access: 'world',
+            embargo_release_date: nil,
+            files_metadata: {},
+            label: nil,
+            source_id: 'googlebooks:12345',
+            type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+            use_statement: 'Property rights reside with the repository...',
+            viewing_direction: nil
           )
 
         expect(process).to have_received(:run)

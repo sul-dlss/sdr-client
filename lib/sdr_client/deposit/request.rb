@@ -14,6 +14,8 @@ module SdrClient
       # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
                      access: 'dark',
+                     use_statement: nil,
+                     copyright: nil,
                      apo:,
                      collection: nil,
                      source_id:,
@@ -32,6 +34,8 @@ module SdrClient
         @embargo_release_date = embargo_release_date
         @embargo_access = embargo_access
         @access = access
+        @use_statement = use_statement
+        @copyright = copyright
         @apo = apo
         @file_sets = file_sets
         @files_metadata = files_metadata
@@ -77,7 +81,7 @@ module SdrClient
 
       attr_reader :access, :label, :file_sets, :source_id, :catkey, :apo, :collection,
                   :type, :files_metadata, :embargo_release_date, :embargo_access,
-                  :viewing_direction
+                  :viewing_direction, :use_statement, :copyright
 
       def administrative
         {
@@ -101,6 +105,9 @@ module SdrClient
 
       def access_struct
         { access: access }.tap do |json|
+          json[:useAndReproductionStatement] = use_statement if use_statement
+          json[:copyright] = copyright if copyright
+
           if embargo_release_date
             json[:embargo] = {
               releaseDate: embargo_release_date.strftime('%FT%T%:z'),
