@@ -7,8 +7,10 @@ RSpec.describe SdrClient::Deposit::Request do
                           type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                           apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
+                          copyright: 'copyright',
                           source_id: 'googlebooks:12345',
                           catkey: '11991',
+                          use_statement: 'use statement',
                           viewing_direction: 'right-to-left',
                           embargo_release_date: Time.gm(2045),
                           embargo_access: 'stanford')
@@ -52,6 +54,8 @@ RSpec.describe SdrClient::Deposit::Request do
           label: 'This is my object',
           access: {
             access: 'dark',
+            copyright: 'copyright',
+            useAndReproductionStatement: 'use statement',
             embargo: {
               releaseDate: '2045-01-01T00:00:00+00:00',
               access: 'stanford'

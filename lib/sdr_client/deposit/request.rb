@@ -61,11 +61,13 @@ module SdrClient
                     access: access,
                     apo: apo,
                     collection: collection,
+                    copyright: copyright,
                     source_id: source_id,
                     catkey: catkey,
                     embargo_release_date: embargo_release_date,
                     embargo_access: embargo_access,
                     type: type,
+                    use_statement: use_statement,
                     viewing_direction: viewing_direction,
                     file_sets: file_sets,
                     files_metadata: files_metadata)
