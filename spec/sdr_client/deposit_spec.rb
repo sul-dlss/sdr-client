@@ -37,8 +37,8 @@ RSpec.describe SdrClient::Deposit do
                           files: ['spec/fixtures/file1.txt'],
                           files_metadata: {
                             'file1.txt' => {
-                              mime_type: 'text/plain',
-                              use: 'transcription'
+                              'mime_type' => 'text/plain',
+                              'use' => 'transcription'
                             }
                           },
                           grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
