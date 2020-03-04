@@ -126,12 +126,12 @@ RSpec.describe SdrClient::Deposit::Process do
         let(:files_metadata) do
           {
             'file1.txt' => {
-              md5: 'abc123',
-              sha1: 'def456',
-              mime_type: 'image/tiff',
-              access: 'public',
-              preserve: true,
-              shelve: true
+              'md5' => 'abc123',
+              'sha1' => 'def456',
+              'mime_type' => 'image/tiff',
+              'access' => 'public',
+              'preserve' => true,
+              'shelve' => true
             }
           }
         end

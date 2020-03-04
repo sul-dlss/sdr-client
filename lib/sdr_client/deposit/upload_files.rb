@@ -35,7 +35,7 @@ module SdrClient
           file_name = ::File.basename(path)
           obj[path] = Files::DirectUploadRequest.from_file(path,
                                                            file_name: file_name,
-                                                           content_type: metadata.for(file_name)[:mime_type])
+                                                           content_type: metadata.for(file_name)['mime_type'])
         end
       end
 
