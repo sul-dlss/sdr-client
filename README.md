@@ -8,6 +8,8 @@
 This is a CLI for interacting with the Stanford Digital Repository API.
 The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
+The provides a way for consumers to easily and correctly deposit files to the SDR without requiring access the the `/dor` NFS mount or to use Hydrus.  A primary design goal was for this to have as few dependencies as possible so that it can be easily distributed by `gem install sdr-client` and then it can be used as a CLI.
+
 ## Install
 
 `gem install sdr-client`
