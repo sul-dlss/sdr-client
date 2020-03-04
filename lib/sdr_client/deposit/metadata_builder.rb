@@ -30,9 +30,16 @@ module SdrClient
       def build_filesets(uploads:)
         grouped_uploads = grouping_strategy.run(uploads: uploads)
         grouped_uploads.map.with_index(1) do |upload_group, i|
-          metadata_group = {}
-          upload_group.each { |upload| metadata_group[upload.filename] = metadata.for(upload.filename) }
-          FileSet.new(uploads: upload_group, uploads_metadata: metadata_group, label: "Object #{i}")
+          FileSet.new(uploads: upload_group,
+                      uploads_metadata: metadata_group(upload_group),
+                      label: "Object #{i}")
+        end
+      end
+
+      # Get the metadata for the files belonging to a fileset
+      def metadata_group(upload_group)
+        upload_group.each_with_object({}) do |upload, obj|
+          obj[upload.filename] = metadata.for(upload.filename)
         end
       end
     end
