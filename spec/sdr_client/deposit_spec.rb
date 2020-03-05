@@ -28,6 +28,8 @@ RSpec.describe SdrClient::Deposit do
         filename: 'file1.txt',
         label: 'file1.txt',
         mime_type: 'text/plain',
+        md5: '85a81f69fd85d42c74af78e71ed21ef5',
+        sha1: '4502d57465f953f61c06071d8873f2be20c80824',
         use: 'transcription'
       ).and_call_original
       described_class.run(apo: 'druid:bc123df4567',

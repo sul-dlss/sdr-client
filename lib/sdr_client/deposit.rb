@@ -26,6 +26,7 @@ module SdrClient
                  logger: Logger.new(STDOUT))
       token = Credentials.read
 
+      augmented_metadata = FileMetadataBuilder.build(files: files, files_metadata: files_metadata)
       metadata = Request.new(label: label,
                              type: type,
                              access: access,
@@ -38,7 +39,7 @@ module SdrClient
                              embargo_release_date: embargo_release_date,
                              embargo_access: embargo_access,
                              viewing_direction: viewing_direction,
-                             files_metadata: files_metadata)
+                             files_metadata: augmented_metadata)
       Process.new(metadata: metadata, url: url, token: token, files: files,
                   grouping_strategy: grouping_strategy, logger: logger).run
     end
@@ -52,6 +53,7 @@ require 'sdr_client/deposit/matching_file_grouping_strategy'
 require 'sdr_client/deposit/files/direct_upload_request'
 require 'sdr_client/deposit/files/direct_upload_response'
 require 'sdr_client/deposit/file'
+require 'sdr_client/deposit/file_metadata_builder'
 require 'sdr_client/deposit/file_set'
 require 'sdr_client/deposit/request'
 require 'sdr_client/deposit/upload_files'
