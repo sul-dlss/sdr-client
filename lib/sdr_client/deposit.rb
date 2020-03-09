@@ -5,10 +5,11 @@ require 'logger'
 module SdrClient
   # The namespace for the "deposit" command
   module Deposit
+    BOOK_TYPE = 'http://cocina.sul.stanford.edu/models/book.jsonld'
     # rubocop:disable Metrics/ParameterLists
     # rubocop:disable Metrics/MethodLength
     def self.run(label: nil,
-                 type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                 type: BOOK_TYPE,
                  viewing_direction: nil,
                  access: 'dark',
                  use_statement: nil,

@@ -16,6 +16,8 @@ module SdrClient
         @grouping_strategy = grouping_strategy
       end
 
+      # @param [UploadFiles] upload_responses the uploaded file information
+      # @return [Request] the metadata with fileset information added in.
       def with_uploads(upload_responses)
         file_sets = build_filesets(uploads: upload_responses)
         metadata.with_file_sets(file_sets)
@@ -32,7 +34,16 @@ module SdrClient
         grouped_uploads.map.with_index(1) do |upload_group, i|
           FileSet.new(uploads: upload_group,
                       uploads_metadata: metadata_group(upload_group),
-                      label: "Object #{i}")
+                      label: label(i))
+        end
+      end
+
+      def label(index)
+        case metadata.type
+        when BOOK_TYPE
+          "Page #{index}"
+        else
+          "Object #{index}"
         end
       end
 

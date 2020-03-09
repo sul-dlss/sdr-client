@@ -100,12 +100,12 @@ RSpec.describe SdrClient::Deposit::Process do
               '"identification":{"sourceId":"googlebooks:12345"},' \
               '"structural":{"isMemberOf":"druid:gh123df4567",' \
               '"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
-              '"label":"Object 1",' \
+              '"label":"Page 1",' \
               '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
               '"label":"file1.txt","filename":"file1.txt","externalIdentifier":"BaHBLZz09Iiw",' \
               '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},' \
               '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
-              '"label":"Object 2",' \
+              '"label":"Page 2",' \
               '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
               '"label":"file2.txt","filename":"file2.txt","externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
               '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}]},' \
@@ -194,14 +194,14 @@ RSpec.describe SdrClient::Deposit::Process do
           '"identification":{"sourceId":"googlebooks:12345"},' \
           '"structural":{"isMemberOf":"druid:gh123df4567",' \
           '"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
-          '"label":"Object 1",' \
+          '"label":"Page 1",' \
           '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
           '"label":"file1.txt","filename":"file1.txt","externalIdentifier":"BaHBLZz09Iiw",' \
           '"access":{"access":"public"},"administrative":{"sdrPreserve":true,"shelve":true},' \
           '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],' \
           '"hasMimeType":"image/tiff"}]}},' \
           '{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld",' \
-          '"label":"Object 2",' \
+          '"label":"Page 2",' \
           '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
           '"label":"file2.txt","filename":"file2.txt","externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
           '"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}]},' \

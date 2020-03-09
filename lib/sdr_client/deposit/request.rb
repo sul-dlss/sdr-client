@@ -79,10 +79,12 @@ module SdrClient
         files_metadata.fetch(filename, {})
       end
 
+      attr_reader :type
+
       private
 
       attr_reader :access, :label, :file_sets, :source_id, :catkey, :apo, :collection,
-                  :type, :files_metadata, :embargo_release_date, :embargo_access,
+                  :files_metadata, :embargo_release_date, :embargo_access,
                   :viewing_direction, :use_statement, :copyright
 
       def administrative
