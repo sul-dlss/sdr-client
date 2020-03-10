@@ -4,43 +4,35 @@ require 'logger'
 
 module SdrClient
   module Deposit
-    # The process for doing a deposit
-    class Process
+    # The process for doing a deposit from a Cocina Model
+    class ModelProcess
       DRO_PATH = '/v1/resources'
-      # @param [Request] metadata information about the object
-      # @param [Class] grouping_strategy class whose run method groups an array of uploads
+      # @param [Cocina::Model::RequestDRO] request_dro for depositing
       # @param [String] url the server to send to
       # @param [String] token the bearer auth token for the server
       # @param [Array<String>] files a list of file names to upload
       # @param [Logger] logger the logger to use
-      # rubocop:disable Metrics/ParameterLists
-      def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy, url:,
+      def initialize(request_dro:, url:,
                      token:, files: [], logger: Logger.new(STDOUT))
         @files = files
         @url = url
         @token = token
-        @metadata = metadata
+        @request_dro = request_dro
         @logger = logger
-        @grouping_strategy = grouping_strategy
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def run
         check_files_exist
-        upload_responses = UploadFiles.new(files: files,
-                                           logger: logger,
-                                           connection: connection,
-                                           mime_types: mime_types).run
-        metadata_builder = MetadataBuilder.new(metadata: metadata,
-                                               grouping_strategy: grouping_strategy,
-                                               logger: logger)
-        request = metadata_builder.with_uploads(upload_responses)
-        upload_metadata(request.as_json)
+        UploadFiles.new(files: files,
+                        logger: logger,
+                        connection: connection,
+                        mime_types: mime_types).run
+        upload_request_dro
       end
 
       private
 
-      attr_reader :metadata, :files, :url, :token, :logger, :grouping_strategy
+      attr_reader :request_dro, :files, :url, :token, :logger
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -50,9 +42,10 @@ module SdrClient
       end
 
       # @return [Hash<Symbol,String>] the result of the metadata call
-      def upload_metadata(metadata)
-        logger.info("Starting upload metadata: #{metadata}")
-        request_json = JSON.generate(metadata)
+      # rubocop:disable Metrics/AbcSize
+      def upload_request_dro
+        request_json = request_dro.to_json
+        logger.info("Starting upload metadata: #{request_json}")
         response = connection.post(DRO_PATH, request_json, 'Content-Type' => 'application/json')
         unexpected_response(response) unless response.status == 201
 
@@ -60,6 +53,7 @@ module SdrClient
 
         { druid: JSON.parse(response.body)['druid'], background_job: response.headers['Location'] }
       end
+      # rubocop:enable Metrics/AbcSize
 
       def unexpected_response(response)
         raise "There was an error with your request: #{response.body}" if response.status == 400
@@ -78,10 +72,11 @@ module SdrClient
       def mime_types
         @mime_types ||=
           Hash[
-            files.map do |filepath|
-              filename = ::File.basename(filepath)
-              [filename, metadata.for(filename)['mime_type']]
-            end
+            request_dro.structural.contains.map do |file_set|
+              file_set.structural.contains.map do |file|
+                [file.filename, file.hasMimeType || 'application/octet-stream']
+              end
+            end.flatten(1)
           ]
       end
     end

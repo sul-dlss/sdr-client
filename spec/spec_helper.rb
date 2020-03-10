@@ -10,6 +10,7 @@ SimpleCov.start do
 end
 
 require 'sdr_client'
+require 'cocina/models'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
