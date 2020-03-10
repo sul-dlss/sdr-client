@@ -13,6 +13,7 @@ Layout/LineLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    -  'sdr-client.gemspec'
   ExcludedMethods:
     - 'OptionParser.new'
 

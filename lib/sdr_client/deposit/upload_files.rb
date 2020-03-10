@@ -7,13 +7,13 @@ module SdrClient
     # The file uploading part of a deposit
     class UploadFiles
       BLOB_PATH = '/v1/direct_uploads'
-      # @param [Array<String>] files a list of file names to upload
+      # @param [Array<String>] files a list of filepaths to upload
       # @param [Logger] logger the logger to use
       # @param [Faraday::Connection] connection
-      # @param [Request] metadata information about the object
-      def initialize(files:, metadata:, logger:, connection:)
+      # @param [Hash<String,String] mime_types a map of filenames to mime types
+      def initialize(files:, mime_types:, logger:, connection:)
         @files = files
-        @metadata = metadata
+        @mime_types = mime_types
         @logger = logger
         @connection = connection
       end
@@ -28,14 +28,14 @@ module SdrClient
 
       private
 
-      attr_reader :files, :metadata, :logger, :connection
+      attr_reader :files, :mime_types, :logger, :connection
 
       def collect_file_metadata
         files.each_with_object({}) do |path, obj|
           file_name = ::File.basename(path)
           obj[path] = Files::DirectUploadRequest.from_file(path,
                                                            file_name: file_name,
-                                                           content_type: metadata.for(file_name)['mime_type'])
+                                                           content_type: mime_types[file_name])
         end
       end
 

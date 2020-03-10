@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '>= 0.16'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'cocina-models'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.79.0'
