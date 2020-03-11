@@ -28,11 +28,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activesupport'
+  spec.add_dependency 'cocina-models', '~> 0.28.0'
   spec.add_dependency 'dry-monads'
   spec.add_dependency 'faraday', '>= 0.16'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'cocina-models', '~> 0.28.0'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.79.0'
