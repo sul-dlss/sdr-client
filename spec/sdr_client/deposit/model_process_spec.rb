@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe SdrClient::Deposit::ModelProcess do
-  let(:request_dro) do
-    Cocina::Models::RequestDRO.new(
+  let(:request_dro_hash) do
+    {
+
       'access' => { 'access' => 'world' },
       'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
       'version' => 1,
@@ -48,7 +49,20 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         ]
       },
       'label' => 'This is my object'
-    )
+
+    }
+  end
+  let(:request_dro) do
+    Cocina::Models::RequestDRO.new(request_dro_hash)
+  end
+
+  let(:submitted_request_dro) do
+    # When submitted, expect to have externalIdentifiers added.
+    submitted_request_dro_hash = request_dro_hash.dup
+    contains = submitted_request_dro_hash['structural']['contains']
+    contains[0]['structural']['contains'][0]['externalIdentifier'] = 'BaHBLZz09Iiw'
+    contains[1]['structural']['contains'][0]['externalIdentifier'] = 'dz09IiwiZXhwIjpudWxsLC'
+    Cocina::Models::RequestDRO.new(submitted_request_dro_hash)
   end
 
   let(:instance) do
@@ -66,6 +80,22 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
 
       it 'raises an error' do
         expect { subject }.to raise_error(Errno::ENOENT)
+      end
+    end
+
+    context 'when no request file for file' do
+      let(:files) { ['spec/fixtures/file1.txt', 'spec/fixtures/file2.txt', 'spec/fixtures/file3.txt'] }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(/Request file not provided/)
+      end
+    end
+
+    context 'when no file for request file' do
+      let(:files) { ['spec/fixtures/file1.txt'] }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(/File not provided for request file/)
       end
     end
 
@@ -128,7 +158,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
 
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: request_dro.to_json,
+              body: submitted_request_dro.to_json,
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',

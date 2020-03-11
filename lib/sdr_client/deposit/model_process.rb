@@ -23,11 +23,14 @@ module SdrClient
 
       def run
         check_files_exist
-        UploadFiles.new(files: files,
-                        logger: logger,
-                        connection: connection,
-                        mime_types: mime_types).run
-        upload_request_dro
+        child_files_match
+
+        upload_responses = UploadFiles.new(files: files,
+                                           logger: logger,
+                                           connection: connection,
+                                           mime_types: mime_types).run
+        new_request_dro = with_external_identifiers(upload_responses)
+        upload_request_dro(new_request_dro.to_json)
       end
 
       private
@@ -41,10 +44,23 @@ module SdrClient
         end
       end
 
+      def child_files_match
+        # Files without request files.
+        files.each do |filepath|
+          filename = ::File.basename(filepath)
+
+          raise "Request file not provided for #{filepath}" if request_files[filename].nil?
+        end
+
+        # Request files without files
+        filenames = files.map { |filepath| ::File.basename(filepath) }
+        request_files.keys.each do |request_filename|
+          raise "File not provided for request file #{request_filename}" unless filenames.include?(request_filename)
+        end
+      end
+
       # @return [Hash<Symbol,String>] the result of the metadata call
-      # rubocop:disable Metrics/AbcSize
-      def upload_request_dro
-        request_json = request_dro.to_json
+      def upload_request_dro(request_json)
         logger.info("Starting upload metadata: #{request_json}")
         response = connection.post(DRO_PATH, request_json, 'Content-Type' => 'application/json')
         unexpected_response(response) unless response.status == 201
@@ -53,7 +69,6 @@ module SdrClient
 
         { druid: JSON.parse(response.body)['druid'], background_job: response.headers['Location'] }
       end
-      # rubocop:enable Metrics/AbcSize
 
       def unexpected_response(response)
         raise "There was an error with your request: #{response.body}" if response.status == 400
@@ -69,15 +84,40 @@ module SdrClient
         end
       end
 
+      # Map of filenames to mimetypes
       def mime_types
         @mime_types ||=
           Hash[
-            request_dro.structural.contains.map do |file_set|
-              file_set.structural.contains.map do |file|
-                [file.filename, file.hasMimeType || 'application/octet-stream']
-              end
-            end.flatten(1)
+            request_files.map do |filename, file|
+              [filename, file.hasMimeType || 'application/octet-stream']
+            end
           ]
+      end
+
+      # Map of filenames to request files
+      def request_files
+        @request_files ||=
+          Hash[
+              request_dro.structural.contains.map do |file_set|
+                file_set.structural.contains.map do |file|
+                  [file.filename, file]
+                end
+              end.flatten(1)
+          ]
+      end
+
+      def with_external_identifiers(upload_responses)
+        signed_id_map = Hash[upload_responses.map { |response| [response.filename, response.signed_id] }]
+
+        # Manipulating request_dro as hash since immutable
+        request_dro_hash = request_dro.to_h
+        request_dro_hash[:structural][:contains].each do |file_set|
+          file_set[:structural][:contains].each do |file|
+            file[:externalIdentifier] = signed_id_map[file[:filename]]
+          end
+        end
+
+        Cocina::Models::RequestDRO.new(request_dro_hash)
       end
     end
   end
