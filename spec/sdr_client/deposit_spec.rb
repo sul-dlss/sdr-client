@@ -53,7 +53,6 @@ RSpec.describe SdrClient::Deposit do
     let(:second_request) { instance_double(SdrClient::Deposit::Request, as_json: {}) }
 
     before do
-      allow(SdrClient::Credentials).to receive(:read).and_return('token')
       allow(SdrClient::Deposit::Request).to receive(:new).and_return(request)
       allow(SdrClient::Deposit::Process).to receive(:new).and_return(process)
     end
@@ -72,8 +71,7 @@ RSpec.describe SdrClient::Deposit do
           .with(grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 files: [],
                 metadata: request,
-                token: 'token',
-                url: 'http://example.com/',
+                connection: SdrClient::Connection,
                 logger: Logger)
 
         expect(process).to have_received(:run)
@@ -95,8 +93,7 @@ RSpec.describe SdrClient::Deposit do
           .with(grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy,
                 files: [],
                 metadata: request,
-                token: 'token',
-                url: 'http://example.com/',
+                connection: SdrClient::Connection,
                 logger: Logger)
 
         expect(process).to have_received(:run)

@@ -9,21 +9,17 @@ module SdrClient
       DRO_PATH = '/v1/resources'
       # @param [Request] metadata information about the object
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
-      # @param [String] url the server to send to
-      # @param [String] token the bearer auth token for the server
+      # @param [String] connection the server connection to use
       # @param [Array<String>] files a list of file names to upload
       # @param [Logger] logger the logger to use
-      # rubocop:disable Metrics/ParameterLists
-      def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy, url:,
-                     token:, files: [], logger: Logger.new(STDOUT))
+      def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy,
+                     connection:, files: [], logger: Logger.new(STDOUT))
         @files = files
-        @url = url
-        @token = token
+        @connection = connection
         @metadata = metadata
         @logger = logger
         @grouping_strategy = grouping_strategy
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def run
         check_files_exist
@@ -40,7 +36,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :files, :url, :token, :logger, :grouping_strategy
+      attr_reader :metadata, :files, :connection, :logger, :grouping_strategy
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -66,13 +62,6 @@ module SdrClient
         raise 'There was an error with your credentials. Perhaps they have expired?' if response.status == 401
 
         raise "unexpected response: #{response.status} #{response.body}"
-      end
-
-      def connection
-        @connection ||= Faraday.new(url: url) do |conn|
-          conn.authorization :Bearer, token
-          conn.adapter :net_http
-        end
       end
 
       def mime_types

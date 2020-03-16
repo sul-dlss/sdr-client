@@ -9,7 +9,7 @@ module SdrClient
       BLOB_PATH = '/v1/direct_uploads'
       # @param [Array<String>] files a list of filepaths to upload
       # @param [Logger] logger the logger to use
-      # @param [Faraday::Connection] connection
+      # @param [Connection] connection
       # @param [Hash<String,String] mime_types a map of filenames to mime types
       def initialize(files:, mime_types:, logger:, connection:)
         @files = files

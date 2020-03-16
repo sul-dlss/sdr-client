@@ -25,8 +25,6 @@ module SdrClient
                  files_metadata: {},
                  grouping_strategy: SingleFileGroupingStrategy,
                  logger: Logger.new(STDOUT))
-      token = Credentials.read
-
       augmented_metadata = FileMetadataBuilder.build(files: files, files_metadata: files_metadata)
       metadata = Request.new(label: label,
                              type: type,
@@ -41,7 +39,8 @@ module SdrClient
                              embargo_access: embargo_access,
                              viewing_direction: viewing_direction,
                              files_metadata: augmented_metadata)
-      Process.new(metadata: metadata, url: url, token: token, files: files,
+      connection = Connection.new(url: url)
+      Process.new(metadata: metadata, connection: connection, files: files,
                   grouping_strategy: grouping_strategy, logger: logger).run
     end
     # rubocop:enable Metrics/MethodLength
