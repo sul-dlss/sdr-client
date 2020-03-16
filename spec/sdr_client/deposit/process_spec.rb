@@ -11,10 +11,10 @@ RSpec.describe SdrClient::Deposit::Process do
                                     files_metadata: files_metadata)
   end
 
+  let(:connection) { SdrClient::Connection.new(url: 'http://example.com:3000', token: 'eyJhbGci') }
   let(:instance) do
     described_class.new(metadata: metadata,
-                        url: 'http://example.com:3000',
-                        token: 'eyJhbGci',
+                        connection: connection,
                         files: files,
                         logger: logger)
   end
