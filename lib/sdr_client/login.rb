@@ -7,12 +7,12 @@ module SdrClient
     extend Dry::Monads[:result]
 
     # @return [Result] the status of the call
-    def self.run(url:, login_service: LoginPrompt)
+    def self.run(url:, login_service: LoginPrompt, credential_store: Credentials)
       request_json = JSON.generate(login_service.run)
       response = Faraday.post(url + LOGIN_PATH, request_json, 'Content-Type' => 'application/json')
       case response.status
       when 200
-        Credentials.write(response.body)
+        credential_store.write(response.body)
         Success()
       when 400
         Failure('Email address is not a valid email')
