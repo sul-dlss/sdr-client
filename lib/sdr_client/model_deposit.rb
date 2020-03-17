@@ -9,9 +9,8 @@ module SdrClient
                        files: [],
                        url:,
                        logger: Logger.new(STDOUT))
-      token = Credentials.read
-
-      ModelProcess.new(request_dro: request_dro, url: url, token: token, files: files, logger: logger).run
+      connection = Connection.new(url: url)
+      ModelProcess.new(request_dro: request_dro, connection: connection, files: files, logger: logger).run
     end
   end
 end

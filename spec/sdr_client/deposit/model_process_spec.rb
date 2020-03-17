@@ -65,10 +65,10 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     Cocina::Models::RequestDRO.new(submitted_request_dro_hash)
   end
 
+  let(:connection) { SdrClient::Connection.new(url: 'http://example.com:3000', token: 'eyJhbGci') }
   let(:instance) do
     described_class.new(request_dro: request_dro,
-                        url: 'http://example.com:3000',
-                        token: 'eyJhbGci',
+                        connection: connection,
                         files: files)
   end
 
