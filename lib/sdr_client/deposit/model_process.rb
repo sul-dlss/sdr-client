@@ -8,15 +8,12 @@ module SdrClient
     class ModelProcess
       DRO_PATH = '/v1/resources'
       # @param [Cocina::Model::RequestDRO] request_dro for depositing
-      # @param [String] url the server to send to
-      # @param [String] token the bearer auth token for the server
+      # @param [Connection] connection the connection to use
       # @param [Array<String>] files a list of file names to upload
       # @param [Logger] logger the logger to use
-      def initialize(request_dro:, url:,
-                     token:, files: [], logger: Logger.new(STDOUT))
+      def initialize(request_dro:, connection:, files: [], logger: Logger.new(STDOUT))
         @files = files
-        @url = url
-        @token = token
+        @connection = connection
         @request_dro = request_dro
         @logger = logger
       end
@@ -35,7 +32,7 @@ module SdrClient
 
       private
 
-      attr_reader :request_dro, :files, :url, :token, :logger
+      attr_reader :request_dro, :files, :logger, :connection
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -75,13 +72,6 @@ module SdrClient
         raise 'There was an error with your credentials. Perhaps they have expired?' if response.status == 401
 
         raise "unexpected response: #{response.status} #{response.body}"
-      end
-
-      def connection
-        @connection ||= Faraday.new(url: url) do |conn|
-          conn.authorization :Bearer, token
-          conn.adapter :net_http
-        end
       end
 
       # Map of filenames to mimetypes

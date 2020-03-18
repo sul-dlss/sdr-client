@@ -11,21 +11,22 @@ RSpec.describe SdrClient::Deposit do
     let(:files) { ['spec/fixtures/file1.txt'] }
 
     let(:request_dro) { instance_double(Cocina::Models::RequestDRO) }
-
+    let(:connection) { instance_double(SdrClient::Connection) }
     let(:upload_url) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
 
     before do
-      allow(SdrClient::Credentials).to receive(:read).and_return('token')
+      allow(SdrClient::Connection).to receive(:new).and_return(connection)
       allow(SdrClient::Deposit::ModelProcess).to receive(:new).and_return(process)
     end
 
     it 'runs the process' do
       run
+      expect(SdrClient::Connection).to have_received(:new).with(url: upload_url)
+
       expect(SdrClient::Deposit::ModelProcess).to have_received(:new)
         .with(files: files,
               request_dro: request_dro,
-              token: 'token',
-              url: upload_url,
+              connection: connection,
               logger: Logger)
 
       expect(process).to have_received(:run)
