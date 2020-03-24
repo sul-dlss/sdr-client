@@ -24,7 +24,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
                   'filename' => 'file1.txt',
                   'access' => { 'access' => 'dark' },
                   'administrative' => { 'sdrPreserve' => false, 'shelve' => false },
-                  'version' => 1
+                  'version' => 1,
+                  'hasMessageDigests' => []
                 }
               ]
             }
@@ -41,7 +42,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
                   'filename' => 'file2.txt',
                   'access' => { 'access' => 'dark' },
                   'administrative' => { 'sdrPreserve' => false, 'shelve' => false },
-                  'version' => 1
+                  'version' => 1,
+                  'hasMessageDigests' => []
                 }
               ]
             }
