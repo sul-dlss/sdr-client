@@ -34,9 +34,10 @@ module SdrClient
           administrative: {
             sdrPreserve: @preserve,
             shelve: @shelve
-          }
+          },
+          version: 1,
+          hasMessageDigests: message_digests
         }.tap do |json|
-          json['hasMessageDigests'] = message_digests unless message_digests.empty?
           json['hasMimeType'] = @mime_type if @mime_type
           json['use'] = @use if @use
         end

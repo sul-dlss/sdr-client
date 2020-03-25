@@ -21,6 +21,7 @@ module SdrClient
         @grouping_strategy = grouping_strategy
       end
 
+      # rubocop:disable Metrics/AbcSize
       def run
         check_files_exist
         upload_responses = UploadFiles.new(files: files,
@@ -31,8 +32,10 @@ module SdrClient
                                                grouping_strategy: grouping_strategy,
                                                logger: logger)
         request = metadata_builder.with_uploads(upload_responses)
-        upload_metadata(request.as_json)
+        model = Cocina::Models.build_request(request.as_json.with_indifferent_access)
+        upload_metadata(model.to_h)
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 

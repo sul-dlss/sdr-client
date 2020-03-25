@@ -49,10 +49,10 @@ module SdrClient
           type: type,
           administrative: administrative,
           identification: identification,
-          structural: structural
-        }.tap do |json|
-          json[:label] = label if label
-        end
+          structural: structural,
+          version: 1,
+          label: label.nil? ? ':auto' : label
+        }
       end
 
       # @return [Request] a clone of this request with the file_sets added

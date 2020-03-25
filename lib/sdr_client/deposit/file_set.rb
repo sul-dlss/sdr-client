@@ -25,7 +25,8 @@ module SdrClient
           "label": label,
           structural: {
             contains: files.map(&:as_json)
-          }
+          },
+          version: 1
         }
       end
 

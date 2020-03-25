@@ -52,6 +52,7 @@ RSpec.describe SdrClient::Deposit::Request do
         {
           type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
           label: 'This is my object',
+          version: 1,
           access: {
             access: 'dark',
             copyright: 'copyright',
@@ -73,6 +74,7 @@ RSpec.describe SdrClient::Deposit::Request do
               {
                 type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
                 label: 'Object 1',
+                version: 1,
                 structural: { contains:
                   [
                     {
@@ -80,13 +82,16 @@ RSpec.describe SdrClient::Deposit::Request do
                       label: 'file1.png',
                       filename: 'file1.png',
                       access: { access: 'dark' }, administrative: { sdrPreserve: false, shelve: false },
-                      externalIdentifier: 'foo-file1'
+                      externalIdentifier: 'foo-file1',
+                      version: 1,
+                      hasMessageDigests: []
                     }
                   ] }
               },
               {
                 type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
                 label: 'Object 2',
+                version: 1,
                 structural: { contains:
                   [
                     {
@@ -94,7 +99,9 @@ RSpec.describe SdrClient::Deposit::Request do
                       label: 'file2.png',
                       filename: 'file2.png',
                       access: { access: 'dark' }, administrative: { sdrPreserve: false, shelve: false },
-                      externalIdentifier: 'bar-file2'
+                      externalIdentifier: 'bar-file2',
+                      version: 1,
+                      hasMessageDigests: []
                     }
                   ] }
               }
@@ -125,7 +132,8 @@ RSpec.describe SdrClient::Deposit::Request do
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: { sourceId: 'googlebooks:12345' },
-          structural: {}
+          structural: {},
+          version: 1
         }
       end
       it { is_expected.to eq expected }
