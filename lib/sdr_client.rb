@@ -4,6 +4,7 @@ require 'dry/monads'
 require 'faraday'
 require 'active_support'
 require 'active_support/core_ext/object/json'
+require 'active_support/core_ext/hash/indifferent_access'
 
 require 'sdr_client/version'
 require 'sdr_client/deposit'

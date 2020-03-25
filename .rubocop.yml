@@ -9,6 +9,8 @@ AllCops:
 
 Layout/LineLength:
   Max: 120
+  Exclude:
+    - 'spec/sdr_client/deposit/process_spec.rb'
 
 Metrics/BlockLength:
   Exclude:
