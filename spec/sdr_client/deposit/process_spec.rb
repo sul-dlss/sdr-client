@@ -16,10 +16,11 @@ RSpec.describe SdrClient::Deposit::Process do
     described_class.new(metadata: metadata,
                         connection: connection,
                         files: files,
-                        logger: logger)
+                        logger: logger,
+                        accession: false)
   end
 
-  let(:logger) { instance_double(Logger, info: nil) }
+  let(:logger) { instance_double(Logger, info: nil, debug: nil) }
 
   let(:files_metadata) { {} }
 

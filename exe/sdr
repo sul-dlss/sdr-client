@@ -27,7 +27,10 @@ global = OptionParser.new do |opts|
 
       COMMANDS
         deposit
-        deposit files to the SDR
+        accession object into the SDR
+
+        register
+        create a draft object in SDR
 
         login
         Will prompt for email & password and exchange it for an login token, which it saves in ~/.sdr/token
@@ -40,77 +43,80 @@ end
 global.order!
 command = ARGV.shift
 
+deposit_options = OptionParser.new do |opts|
+  opts.on('--label LABEL', 'The object label') do |label|
+    options[:label] = label
+  end
+
+  opts.on('--admin-policy ADMIN_POLICY', 'The druid identifier of the admin policy object') do |apo|
+    options[:apo] = apo
+  end
+
+  opts.on('--type TYPE', 'The object type to create. ' \
+          'One of: "image", "book", "document", "map", "manuscript", "media", ' \
+          '"three_dimensional", "collection", or "admin_policy"') do |type|
+    if %w[image book document map manuscript media three_dimensional collection admin_policy].include?(type)
+      options[:type] = "http://cocina.sul.stanford.edu/models/#{type}.jsonld"
+    end
+  end
+
+  opts.on('--collection COLLECTION', 'The druid identifier of the collection object') do |collection|
+    options[:collection] = collection
+  end
+
+  opts.on('--catkey CATKEY', 'The catkey for this item') do |catkey|
+    options[:catkey] = catkey
+  end
+
+  opts.on('--source-id SOURCE_ID', 'The source id for this object') do |source_id|
+    options[:source_id] = source_id
+  end
+
+  opts.on('--copyright COPYRIGHT', 'The copyright statement') do |copyright|
+    options[:copyright] = copyright
+  end
+
+  opts.on('--use-statement STATEMENT', 'The use and reproduction statement') do |use_statement|
+    options[:use_statement] = use_statement
+  end
+
+  opts.on('--viewing-direction DIRECTION', 'The viewing direction (if a book). ' \
+          'Either "left-to-right" or "right-to-left"') do |viewing_direction|
+    options[:viewing_direction] = viewing_direction if %w[left-to-right right-to-left].include?(viewing_direction)
+  end
+
+  opts.on('--access LEVEL', 'The access level for this object. ' \
+          'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |level|
+    options[:access] = level if %w[world stanford location-based citation-only dark].include?(level)
+  end
+
+  opts.on('--files-metadata FILES_METADATA', 'A JSON object representing per-file metadata') do |files_metadata|
+    options[:files_metadata] = JSON.parse(files_metadata)
+  end
+
+  opts.on('--strategy STRATEGY',
+          'The strategy to use for distributing files into filesets. Either "default" or "filename"') do |strategy|
+    strategy_class = case strategy
+                     when 'filename'
+                       SdrClient::Deposit::MatchingFileGroupingStrategy
+                     when 'default'
+                       SdrClient::Deposit::SingleFileGroupingStrategy
+                     else
+                       warn "Unknown strategy #{strategy}"
+                       exit(1)
+                     end
+    options[:grouping_strategy] = strategy_class
+  end
+
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+end
+
 subcommands = {
-  'deposit' => OptionParser.new do |opts|
-    opts.on('--label LABEL', 'The object label') do |label|
-      options[:label] = label
-    end
-
-    opts.on('--admin-policy ADMIN_POLICY', 'The druid identifier of the admin policy object') do |apo|
-      options[:apo] = apo
-    end
-
-    opts.on('--type TYPE', 'The object type to create. ' \
-            'One of: "image", "book", "document", "map", "manuscript", "media", ' \
-            '"three_dimensional", "collection", or "admin_policy"') do |type|
-      if %w[image book document map manuscript media three_dimensional collection admin_policy].include?(type)
-        options[:type] = "http://cocina.sul.stanford.edu/models/#{type}.jsonld"
-      end
-    end
-
-    opts.on('--collection COLLECTION', 'The druid identifier of the collection object') do |collection|
-      options[:collection] = collection
-    end
-
-    opts.on('--catkey CATKEY', 'The catkey for this item') do |catkey|
-      options[:catkey] = catkey
-    end
-
-    opts.on('--source-id SOURCE_ID', 'The source id for this object') do |source_id|
-      options[:source_id] = source_id
-    end
-
-    opts.on('--copyright COPYRIGHT', 'The copyright statement') do |copyright|
-      options[:copyright] = copyright
-    end
-
-    opts.on('--use-statement STATEMENT', 'The use and reproduction statement') do |use_statement|
-      options[:use_statement] = use_statement
-    end
-
-    opts.on('--viewing-direction DIRECTION', 'The viewing direction (if a book). ' \
-            'Either "left-to-right" or "right-to-left"') do |viewing_direction|
-      options[:viewing_direction] = viewing_direction if %w[left-to-right right-to-left].include?(viewing_direction)
-    end
-
-    opts.on('--access LEVEL', 'The access level for this object. ' \
-            'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |level|
-      options[:access] = level if %w[world stanford location-based citation-only dark].include?(level)
-    end
-
-    opts.on('--files-metadata FILES_METADATA', 'A JSON object representing per-file metadata') do |files_metadata|
-      options[:files_metadata] = JSON.parse(files_metadata)
-    end
-
-    opts.on('--strategy STRATEGY',
-            'The strategy to use for distributing files into filesets. Either "default" or "filename"') do |strategy|
-      strategy_class = case strategy
-                       when 'filename'
-                         SdrClient::Deposit::MatchingFileGroupingStrategy
-                       when 'default'
-                         SdrClient::Deposit::SingleFileGroupingStrategy
-                       else
-                         warn "Unknown strategy #{strategy}"
-                         exit(1)
-                       end
-      options[:grouping_strategy] = strategy_class
-    end
-
-    opts.on('-h', '--help', 'Display this screen') do
-      puts opts
-      exit
-    end
-  end,
+  'deposit' => deposit_options,
+  'register' => deposit_options,
   'login' => OptionParser.new
 }
 

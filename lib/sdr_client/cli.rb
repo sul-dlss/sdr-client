@@ -6,7 +6,9 @@ module SdrClient
     def self.start(command, options)
       case command
       when 'deposit'
-        SdrClient::Deposit.run(options)
+        SdrClient::Deposit.run(accession: true, **options)
+      when 'register'
+        SdrClient::Deposit.run(accession: false, **options)
       when 'login'
         status = SdrClient::Login.run(options)
         puts status.value if status.failure?
