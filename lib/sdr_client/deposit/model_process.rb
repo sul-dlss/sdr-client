@@ -10,12 +10,15 @@ module SdrClient
       # @param [Cocina::Model::RequestDRO] request_dro for depositing
       # @param [Connection] connection the connection to use
       # @param [Array<String>] files a list of file names to upload
+      # @param [Boolean] accession should the accessionWF be started
       # @param [Logger] logger the logger to use
-      def initialize(request_dro:, connection:, files: [], logger: Logger.new(STDOUT))
+      def initialize(request_dro:, connection:,
+                     files: [], accession:, logger: Logger.new(STDOUT))
         @files = files
         @connection = connection
         @request_dro = request_dro
         @logger = logger
+        @accession = accession
       end
 
       def run
@@ -33,6 +36,10 @@ module SdrClient
       private
 
       attr_reader :request_dro, :files, :logger, :connection
+
+      def accession?
+        @accession
+      end
 
       def check_files_exist
         logger.info('checking to see if files exist')
@@ -59,12 +66,18 @@ module SdrClient
       # @return [Hash<Symbol,String>] the result of the metadata call
       def upload_request_dro(request_json)
         logger.info("Starting upload metadata: #{request_json}")
-        response = connection.post(DRO_PATH, request_json, 'Content-Type' => 'application/json')
+        response = connection.post(path, request_json, 'Content-Type' => 'application/json')
         unexpected_response(response) unless response.status == 201
 
         logger.info("Response from server: #{response.body}")
 
         { druid: JSON.parse(response.body)['druid'], background_job: response.headers['Location'] }
+      end
+
+      def path
+        path = DRO_PATH
+        path += '?accession=true' if accession?
+        path
       end
 
       def unexpected_response(response)
