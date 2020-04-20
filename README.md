@@ -29,7 +29,7 @@ sdr --service-url https://sdr-api-server:3000 register --label 'hey there' \
   --source-id 'googlebooks:stanford_12345' file1.png file2.png
 ```
 
-Deposit a new object:
+Deposit (register + accession) a new object:
 ```
 sdr --service-url https://sdr-api-server:3000 deposit --label 'hey there' \
   --admin-policy 'druid:bk123gh4567' \
