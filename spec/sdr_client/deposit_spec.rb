@@ -5,7 +5,7 @@ RSpec.describe SdrClient::Deposit do
     let(:upload_url) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
 
     before do
-      stub_request(:post, 'http://example.com/v1/resources')
+      stub_request(:post, 'http://example.com/v1/resources?accession=true')
         .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
                    headers: { 'Location' => 'http://example.com/background_job/1' })
       stub_request(:post, 'http://example.com/v1/direct_uploads')
@@ -43,6 +43,7 @@ RSpec.describe SdrClient::Deposit do
                               'use' => 'transcription'
                             }
                           },
+                          accession: true,
                           grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
     end
   end
@@ -72,7 +73,8 @@ RSpec.describe SdrClient::Deposit do
                 files: [],
                 metadata: request,
                 connection: SdrClient::Connection,
-                logger: Logger)
+                logger: Logger,
+                accession: false)
 
         expect(process).to have_received(:run)
       end
@@ -94,7 +96,8 @@ RSpec.describe SdrClient::Deposit do
                 files: [],
                 metadata: request,
                 connection: SdrClient::Connection,
-                logger: Logger)
+                logger: Logger,
+                accession: false)
 
         expect(process).to have_received(:run)
       end
