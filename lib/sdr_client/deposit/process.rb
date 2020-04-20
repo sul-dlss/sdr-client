@@ -6,7 +6,6 @@ module SdrClient
   module Deposit
     # The process for doing a deposit
     class Process
-      DRO_PATH = '/v1/resources'
       # @param [Request] metadata information about the object
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [String] connection the server connection to use
@@ -38,7 +37,10 @@ module SdrClient
                                                logger: logger)
         request = metadata_builder.with_uploads(upload_responses)
         model = Cocina::Models.build_request(request.as_json.with_indifferent_access)
-        upload_metadata(model.to_h)
+        UploadResource.run(accession: @accession,
+                           metadata: JSON.generate(model.to_h),
+                           logger: logger,
+                           connection: connection)
       end
       # rubocop:enable Metrics/AbcSize
 
@@ -51,41 +53,6 @@ module SdrClient
         files.each do |file_name|
           raise Errno::ENOENT, file_name unless ::File.exist?(file_name)
         end
-      end
-
-      def accession?
-        @accession
-      end
-
-      # @param [Hash<Symbol,String>] the result of the metadata call
-      # @param [Boolean] accession should the accessionWF be started
-      # @return [Hash<Symbol,String>] the result of the metadata call
-      def upload_metadata(metadata)
-        response = metadata_request(metadata)
-        unexpected_response(response) unless response.status == 201
-
-        logger.info("Response from server: #{response.body}")
-
-        { druid: JSON.parse(response.body)['druid'], background_job: response.headers['Location'] }
-      end
-
-      def metadata_request(metadata)
-        logger.debug("Starting upload metadata: #{metadata}")
-
-        connection.post(path, JSON.generate(metadata), 'Content-Type' => 'application/json')
-      end
-
-      def path
-        path = DRO_PATH
-        path += '?accession=true' if accession?
-        path
-      end
-
-      def unexpected_response(response)
-        raise "There was an error with your request: #{response.body}" if response.status == 400
-        raise 'There was an error with your credentials. Perhaps they have expired?' if response.status == 401
-
-        raise "unexpected response: #{response.status} #{response.body}"
       end
 
       def mime_types
