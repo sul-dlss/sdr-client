@@ -3,7 +3,8 @@
 RSpec.describe SdrClient::Deposit do
   describe '.run_model' do
     subject(:run) do
-      described_class.model_run(files: files, request_dro: request_dro, url: upload_url)
+      described_class.model_run(files: files, request_dro: request_dro,
+                                url: upload_url, accession: true)
     end
 
     let(:process) { instance_double(SdrClient::Deposit::ModelProcess, run: true) }
@@ -27,7 +28,8 @@ RSpec.describe SdrClient::Deposit do
         .with(files: files,
               request_dro: request_dro,
               connection: connection,
-              logger: Logger)
+              logger: Logger,
+              accession: true)
 
       expect(process).to have_received(:run)
     end
