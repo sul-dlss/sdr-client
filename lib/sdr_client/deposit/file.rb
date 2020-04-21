@@ -6,7 +6,7 @@ module SdrClient
     class File
       # rubocop:disable Metrics/ParameterLists
       def initialize(external_identifier:, label:, filename:,
-                     access: 'dark', preserve: false, shelve: false,
+                     access: 'world', preserve: true, shelve: true,
                      mime_type: nil, md5: nil, sha1: nil, use: nil)
         @external_identifier = external_identifier
         @label = label
