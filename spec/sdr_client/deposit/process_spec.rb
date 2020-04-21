@@ -96,7 +96,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[],"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}],"isMemberOf":"druid:gh123df4567"}}',
+              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[],"access":{"access":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}],"isMemberOf":"druid:gh123df4567"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
@@ -116,9 +116,9 @@ RSpec.describe SdrClient::Deposit::Process do
               'md5' => 'abc123',
               'sha1' => 'def456',
               'mime_type' => 'image/tiff',
-              'access' => 'world',
-              'preserve' => true,
-              'shelve' => true
+              'access' => 'dark',
+              'preserve' => false,
+              'shelve' => false
             }
           }
         end
@@ -176,7 +176,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/resources')
             .with(
-              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff","externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],"access":{"access":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}}],"isMemberOf":"druid:gh123df4567"}}',
+              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff","externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],"access":{"access":"dark"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}],"isMemberOf":"druid:gh123df4567"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
