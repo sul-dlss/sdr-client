@@ -3,7 +3,6 @@
 RSpec.describe SdrClient::Deposit::ModelProcess do
   let(:request_dro_hash) do
     {
-
       'access' => { 'access' => 'world' },
       'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
       'version' => 1,
@@ -71,7 +70,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
   let(:instance) do
     described_class.new(request_dro: request_dro,
                         connection: connection,
-                        files: files)
+                        files: files,
+                        accession: true)
   end
 
   describe '.run' do
@@ -158,7 +158,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, 'http://example.com:3000/v1/resources?accession=true')
             .with(
               body: submitted_request_dro.to_json,
               headers: { 'Content-Type' => 'application/json' }
@@ -225,7 +225,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, 'http://example.com:3000/v1/resources?accession=true')
             .to_return(status: 400, body: '{"id":"bad_request",' \
               '"message":"#/components/schemas/DROStructural missing required parameters: isMemberOf"}')
         end
@@ -287,7 +287,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, 'http://example.com:3000/v1/resources?accession=true')
             .to_return(status: 401)
         end
 
