@@ -13,7 +13,9 @@ RSpec.describe SdrClient::Deposit::Request do
                           use_statement: 'use statement',
                           viewing_direction: 'right-to-left',
                           embargo_release_date: Time.gm(2045),
-                          embargo_access: 'stanford')
+                          embargo_access: 'stanford',
+                          access: 'world',
+                          download: 'world')
     end
     let(:with_file_sets) do
       instance.with_file_sets(file_sets)
@@ -54,8 +56,9 @@ RSpec.describe SdrClient::Deposit::Request do
           label: 'This is my object',
           version: 1,
           access: {
-            access: 'dark',
+            access: 'world',
             copyright: 'copyright',
+            download: 'world',
             useAndReproductionStatement: 'use statement',
             embargo: {
               releaseDate: '2045-01-01T00:00:00+00:00',
@@ -128,7 +131,8 @@ RSpec.describe SdrClient::Deposit::Request do
           type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
           label: 'This is my object',
           access: {
-            access: 'dark'
+            access: 'dark',
+            download: 'none'
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: { sourceId: 'googlebooks:12345' },
