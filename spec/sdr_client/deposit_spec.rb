@@ -118,6 +118,7 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Request).to have_received(:new)
           .with(
             access: 'dark',
+            download: 'none',
             apo: 'druid:bc123df4567',
             catkey: nil,
             collection: 'druid:gh123df4567',
@@ -152,6 +153,7 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Request).to have_received(:new)
           .with(
             access: 'dark',
+            download: 'none',
             apo: 'druid:bc123df4567',
             catkey: nil,
             collection: 'druid:gh123df4567',
