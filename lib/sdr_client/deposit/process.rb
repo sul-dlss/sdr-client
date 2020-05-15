@@ -26,6 +26,7 @@ module SdrClient
       # rubocop:enable Metrics/ParameterLists
 
       # rubocop:disable Metrics/AbcSize
+      # @return [String] job id for the background job result
       def run
         check_files_exist
         upload_responses = UploadFiles.new(files: files,
