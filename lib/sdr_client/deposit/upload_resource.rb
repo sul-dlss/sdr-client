@@ -21,14 +21,14 @@ module SdrClient
       end
 
       # @param [Hash<Symbol,String>] the result of the metadata call
-      # @return [Hash<Symbol,String>] the result of the metadata call
+      # @return [String] job id for the background job result
       def run
         response = metadata_request
         unexpected_response(response) unless response.status == 201
 
         logger.info("Response from server: #{response.body}")
 
-        { druid: JSON.parse(response.body)['druid'], background_job: response.headers['Location'] }
+        JSON.parse(response.body)['jobId']
       end
 
       private

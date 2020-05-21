@@ -8,6 +8,7 @@ module SdrClient
     BOOK_TYPE = 'http://cocina.sul.stanford.edu/models/book.jsonld'
     # rubocop:disable Metrics/ParameterLists
     # rubocop:disable Metrics/MethodLength
+    # @return [String] job id for the background job result
     def self.run(label: nil,
                  type: BOOK_TYPE,
                  viewing_direction: nil,

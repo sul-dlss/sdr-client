@@ -15,6 +15,7 @@ require 'sdr_client/login'
 require 'sdr_client/login_prompt'
 require 'sdr_client/cli'
 require 'sdr_client/connection'
+require 'sdr_client/background_job_results'
 
 module SdrClient
   class Error < StandardError; end

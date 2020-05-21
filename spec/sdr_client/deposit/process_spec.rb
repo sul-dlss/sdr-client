@@ -99,13 +99,12 @@ RSpec.describe SdrClient::Deposit::Process do
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world","download":"none"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[],"access":{"access":"world","download":"none"},"administrative":{"sdrPreserve":true,"shelve":true}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"world","download":"none"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}],"isMemberOf":"druid:gh123df4567"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
-            .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
+            .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end
 
         it 'uploads files' do
-          expect(subject).to eq(background_job: 'http://example.com/background_job/1',
-                                druid: 'druid:bc333df7777')
+          expect(subject).to eq('1')
         end
       end
 
@@ -179,13 +178,12 @@ RSpec.describe SdrClient::Deposit::Process do
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world","download":"none"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff","externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],"access":{"access":"dark","download":"none"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"world","download":"none"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}],"isMemberOf":"druid:gh123df4567"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
-            .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
+            .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end
 
         it 'uploads files' do
-          expect(subject).to eq(background_job: 'http://example.com/background_job/1',
-                                druid: 'druid:bc333df7777')
+          expect(subject).to eq('1')
         end
       end
 

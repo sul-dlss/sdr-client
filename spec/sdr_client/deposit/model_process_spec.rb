@@ -163,13 +163,12 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
               body: submitted_request_dro.to_json,
               headers: { 'Content-Type' => 'application/json' }
             )
-            .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
+            .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end
 
         it 'uploads files' do
-          expect(subject).to eq(background_job: 'http://example.com/background_job/1',
-                                druid: 'druid:bc333df7777')
+          expect(subject).to eq('1')
         end
       end
 
