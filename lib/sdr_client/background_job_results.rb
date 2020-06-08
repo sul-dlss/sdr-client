@@ -13,7 +13,7 @@ module SdrClient
       connection = Connection.new(url: "#{url}/v1/background_job_results/#{job_id}").connection
       resp = connection.get
 
-      raise "unexpected response: #{response.status} #{response.body}" unless resp.success?
+      raise "unexpected response: #{resp.status} #{resp.body}" unless resp.success?
 
       JSON.parse(resp.body).with_indifferent_access
     end
