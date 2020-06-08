@@ -25,5 +25,13 @@ RSpec.describe SdrClient::BackgroundJobResults do
         expect(subject['status']).to eq(status)
       end
     end
+
+    context 'when error' do
+      let(:status_code) { 500 }
+      let(:status) { 'error' }
+      it 'raises' do
+        expect { subject }.to raise_error(/unexpected response: 500/)
+      end
+    end
   end
 end
