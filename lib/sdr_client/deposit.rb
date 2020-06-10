@@ -51,6 +51,19 @@ module SdrClient
     end
     # rubocop:enable Metrics/MethodLength
     # rubocop:enable Metrics/ParameterLists
+
+    def self.model_run(request_dro:,
+                       files: [],
+                       url:,
+                       accession:,
+                       logger: Logger.new(STDOUT))
+      connection = Connection.new(url: url)
+      ModelProcess.new(request_dro: request_dro,
+                       connection: connection,
+                       files: files,
+                       logger: logger,
+                       accession: accession).run
+    end
   end
 end
 require 'json'
@@ -63,6 +76,7 @@ require 'sdr_client/deposit/file_metadata_builder'
 require 'sdr_client/deposit/file_set'
 require 'sdr_client/deposit/request'
 require 'sdr_client/deposit/metadata_builder'
+require 'sdr_client/deposit/model_process'
 require 'sdr_client/deposit/process'
 require 'sdr_client/deposit/upload_files'
 require 'sdr_client/deposit/upload_resource'
