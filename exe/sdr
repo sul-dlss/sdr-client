@@ -106,6 +106,7 @@ end
 subcommands[command].order!
 
 options[:files] = ARGV unless ARGV.empty?
+options[:url] ||= 'https://sdr-api-prod.stanford.edu'
 
 begin
   SdrClient::CLI.start(command, options)
