@@ -6,37 +6,13 @@ require 'optparse'
 require 'sdr_client'
 
 options = {}
+
 global = OptionParser.new do |opts|
   opts.on('--service-url URL', 'Connect to the host at this URL') do |url|
     options[:url] = url
   end
   opts.on('-h', '--help', 'Display this screen') do
-    puts <<~HELP
-      DESCRIPTION:
-        The SDR Command Line Interface is a tool to interact with the Stanford Digital Repository.
-
-      SYNOPSIS:
-        sdr [options] <command>
-
-      OPTIONS:
-        --service-url (string)
-        Override the command's default URL with the given URL.
-
-        -h, --help
-        Displays this screen
-
-      COMMANDS
-        deposit
-        accession object into the SDR
-
-        register
-        create a draft object in SDR
-
-        login
-        Will prompt for email & password and exchange it for an login token, which it saves in ~/.sdr/token
-
-    HELP
-    exit
+    SdrClient::CLI.help
   end
 end
 
@@ -114,6 +90,8 @@ deposit_options = OptionParser.new do |opts|
   end
 end
 
+SdrClient::CLI.help unless command
+
 subcommands = {
   'deposit' => deposit_options,
   'register' => deposit_options,
@@ -122,10 +100,16 @@ subcommands = {
 
 unless subcommands.key?(command)
   puts "unknown command '#{command}'"
-  exit
+  SdrClient::CLI.help
 end
 
 subcommands[command].order!
 
 options[:files] = ARGV unless ARGV.empty?
-SdrClient::CLI.start(command, options)
+
+begin
+  SdrClient::CLI.start(command, options)
+rescue StandardError => e
+  warn e.message
+  puts subcommands[command].help
+end
