@@ -38,7 +38,8 @@ module SdrClient
       case command
       when 'deposit', 'register'
         display_errors(validate_deposit_options(options))
-        SdrClient::Deposit.run(accession: command == 'deposit', **options)
+        job_id = SdrClient::Deposit.run(accession: command == 'deposit', **options)
+        poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
       when 'login'
         status = SdrClient::Login.run(options)
         puts status.failure if status.failure?
@@ -66,6 +67,21 @@ module SdrClient
     def self.help
       puts HELP
       exit
+    end
+
+    def self.poll_for_job_complete(job_id:, url:)
+      result = nil
+      1.upto(5) do |_n|
+        result = SdrClient::BackgroundJobResults.show(url: url, job_id: job_id)
+        break unless %w[pending processing].include? result['status']
+
+        sleep 5
+      end
+      if result['status'] == 'complete'
+        puts result.dig('output', 'druid')
+      else
+        warn "Job #{job_id} did not complete\n#{result.inspect}"
+      end
     end
   end
 end
