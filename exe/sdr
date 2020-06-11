@@ -20,6 +20,7 @@ global.order!
 command = ARGV.shift
 
 deposit_options = OptionParser.new do |opts|
+  opts.banner = "Usage: sdr #{command} [options]"
   opts.on('--label LABEL', 'The object label') do |label|
     options[:label] = label
   end
@@ -111,6 +112,8 @@ options[:url] ||= 'https://sdr-api-prod.stanford.edu'
 begin
   SdrClient::CLI.start(command, options)
 rescue StandardError => e
+  warn "There was a problem making your request:\n\n"
   warn e.message
+  puts
   puts subcommands[command].help
 end
