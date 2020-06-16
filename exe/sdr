@@ -31,8 +31,8 @@ deposit_options = OptionParser.new do |opts|
 
   opts.on('--type TYPE', 'The object type to create. ' \
           'One of: "image", "book", "document", "map", "manuscript", "media", ' \
-          '"three_dimensional", "collection", or "admin_policy"') do |type|
-    if %w[image book document map manuscript media three_dimensional collection admin_policy].include?(type)
+          '"three_dimensional", "object", "collection", or "admin_policy"') do |type|
+    if %w[image book document map manuscript media three_dimensional object collection admin_policy].include?(type)
       options[:type] = "http://cocina.sul.stanford.edu/models/#{type}.jsonld"
     end
   end
