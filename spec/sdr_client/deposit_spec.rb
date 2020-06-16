@@ -11,7 +11,7 @@ RSpec.describe SdrClient::Deposit do
       stub_request(:post, 'http://example.com/v1/direct_uploads')
         .to_return(
           status: 200,
-          body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",'\
+          body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file four.txt",'\
                 '"content_type":"text/html","metadata":{},"byte_size":27,' \
                 '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
                 '"signed_id":"BaHBLZz09Iiw",'\
@@ -25,20 +25,20 @@ RSpec.describe SdrClient::Deposit do
     it 'passes files metadata through to Process' do
       expect(SdrClient::Deposit::File).to receive(:new).with(
         external_identifier: 'BaHBLZz09Iiw',
-        filename: 'file1.txt',
-        label: 'file1.txt',
+        filename: 'file four.txt',
+        label: 'file four.txt',
         mime_type: 'text/plain',
-        md5: '85a81f69fd85d42c74af78e71ed21ef5',
-        sha1: '4502d57465f953f61c06071d8873f2be20c80824',
+        md5: '19531a7fd61429c613d156f53cf3ba76',
+        sha1: 'bc59eae52d98e84f83f65fdea3d7857b9ec5c46c',
         use: 'transcription'
       ).and_call_original
       described_class.run(apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
                           source_id: 'googlebooks:12345',
                           url: 'http://example.com/',
-                          files: ['spec/fixtures/file1.txt'],
+                          files: ['spec/fixtures/file four.txt'],
                           files_metadata: {
-                            'file1.txt' => {
+                            'file four.txt' => {
                               'mime_type' => 'text/plain',
                               'use' => 'transcription'
                             }
