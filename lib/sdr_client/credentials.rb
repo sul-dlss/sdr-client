@@ -12,6 +12,7 @@ module SdrClient
       File.open(credentials_file, 'w', 0o600) do |file|
         file.flock(File::LOCK_EX)
         file.write(json.fetch('token'))
+        file.flush
       end
     end
 
