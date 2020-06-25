@@ -21,7 +21,7 @@ module SdrClient
 
       creds = nil
       File.open(credentials_file, 'r') do |file|
-        file.flock(File::LOCK_SH)
+        file.flock(File::LOCK_EX)
         creds = file.readlines(chomp: true).first
       end
       raise NoCredentialsError if creds.nil?
