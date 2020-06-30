@@ -5,6 +5,7 @@ require 'faraday'
 require 'active_support'
 require 'active_support/core_ext/object/json'
 require 'active_support/core_ext/hash/indifferent_access'
+require 'active_support/core_ext/file/atomic'
 require 'cocina/models'
 
 require 'sdr_client/version'

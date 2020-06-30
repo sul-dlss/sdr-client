@@ -9,21 +9,16 @@ module SdrClient
     def self.write(body)
       json = JSON.parse(body)
       Dir.mkdir(credentials_path, 0o700) unless Dir.exist?(credentials_path)
-      File.open(credentials_file, 'w', 0o600) do |file|
-        file.flock(File::LOCK_EX)
+      File.atomic_write(credentials_file) do |file|
         file.write(json.fetch('token'))
-        file.flush
       end
+      File.chmod(0o600, credentials_file)
     end
 
     def self.read
       raise NoCredentialsError unless ::File.exist?(credentials_file)
 
-      creds = nil
-      File.open(credentials_file, 'r') do |file|
-        file.flock(File::LOCK_EX)
-        creds = file.readlines(chomp: true).first
-      end
+      creds = IO.readlines(credentials_file, chomp: true).first if ::File.exist?(credentials_file)
       raise NoCredentialsError if creds.nil?
 
       creds
