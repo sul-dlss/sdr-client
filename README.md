@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sul-dlss/sdr-client.svg?branch=master)](https://travis-ci.org/sul-dlss/sdr-client)
+[![CircleCI](https://circleci.com/gh/sul-dlss/sdr-client.svg?style=svg)](https://circleci.com/gh/sul-dlss/sdr-client)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1210855d46d4f424bf30/maintainability)](https://codeclimate.com/github/sul-dlss/sdr-client/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1210855d46d4f424bf30/test_coverage)](https://codeclimate.com/github/sul-dlss/sdr-client/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/sdr-client.svg)](https://badge.fury.io/rb/sdr-client)
