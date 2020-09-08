@@ -9,7 +9,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
       'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
       'identification' => { 'sourceId' => 'googlebooks:12345' },
       'structural' => {
-        'isMemberOf' => 'druid:gh123df4567',
+        'isMemberOf' => ['druid:gh123df4567'],
         'contains' => [
           {
             'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
