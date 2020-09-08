@@ -72,7 +72,7 @@ RSpec.describe SdrClient::Deposit::Request do
           },
           structural: {
             hasMemberOrders: [{ viewingDirection: 'right-to-left' }],
-            isMemberOf: 'druid:gh123df4567',
+            isMemberOf: ['druid:gh123df4567'],
             contains: [
               {
                 type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',

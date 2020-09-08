@@ -104,7 +104,7 @@ module SdrClient
 
       def structural
         {}.tap do |json|
-          json[:isMemberOf] = collection if collection
+          json[:isMemberOf] = [collection] if collection
           json[:contains] = file_sets.map(&:as_json) unless file_sets.empty?
           json[:hasMemberOrders] = [{ viewingDirection: viewing_direction }] if viewing_direction
         end
