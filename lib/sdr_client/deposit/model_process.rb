@@ -73,7 +73,9 @@ module SdrClient
 
       # Map of filenames to request files
       def request_files
-        @request_files ||=
+        @request_files ||= begin
+          return {} unless request_dro.structural
+
           Hash[
               request_dro.structural.contains.map do |file_set|
                 file_set.structural.contains.map do |file|
@@ -81,21 +83,26 @@ module SdrClient
                 end
               end.flatten(1)
           ]
+        end
       end
 
+      # rubocop:disable Metrics/AbcSize
       def with_external_identifiers(upload_responses)
         signed_id_map = Hash[upload_responses.map { |response| [response.filename, response.signed_id] }]
 
         # Manipulating request_dro as hash since immutable
         request_dro_hash = request_dro.to_h
-        request_dro_hash[:structural][:contains].each do |file_set|
-          file_set[:structural][:contains].each do |file|
-            file[:externalIdentifier] = signed_id_map[file[:filename]]
+        if request_dro_hash[:structural]
+          request_dro_hash[:structural][:contains].each do |file_set|
+            file_set[:structural][:contains].each do |file|
+              file[:externalIdentifier] = signed_id_map[file[:filename]]
+            end
           end
         end
 
         Cocina::Models::RequestDRO.new(request_dro_hash)
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

@@ -295,5 +295,41 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         end
       end
     end
+
+    context 'when no structural' do
+      let(:request_dro_hash) do
+        {
+          'access' => { 'access' => 'world' },
+          'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+          'version' => 1,
+          'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
+          'identification' => { 'sourceId' => 'googlebooks:12345' },
+          'label' => 'This is my object'
+
+        }
+      end
+
+      let(:files) { [] }
+
+      before do
+        stub_request(:post, 'http://example.com:3000/v1/resources?accession=true')
+          .with(
+            body: Cocina::Models::RequestDRO.new(request_dro_hash).to_json,
+            headers: {
+              'Accept' => '*/*',
+              'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'Authorization' => 'Bearer eyJhbGci',
+              'Content-Type' => 'application/json',
+              'User-Agent' => 'Faraday v1.1.0'
+            }
+          )
+          .to_return(status: 201, body: '{"jobId":"1"}',
+                     headers: { 'Location' => 'http://example.com/background_job/1' })
+      end
+
+      it 'uploads resource' do
+        expect(subject).to eq('1')
+      end
+    end
   end
 end
