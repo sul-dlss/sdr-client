@@ -52,6 +52,7 @@ module SdrClient
     # rubocop:enable Metrics/MethodLength
     # rubocop:enable Metrics/ParameterLists
 
+    # @param [Array<String>] files absolute paths to files
     def self.model_run(request_dro:,
                        files: [],
                        url:,
