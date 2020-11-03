@@ -7,40 +7,34 @@ module SdrClient
     # The file uploading part of a deposit
     class UploadFiles
       BLOB_PATH = '/v1/direct_uploads'
-      # @param [Array<String>] files a list of filepaths to upload
+      # @param [Hash<String,Files::DirectUploadRequest>] the metadata for uploading the files
       # @param [Logger] logger the logger to use
       # @param [Connection] connection
-      # @param [Hash<String,String] mime_types a map of filenames to mime types
-      def initialize(files:, mime_types:, logger:, connection:)
-        @files = files
-        @mime_types = mime_types
+      def self.upload(file_metadata:, logger:, connection:)
+        new(file_metadata: file_metadata, logger: logger, connection: connection).run
+      end
+
+      # @param [Hash<String,Files::DirectUploadRequest>] the metadata for uploading the files
+      # @param [Logger] logger the logger to use
+      # @param [Connection] connection
+      def initialize(file_metadata:, logger:, connection:)
+        @file_metadata = file_metadata
         @logger = logger
         @connection = connection
       end
 
       # @return [Array<SdrClient::Deposit::Files::DirectUploadResponse>] the responses from the server for the uploads
       def run
-        file_metadata = collect_file_metadata
-        upload_responses = upload_file_metadata(file_metadata)
+        upload_responses = upload_file_metadata
         upload_files(upload_responses)
         upload_responses.values
       end
 
       private
 
-      attr_reader :files, :mime_types, :logger, :connection
+      attr_reader :logger, :connection, :file_metadata
 
-      def collect_file_metadata
-        files.each_with_object({}) do |path, obj|
-          file_name = ::File.basename(path)
-          obj[path] = Files::DirectUploadRequest.from_file(path,
-                                                           file_name: file_name,
-                                                           content_type: mime_types[file_name])
-        end
-      end
-
-      # @param [Hash<String,Files::DirectUploadRequest>] file_metadata the filenames and their upload request
-      def upload_file_metadata(file_metadata)
+      def upload_file_metadata
         Hash[file_metadata.map { |filename, metadata| [filename, direct_upload(metadata.to_json)] }]
       end
 

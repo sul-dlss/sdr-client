@@ -29,10 +29,11 @@ module SdrClient
       # @return [String] job id for the background job result
       def run
         check_files_exist
-        upload_responses = UploadFiles.new(files: files,
-                                           logger: logger,
-                                           connection: connection,
-                                           mime_types: mime_types).run
+
+        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types)
+        upload_responses = UploadFiles.upload(file_metadata: file_metadata,
+                                              logger: logger,
+                                              connection: connection)
         metadata_builder = MetadataBuilder.new(metadata: metadata,
                                                grouping_strategy: grouping_strategy,
                                                logger: logger)
