@@ -24,10 +24,10 @@ module SdrClient
         check_files_exist
         child_files_match
 
-        upload_responses = UploadFiles.new(files: files,
-                                           logger: logger,
-                                           connection: connection,
-                                           mime_types: mime_types).run
+        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types)
+        upload_responses = UploadFiles.upload(file_metadata: file_metadata,
+                                              logger: logger,
+                                              connection: connection)
         new_request_dro = with_external_identifiers(upload_responses)
         UploadResource.run(accession: @accession,
                            metadata: new_request_dro.to_json,
