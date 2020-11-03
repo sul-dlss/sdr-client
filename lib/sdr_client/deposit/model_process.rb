@@ -28,7 +28,7 @@ module SdrClient
         upload_responses = UploadFiles.upload(file_metadata: file_metadata,
                                               logger: logger,
                                               connection: connection)
-        new_request_dro = with_external_identifiers(upload_responses)
+        new_request_dro = UpdateDroWithFileIdentifiers.update(request_dro: request_dro, upload_responses: upload_responses)
         UploadResource.run(accession: @accession,
                            metadata: new_request_dro.to_json,
                            logger: logger,
@@ -85,24 +85,6 @@ module SdrClient
           ]
         end
       end
-
-      # rubocop:disable Metrics/AbcSize
-      def with_external_identifiers(upload_responses)
-        signed_id_map = Hash[upload_responses.map { |response| [response.filename, response.signed_id] }]
-
-        # Manipulating request_dro as hash since immutable
-        request_dro_hash = request_dro.to_h
-        if request_dro_hash[:structural]
-          request_dro_hash[:structural][:contains].each do |file_set|
-            file_set[:structural][:contains].each do |file|
-              file[:externalIdentifier] = signed_id_map[file[:filename]]
-            end
-          end
-        end
-
-        Cocina::Models::RequestDRO.new(request_dro_hash)
-      end
-      # rubocop:enable Metrics/AbcSize
     end
   end
 end
