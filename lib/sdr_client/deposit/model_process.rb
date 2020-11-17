@@ -29,8 +29,8 @@ module SdrClient
                                               logger: logger,
                                               connection: connection)
         new_request_dro = UpdateDroWithFileIdentifiers.update(request_dro: request_dro, upload_responses: upload_responses)
-        UploadResource.run(accession: @accession,
-                           metadata: new_request_dro.to_json,
+        CreateResource.run(accession: @accession,
+                           metadata: new_request_dro,
                            logger: logger,
                            connection: connection)
       end

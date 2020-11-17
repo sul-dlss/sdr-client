@@ -2,19 +2,17 @@
 
 module SdrClient
   module Deposit
-    # Uploads a resource (metadata) to the server
-    class UploadResource
-      DRO_PATH = '/v1/resources'
+    # Updates a resource (metadata) in SDR
+    class UpdateResource
+      DRO_PATH = '/v1/resources/%<id>s'
 
-      def self.run(accession:, metadata:, logger:, connection:)
-        new(accession: accession, metadata: metadata, logger: logger, connection: connection).run
+      def self.run(metadata:, logger:, connection:)
+        new(metadata: metadata, logger: logger, connection: connection).run
       end
 
-      # @param [Boolean] accession should the accessionWF be started
-      # @param [String] metadata
+      # @param [Cocina::Models::DRO] metadata
       # @param [Hash<Symbol,String>] the result of the metadata call
-      def initialize(accession:, metadata:, logger:, connection:)
-        @accession = accession
+      def initialize(metadata:, logger:, connection:)
         @metadata = metadata
         @logger = logger
         @connection = connection
@@ -24,7 +22,7 @@ module SdrClient
       # @return [String] job id for the background job result
       def run
         response = metadata_request
-        unexpected_response(response) unless response.status == 201
+        unexpected_response(response) unless response.status == 200
 
         logger.info("Response from server: #{response.body}")
 
@@ -36,9 +34,10 @@ module SdrClient
       attr_reader :metadata, :logger, :connection
 
       def metadata_request
-        logger.debug("Starting upload metadata: #{metadata}")
+        json = metadata.to_json
+        logger.debug("Starting upload metadata: #{json}")
 
-        connection.post(path, metadata, 'Content-Type' => 'application/json')
+        connection.put(path(metadata), json, 'Content-Type' => 'application/json')
       end
 
       def unexpected_response(response)
@@ -48,14 +47,8 @@ module SdrClient
         raise "unexpected response: #{response.status} #{response.body}"
       end
 
-      def accession?
-        @accession
-      end
-
-      def path
-        path = DRO_PATH
-        path += '?accession=true' if accession?
-        path
+      def path(metadata)
+        format(DRO_PATH, id: metadata.externalIdentifier)
       end
     end
   end

@@ -39,8 +39,8 @@ module SdrClient
                                                logger: logger)
         request = metadata_builder.with_uploads(upload_responses)
         model = Cocina::Models.build_request(request.as_json.with_indifferent_access)
-        UploadResource.run(accession: @accession,
-                           metadata: JSON.generate(model.to_h),
+        CreateResource.run(accession: @accession,
+                           metadata: model,
                            logger: logger,
                            connection: connection)
       end
