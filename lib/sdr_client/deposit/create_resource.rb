@@ -24,7 +24,7 @@ module SdrClient
       # @return [String] job id for the background job result
       def run
         response = metadata_request
-        unexpected_response(response) unless response.status == 201
+        UnexpectedResponse.call(response) unless response.status == 201
 
         logger.info("Response from server: #{response.body}")
 
@@ -40,13 +40,6 @@ module SdrClient
         logger.debug("Starting upload metadata: #{json}")
 
         connection.post(path, json, 'Content-Type' => 'application/json')
-      end
-
-      def unexpected_response(response)
-        raise "There was an error with your request: #{response.body}" if response.status == 400
-        raise 'There was an error with your credentials. Perhaps they have expired?' if response.status == 401
-
-        raise "unexpected response: #{response.status} #{response.body}"
       end
 
       def accession?
