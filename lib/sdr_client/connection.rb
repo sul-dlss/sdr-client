@@ -32,7 +32,7 @@ module SdrClient
       end
     end
 
-    delegate :put, :post, to: :connection
+    delegate :put, :post, :get, to: :connection
 
     private
 

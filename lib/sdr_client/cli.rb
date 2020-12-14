@@ -23,6 +23,9 @@ module SdrClient
 
 
       COMMANDS:
+        get
+          Retrieve an object from the SDR
+
         deposit
           Accession an object into the SDR
 
@@ -34,12 +37,12 @@ module SdrClient
 
     HELP
 
-    def self.start(command, options)
+    def self.start(command, options, arguments = [])
       case command
+      when 'get'
+        puts SdrClient::Find.run(arguments.first, **options)
       when 'deposit', 'register'
-        display_errors(validate_deposit_options(options))
-        job_id = SdrClient::Deposit.run(accession: command == 'deposit', **options)
-        poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
+        deposit(command, options, arguments)
       when 'login'
         status = SdrClient::Login.run(options)
         puts status.failure if status.failure?
@@ -49,6 +52,13 @@ module SdrClient
     rescue SdrClient::Credentials::NoCredentialsError
       puts 'Log in first'
       exit(1)
+    end
+
+    def self.deposit(command, options, arguments)
+      options[:files] = arguments if arguments.present?
+      display_errors(validate_deposit_options(options))
+      job_id = SdrClient::Deposit.run(accession: command == 'deposit', **options)
+      poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
     end
 
     def self.display_errors(errors)
