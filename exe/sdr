@@ -19,6 +19,9 @@ end
 global.order!
 command = ARGV.shift
 
+retrieve_options = OptionParser.new do |opts|
+end
+
 deposit_options = OptionParser.new do |opts|
   opts.banner = "Usage: sdr #{command} [options]"
   opts.on('--label LABEL', 'The object label') do |label|
@@ -94,6 +97,7 @@ end
 SdrClient::CLI.help unless command
 
 subcommands = {
+  'get' => retrieve_options,
   'deposit' => deposit_options,
   'register' => deposit_options,
   'login' => OptionParser.new
@@ -106,11 +110,10 @@ end
 
 subcommands[command].order!
 
-options[:files] = ARGV unless ARGV.empty?
 options[:url] ||= 'https://sdr-api-prod.stanford.edu'
 
 begin
-  SdrClient::CLI.start(command, options)
+  SdrClient::CLI.start(command, options, ARGV)
 rescue StandardError => e
   warn "There was a problem making your request:\n\n"
   warn e.message
