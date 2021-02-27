@@ -12,12 +12,13 @@ RSpec.describe SdrClient::Deposit::Process do
   end
 
   let(:connection) { SdrClient::Connection.new(url: 'http://example.com:3000', token: 'eyJhbGci') }
+  let(:accession) { false }
   let(:instance) do
     described_class.new(metadata: metadata,
                         connection: connection,
                         files: files,
                         logger: logger,
-                        accession: false)
+                        accession: accession)
   end
 
   let(:logger) { instance_double(Logger, info: nil, debug: nil) }
@@ -94,7 +95,7 @@ RSpec.describe SdrClient::Deposit::Process do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .with(
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world","download":"none"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[],"access":{"access":"world","download":"none"},"administrative":{"sdrPreserve":true,"shelve":true}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"world","download":"none"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}],"isMemberOf":["druid:gh123df4567"]}}',
               headers: { 'Content-Type' => 'application/json' }
@@ -105,6 +106,14 @@ RSpec.describe SdrClient::Deposit::Process do
 
         it 'uploads files' do
           expect(subject).to eq('1')
+        end
+
+        context 'when accession is true' do
+          let(:accession) { true }
+
+          it 'uploads files' do
+            expect(subject).to eq('1')
+          end
         end
       end
 
@@ -173,7 +182,7 @@ RSpec.describe SdrClient::Deposit::Process do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .with(
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld","label":"This is my object","version":1,"access":{"access":"world","download":"none"},"administrative":{"hasAdminPolicy":"druid:bc123df4567"},"identification":{"sourceId":"googlebooks:12345"},"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 1","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff","externalIdentifier":"BaHBLZz09Iiw","hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],"access":{"access":"dark","download":"none"},"administrative":{"sdrPreserve":false,"shelve":false}}]}},{"type":"http://cocina.sul.stanford.edu/models/fileset.jsonld","label":"Page 2","version":1,"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld","label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],"access":{"access":"world","download":"none"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}],"isMemberOf":["druid:gh123df4567"]}}',
               headers: { 'Content-Type' => 'application/json' }
@@ -239,7 +248,7 @@ RSpec.describe SdrClient::Deposit::Process do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .to_return(status: 400, body: '{"id":"bad_request",' \
               '"message":"#/components/schemas/DROStructural missing required parameters: isMemberOf"}')
         end
@@ -301,7 +310,7 @@ RSpec.describe SdrClient::Deposit::Process do
             )
             .to_return(status: 204)
 
-          stub_request(:post, 'http://example.com:3000/v1/resources')
+          stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .to_return(status: 401)
         end
 

@@ -47,9 +47,7 @@ module SdrClient
       end
 
       def path
-        path = DRO_PATH
-        path += '?accession=true' if accession?
-        path
+        "#{DRO_PATH}?accession=#{accession?}"
       end
     end
   end
