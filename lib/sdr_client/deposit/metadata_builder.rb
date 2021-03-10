@@ -8,7 +8,7 @@ module SdrClient
     class MetadataBuilder
       # @param [Request] metadata information about the object
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
-      # Additional metadata includes access, preserve, shelve, md5, sha1
+      # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # @param [Logger] logger the logger to use
       def initialize(metadata:, grouping_strategy:, logger:)
         @metadata = metadata
