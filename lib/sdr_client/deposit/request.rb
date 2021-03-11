@@ -10,7 +10,7 @@ module SdrClient
       # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
       # @param [Array<FileSet>] file_sets the file sets to attach.
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
-      # Additional metadata includes access, preserve, shelve, md5, sha1
+      # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
                      access: 'dark',

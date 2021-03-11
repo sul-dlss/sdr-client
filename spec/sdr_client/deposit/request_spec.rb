@@ -84,7 +84,7 @@ RSpec.describe SdrClient::Deposit::Request do
                       type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
                       label: 'file1.png',
                       filename: 'file1.png',
-                      access: { access: 'world' }, administrative: { sdrPreserve: true, shelve: true },
+                      access: { access: 'world' }, administrative: { publish: true, sdrPreserve: true, shelve: true },
                       externalIdentifier: 'foo-file1',
                       version: 1,
                       hasMessageDigests: []
@@ -101,7 +101,7 @@ RSpec.describe SdrClient::Deposit::Request do
                       type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
                       label: 'file2.png',
                       filename: 'file2.png',
-                      access: { access: 'world' }, administrative: { sdrPreserve: true, shelve: true },
+                      access: { access: 'world' }, administrative: { publish: true, sdrPreserve: true, shelve: true },
                       externalIdentifier: 'bar-file2',
                       version: 1,
                       hasMessageDigests: []

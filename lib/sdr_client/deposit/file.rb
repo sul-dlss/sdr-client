@@ -7,13 +7,15 @@ module SdrClient
       # rubocop:disable Metrics/ParameterLists
       def initialize(external_identifier:, label:, filename:,
                      access: 'world', preserve: true, shelve: true,
-                     mime_type: nil, md5: nil, sha1: nil, use: nil)
+                     publish: true, mime_type: nil, md5: nil, sha1: nil,
+                     use: nil)
         @external_identifier = external_identifier
         @label = label
         @filename = filename
         @access = access
         @preserve = preserve
         @shelve = shelve
+        @publish = publish
         @mime_type = mime_type
         @md5 = md5
         @sha1 = sha1
@@ -33,7 +35,8 @@ module SdrClient
           },
           administrative: {
             sdrPreserve: @preserve,
-            shelve: @shelve
+            shelve: @shelve,
+            publish: @publish
           },
           version: 1,
           hasMessageDigests: message_digests
