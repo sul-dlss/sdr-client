@@ -75,7 +75,7 @@ RSpec.describe SdrClient::Deposit::Request do
             isMemberOf: ['druid:gh123df4567'],
             contains: [
               {
-                type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+                type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
                 label: 'Object 1',
                 version: 1,
                 structural: { contains:
@@ -92,7 +92,7 @@ RSpec.describe SdrClient::Deposit::Request do
                   ] }
               },
               {
-                type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+                type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
                 label: 'Object 2',
                 version: 1,
                 structural: { contains:
