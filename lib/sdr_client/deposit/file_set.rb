@@ -21,7 +21,7 @@ module SdrClient
 
       def as_json
         {
-          "type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+          "type": 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
           "label": label,
           structural: {
             contains: files.map(&:as_json)

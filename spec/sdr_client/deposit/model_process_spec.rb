@@ -12,7 +12,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         'isMemberOf' => ['druid:gh123df4567'],
         'contains' => [
           {
-            'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+            'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
             'label' => 'Page 1',
             'version' => 1,
             'structural' => {
@@ -30,7 +30,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
             }
           },
           {
-            'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+            'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
             'label' => 'Page 2',
             'version' => 1,
             'structural' => {
