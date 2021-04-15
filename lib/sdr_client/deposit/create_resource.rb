@@ -39,7 +39,9 @@ module SdrClient
         json = metadata.to_json
         logger.debug("Starting upload metadata: #{json}")
 
-        connection.post(path, json, 'Content-Type' => 'application/json')
+        connection.post(path, json,
+                        'Content-Type' => 'application/json',
+                        'X-Cocina-Models-Version' => Cocina::Models::VERSION)
       end
 
       def accession?
