@@ -35,6 +35,9 @@ module SdrClient
         login
           Will prompt for email & password and exchange it for an login token, which it saves in ~/.sdr/token
 
+        version
+          Display the sdr-client version
+
     HELP
 
     def self.start(command, options, arguments = [])
@@ -46,6 +49,8 @@ module SdrClient
       when 'login'
         status = SdrClient::Login.run(options)
         puts status.failure if status.failure?
+      when 'version'
+        puts SdrClient::VERSION
       else
         raise "Unknown command #{command}"
       end
