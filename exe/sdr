@@ -19,9 +19,6 @@ end
 global.order!
 command = ARGV.shift
 
-retrieve_options = OptionParser.new do |opts|
-end
-
 deposit_options = OptionParser.new do |opts|
   opts.banner = "Usage: sdr #{command} [options]"
   opts.on('--label LABEL', 'The object label') do |label|
@@ -97,10 +94,11 @@ end
 SdrClient::CLI.help unless command
 
 subcommands = {
-  'get' => retrieve_options,
+  'get' => OptionParser.new,
   'deposit' => deposit_options,
   'register' => deposit_options,
-  'login' => OptionParser.new
+  'login' => OptionParser.new,
+  'version' => OptionParser.new
 }
 
 unless subcommands.key?(command)

@@ -23,7 +23,6 @@ module SdrClient
       end
       # rubocop:enable Metrics/ParameterLists
 
-      # rubocop:disable Metrics/MethodLength
       def as_json
         {
           "type": 'http://cocina.sul.stanford.edu/models/file.jsonld',
@@ -45,7 +44,6 @@ module SdrClient
           json['use'] = @use if @use
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
       private
 
