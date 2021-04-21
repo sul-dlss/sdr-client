@@ -12,6 +12,7 @@ module SdrClient
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable Metrics/AbcSize
       def initialize(label: nil,
                      access: 'dark',
                      download: 'none',
@@ -23,6 +24,7 @@ module SdrClient
                      catkey: nil,
                      embargo_release_date: nil,
                      embargo_access: 'world',
+                     embargo_download: 'world',
                      type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
                      viewing_direction: nil,
                      file_sets: [],
@@ -34,6 +36,7 @@ module SdrClient
         @catkey = catkey
         @embargo_release_date = embargo_release_date
         @embargo_access = embargo_access
+        @embargo_download = embargo_download
         @access = access
         @download = download
         @use_statement = use_statement
@@ -44,6 +47,7 @@ module SdrClient
         @viewing_direction = viewing_direction
       end
       # rubocop:enable Metrics/ParameterLists
+      # rubocop:enable Metrics/AbcSize
 
       def as_json
         {
@@ -58,6 +62,7 @@ module SdrClient
       end
 
       # @return [Request] a clone of this request with the file_sets added
+      # rubocop:disable Metrics/AbcSize
       def with_file_sets(file_sets)
         Request.new(label: label,
                     access: access,
@@ -69,17 +74,22 @@ module SdrClient
                     catkey: catkey,
                     embargo_release_date: embargo_release_date,
                     embargo_access: embargo_access,
+                    embargo_download: embargo_download,
                     type: type,
                     use_statement: use_statement,
                     viewing_direction: viewing_direction,
                     file_sets: file_sets,
                     files_metadata: files_metadata)
       end
+      # rubocop:enable Metrics/AbcSize
 
       # @param [String] filename
       # @return [Hash] the metadata for the file
       def for(filename)
-        files_metadata.fetch(filename, {})
+        metadata = files_metadata.fetch(filename, {}).with_indifferent_access
+        metadata[:access] = access unless metadata.key?(:access)
+        metadata[:download] = download unless metadata.key?(:download)
+        metadata
       end
 
       attr_reader :type
@@ -87,7 +97,7 @@ module SdrClient
       private
 
       attr_reader :access, :label, :file_sets, :source_id, :catkey, :apo, :collection,
-                  :files_metadata, :embargo_release_date, :embargo_access,
+                  :files_metadata, :embargo_release_date, :embargo_access, :embargo_download,
                   :viewing_direction, :use_statement, :copyright, :download
 
       def administrative
@@ -121,7 +131,8 @@ module SdrClient
           if embargo_release_date
             json[:embargo] = {
               releaseDate: embargo_release_date.strftime('%FT%T%:z'),
-              access: embargo_access
+              access: embargo_access,
+              download: embargo_download
             }
           end
         end

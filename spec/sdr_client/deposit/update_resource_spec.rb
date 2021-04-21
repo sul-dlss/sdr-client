@@ -9,7 +9,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
     let(:dro_hash) do
       {
         'externalIdentifier' => 'druid:gf123df7654',
-        'access' => { 'access' => 'world' },
+        'access' => { 'access' => 'world', 'download' => 'world' },
         'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
         'version' => 2,
         'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },

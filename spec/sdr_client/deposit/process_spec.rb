@@ -5,6 +5,7 @@ RSpec.describe SdrClient::Deposit::Process do
     SdrClient::Deposit::Request.new(label: 'This is my object',
                                     type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
                                     access: 'world',
+                                    download: 'none',
                                     apo: 'druid:bc123df4567',
                                     collection: 'druid:gh123df4567',
                                     source_id: 'googlebooks:12345',
@@ -141,6 +142,7 @@ RSpec.describe SdrClient::Deposit::Process do
               'sha1' => 'def456',
               'mime_type' => 'image/tiff',
               'access' => 'dark',
+              'download' => 'none',
               'publish' => false,
               'preserve' => false,
               'shelve' => false

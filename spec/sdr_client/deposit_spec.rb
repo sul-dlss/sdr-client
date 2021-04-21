@@ -30,7 +30,9 @@ RSpec.describe SdrClient::Deposit do
         mime_type: 'text/plain',
         md5: '19531a7fd61429c613d156f53cf3ba76',
         sha1: 'bc59eae52d98e84f83f65fdea3d7857b9ec5c46c',
-        use: 'transcription'
+        use: 'transcription',
+        access: 'dark',
+        download: 'none'
       ).and_call_original
       described_class.run(apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
@@ -124,6 +126,7 @@ RSpec.describe SdrClient::Deposit do
             collection: 'druid:gh123df4567',
             copyright: nil,
             embargo_access: 'world',
+            embargo_download: 'world',
             embargo_release_date: nil,
             files_metadata: {},
             label: nil,
@@ -159,6 +162,7 @@ RSpec.describe SdrClient::Deposit do
             collection: 'druid:gh123df4567',
             copyright: 'All rights reserved unless otherwise indicated.',
             embargo_access: 'world',
+            embargo_download: 'world',
             embargo_release_date: nil,
             files_metadata: {},
             label: nil,

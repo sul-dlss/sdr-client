@@ -14,6 +14,7 @@ RSpec.describe SdrClient::Deposit::Request do
                           viewing_direction: 'right-to-left',
                           embargo_release_date: Time.gm(2045),
                           embargo_access: 'stanford',
+                          embargo_download: 'stanford',
                           access: 'world',
                           download: 'world')
     end
@@ -23,7 +24,8 @@ RSpec.describe SdrClient::Deposit::Request do
 
     let(:file_sets) do
       [
-        SdrClient::Deposit::FileSet.new(uploads: [upload1], label: 'Object 1'),
+        SdrClient::Deposit::FileSet.new(uploads: [upload1], label: 'Object 1',
+                                        uploads_metadata: { 'file1.png' => { access: 'world', download: 'world' } }),
         SdrClient::Deposit::FileSet.new(uploads: [upload2], label: 'Object 2')
       ]
     end
@@ -62,7 +64,8 @@ RSpec.describe SdrClient::Deposit::Request do
             useAndReproductionStatement: 'use statement',
             embargo: {
               releaseDate: '2045-01-01T00:00:00+00:00',
-              access: 'stanford'
+              access: 'stanford',
+              download: 'stanford'
             }
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
@@ -84,7 +87,8 @@ RSpec.describe SdrClient::Deposit::Request do
                       type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
                       label: 'file1.png',
                       filename: 'file1.png',
-                      access: { access: 'world' }, administrative: { publish: true, sdrPreserve: true, shelve: true },
+                      access: { access: 'world', download: 'world' },
+                      administrative: { publish: true, sdrPreserve: true, shelve: true },
                       externalIdentifier: 'foo-file1',
                       version: 1,
                       hasMessageDigests: []
@@ -101,7 +105,8 @@ RSpec.describe SdrClient::Deposit::Request do
                       type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
                       label: 'file2.png',
                       filename: 'file2.png',
-                      access: { access: 'world' }, administrative: { publish: true, sdrPreserve: true, shelve: true },
+                      access: { access: 'dark', download: 'none' },
+                      administrative: { publish: true, sdrPreserve: true, shelve: true },
                       externalIdentifier: 'bar-file2',
                       version: 1,
                       hasMessageDigests: []

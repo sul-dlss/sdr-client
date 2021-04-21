@@ -13,6 +13,10 @@ Metrics/BlockLength:
   ExcludedMethods:
     - 'OptionParser.new'
 
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/sdr_client/deposit/request.rb'
+
 Naming/FileName:
   Exclude:
     - 'lib/sdr-client.rb'

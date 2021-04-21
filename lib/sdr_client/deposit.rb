@@ -21,6 +21,7 @@ module SdrClient
                  catkey: nil,
                  embargo_release_date: nil,
                  embargo_access: 'world',
+                 embargo_download: 'world',
                  source_id:,
                  url:,
                  files: [],
@@ -41,6 +42,7 @@ module SdrClient
                              catkey: catkey,
                              embargo_release_date: embargo_release_date,
                              embargo_access: embargo_access,
+                             embargo_download: embargo_download,
                              viewing_direction: viewing_direction,
                              files_metadata: augmented_metadata)
       connection = Connection.new(url: url)

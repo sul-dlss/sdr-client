@@ -3,7 +3,7 @@
 RSpec.describe SdrClient::Deposit::ModelProcess do
   let(:request_dro_hash) do
     {
-      'access' => { 'access' => 'world' },
+      'access' => { 'access' => 'world', 'download' => 'none' },
       'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
       'version' => 1,
       'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
@@ -21,7 +21,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
                   'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
                   'label' => 'file1.txt',
                   'filename' => 'file1.txt',
-                  'access' => { 'access' => 'dark' },
+                  'access' => { 'access' => 'dark', 'download' => 'none' },
                   'administrative' => { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
                   'version' => 1,
                   'hasMessageDigests' => []
@@ -39,7 +39,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
                   'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
                   'label' => 'file2.txt',
                   'filename' => 'file2.txt',
-                  'access' => { 'access' => 'dark' },
+                  'access' => { 'access' => 'dark', 'download' => 'none' },
                   'administrative' => { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
                   'version' => 1,
                   'hasMessageDigests' => []
@@ -299,7 +299,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     context 'when no structural' do
       let(:request_dro_hash) do
         {
-          'access' => { 'access' => 'world' },
+          'access' => { 'access' => 'world', 'download' => 'none' },
           'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
           'version' => 1,
           'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
