@@ -106,7 +106,7 @@ RSpec.describe SdrClient::Deposit::Request do
                       label: 'file2.png',
                       filename: 'file2.png',
                       access: { access: 'dark', download: 'none' },
-                      administrative: { publish: true, sdrPreserve: true, shelve: true },
+                      administrative: { publish: true, sdrPreserve: true, shelve: false },
                       externalIdentifier: 'bar-file2',
                       version: 1,
                       hasMessageDigests: []

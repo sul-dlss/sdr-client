@@ -15,7 +15,7 @@ module SdrClient
         @access = access
         @download = download
         @preserve = preserve
-        @shelve = shelve
+        @shelve = access == 'dark' ? false : shelve
         @publish = publish
         @mime_type = mime_type
         @md5 = md5
