@@ -5,7 +5,7 @@ module SdrClient
     # This represents the FileSet metadata that we send to the server for doing a deposit
     class FileSet
       # @param [Array] uploads
-      # @param [Hash<String,Hash<String,String>>] the file level metadata
+      # @param [Hash<String,Hash<String,String>>] uploads_metadata the file level metadata
       # @param [Array] files
       # @param [String] label
       def initialize(uploads: [], uploads_metadata: {}, files: [], label:)
