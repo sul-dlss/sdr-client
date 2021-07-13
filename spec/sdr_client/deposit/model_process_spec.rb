@@ -331,5 +331,49 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         expect(subject).to eq('1')
       end
     end
+
+    context 'when assign_doi is provided' do
+      let(:request_dro_hash) do
+        {
+          'access' => { 'access' => 'world', 'download' => 'none' },
+          'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+          'version' => 1,
+          'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
+          'identification' => { 'sourceId' => 'googlebooks:12345' },
+          'label' => 'This is my object'
+
+        }
+      end
+
+      let(:files) { [] }
+
+      let(:instance) do
+        described_class.new(request_dro: request_dro,
+                            connection: connection,
+                            files: files,
+                            assign_doi: true,
+                            accession: false)
+      end
+
+      before do
+        stub_request(:post, 'http://example.com:3000/v1/resources?accession=false&assign_doi=true')
+          .with(
+            body: Cocina::Models::RequestDRO.new(request_dro_hash).to_json,
+            headers: {
+              'Accept' => '*/*',
+              'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'Authorization' => 'Bearer eyJhbGci',
+              'Content-Type' => 'application/json',
+              'User-Agent' => /Faraday v1/
+            }
+          )
+          .to_return(status: 201, body: '{"jobId":"1"}',
+                     headers: { 'Location' => 'http://example.com/background_job/1' })
+      end
+
+      it 'uploads resource' do
+        expect(subject).to eq('1')
+      end
+    end
   end
 end
