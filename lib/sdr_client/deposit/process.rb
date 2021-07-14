@@ -10,18 +10,21 @@ module SdrClient
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [String] connection the server connection to use
       # @param [Array<String>] files a list of file names to upload
+      # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Boolean] accession should the accessionWF be started
       # @param [Logger] logger the logger to use
       #
       # rubocop:disable Metrics/ParameterLists
       def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy,
-                     connection:, files: [], accession:, logger: Logger.new(STDOUT))
+                     connection:, files: [], accession:, assign_doi: false,
+                     logger: Logger.new(STDOUT))
         @files = files
         @connection = connection
         @metadata = metadata
         @logger = logger
         @grouping_strategy = grouping_strategy
         @accession = accession
+        @assign_doi = assign_doi
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -40,6 +43,7 @@ module SdrClient
         request = metadata_builder.with_uploads(upload_responses)
         model = Cocina::Models.build_request(request.as_json.with_indifferent_access)
         CreateResource.run(accession: @accession,
+                           assign_doi: @assign_doi,
                            metadata: model,
                            logger: logger,
                            connection: connection)

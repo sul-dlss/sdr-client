@@ -10,14 +10,19 @@ module SdrClient
       # @param [Connection] connection the connection to use
       # @param [Array<String>] files a list of file names to upload
       # @param [Boolean] accession should the accessionWF be started
+      # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Logger] logger the logger to use
-      def initialize(request_dro:, connection:,
-                     files: [], accession:, logger: Logger.new(STDOUT))
+      def initialize(request_dro:, # rubocop:disable Metrics/ParameterLists
+                     connection:,
+                     files: [], accession:,
+                     assign_doi: false,
+                     logger: Logger.new(STDOUT))
         @files = files
         @connection = connection
         @request_dro = request_dro
         @logger = logger
         @accession = accession
+        @assign_doi = assign_doi
       end
 
       def run
@@ -30,6 +35,7 @@ module SdrClient
                                               connection: connection)
         new_request_dro = UpdateDroWithFileIdentifiers.update(request_dro: request_dro, upload_responses: upload_responses)
         CreateResource.run(accession: @accession,
+                           assign_doi: @assign_doi,
                            metadata: new_request_dro,
                            logger: logger,
                            connection: connection)

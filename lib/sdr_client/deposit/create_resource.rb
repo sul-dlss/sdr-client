@@ -6,15 +6,21 @@ module SdrClient
     class CreateResource
       DRO_PATH = '/v1/resources'
 
-      def self.run(accession:, metadata:, logger:, connection:)
-        new(accession: accession, metadata: metadata, logger: logger, connection: connection).run
+      def self.run(accession:, assign_doi: false, metadata:, logger:, connection:)
+        new(accession: accession,
+            assign_doi: assign_doi,
+            metadata: metadata,
+            logger: logger,
+            connection: connection).run
       end
 
       # @param [Boolean] accession should the accessionWF be started
+      # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Cocina::Models::RequestDRO, Cocina::Models::RequestCollection] metadata
       # @param [Hash<Symbol,String>] the result of the metadata call
-      def initialize(accession:, metadata:, logger:, connection:)
+      def initialize(accession:, assign_doi:, metadata:, logger:, connection:)
         @accession = accession
+        @assign_doi = assign_doi
         @metadata = metadata
         @logger = logger
         @connection = connection
@@ -48,8 +54,14 @@ module SdrClient
         @accession
       end
 
+      def assign_doi?
+        @assign_doi
+      end
+
       def path
-        "#{DRO_PATH}?accession=#{accession?}"
+        params = { accession: accession? }
+        params[:assign_doi] = true if assign_doi? # false is default
+        DRO_PATH + '?' + params.map { |k, v| "#{k}=#{v}" }.join('&')
       end
     end
   end
