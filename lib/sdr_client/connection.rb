@@ -5,13 +5,15 @@ module SdrClient
   class Connection
     include Dry::Monads[:result]
 
-    def initialize(url:, token: Credentials.read)
+    # @param [Integer] read_timeout the value in seconds to set the read timeout
+    def initialize(url:, token: Credentials.read, read_timeout: 180)
       @url = url
       @token = token
+      @request_options = { read_timeout: read_timeout }
     end
 
     def connection
-      @connection ||= Faraday.new(url: url) do |conn|
+      @connection ||= Faraday.new(url: url, request: request_options) do |conn|
         conn.authorization :Bearer, token
         conn.adapter :net_http
       end
@@ -36,6 +38,6 @@ module SdrClient
 
     private
 
-    attr_reader :url, :token
+    attr_reader :url, :token, :request_options
   end
 end
