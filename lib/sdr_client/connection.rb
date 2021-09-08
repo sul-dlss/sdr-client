@@ -14,7 +14,7 @@ module SdrClient
 
     def connection
       @connection ||= Faraday.new(url: url, request: request_options) do |conn|
-        conn.authorization :Bearer, token
+        conn.request :authorization, :Bearer, token
         conn.adapter :net_http
       end
     end
