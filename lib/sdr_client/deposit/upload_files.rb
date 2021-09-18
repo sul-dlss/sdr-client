@@ -38,6 +38,8 @@ module SdrClient
         Hash[file_metadata.map { |filename, metadata| [filename, direct_upload(metadata.to_json)] }]
       end
 
+      # This creates a signed token that we can use to upload the file. This token has an expiration set in sdr-api,
+      # so we have to use it before it expires.
       def direct_upload(metadata_json)
         logger.info("Starting an upload request: #{metadata_json}")
         response = connection.post(BLOB_PATH, metadata_json, 'Content-Type' => 'application/json')
