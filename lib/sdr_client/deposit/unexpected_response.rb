@@ -4,12 +4,21 @@ module SdrClient
   module Deposit
     # Handles unexpected responses when manipulating resources
     class UnexpectedResponse
+      # Raised when there is a request error (e.g.: a cocina-models version mismatch)
+      class BadRequest < StandardError; end
+      # Raised when there is a problem with the credentials
+      class Unauthorized < StandardError; end
+
       # @param [Faraday::Response] response
       def self.call(response)
-        raise "There was an error with your request: #{response.body}" if response.status == 400
-        raise 'There was an error with your credentials. Perhaps they have expired?' if response.status == 401
-
-        raise "unexpected response: #{response.status} #{response.body}"
+        case response.status
+        when 400
+          raise BadRequest, "There was an error with your request: #{response.body}"
+        when 401
+          raise Unauthorized, 'There was an error with your credentials. Perhaps they have expired?'
+        else
+          raise "unexpected response: #{response.status} #{response.body}"
+        end
       end
     end
   end

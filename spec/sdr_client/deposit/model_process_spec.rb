@@ -230,7 +230,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         end
 
         it 'uploads files' do
-          expect { subject }.to raise_error(/There was an error with your request/)
+          expect { subject }.to raise_error(SdrClient::Deposit::UnexpectedResponse::BadRequest,
+                                            /There was an error with your request/)
         end
       end
 
@@ -291,7 +292,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         end
 
         it 'uploads files' do
-          expect { subject }.to raise_error(/There was an error with your credentials./)
+          expect { subject }.to raise_error(SdrClient::Deposit::UnexpectedResponse::Unauthorized,
+                                            /There was an error with your credentials./)
         end
       end
     end
