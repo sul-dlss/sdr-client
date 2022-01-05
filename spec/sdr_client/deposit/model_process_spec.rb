@@ -322,7 +322,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
               'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
               'Authorization' => 'Bearer eyJhbGci',
               'Content-Type' => 'application/json',
-              'User-Agent' => /Faraday v1/
+              'User-Agent' => /Faraday v2/
             }
           )
           .to_return(status: 201, body: '{"jobId":"1"}',
@@ -366,7 +366,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
               'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
               'Authorization' => 'Bearer eyJhbGci',
               'Content-Type' => 'application/json',
-              'User-Agent' => /Faraday v1/
+              'User-Agent' => /Faraday v2/
             }
           )
           .to_return(status: 201, body: '{"jobId":"1"}',
