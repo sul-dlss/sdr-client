@@ -30,7 +30,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport'
   spec.add_dependency 'cocina-models', '~> 0.62.0'
   spec.add_dependency 'dry-monads'
-  spec.add_dependency 'faraday', '>= 0.16'
+  spec.add_dependency 'faraday', '~> 2.0'
+  spec.add_dependency 'faraday-net_http'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 13.0'
