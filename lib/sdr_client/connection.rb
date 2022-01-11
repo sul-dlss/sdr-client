@@ -6,7 +6,7 @@ module SdrClient
     include Dry::Monads[:result]
 
     # @param [Integer] read_timeout the value in seconds to set the read timeout
-    def initialize(url:, token: Credentials.read, read_timeout: 180)
+    def initialize(url:, token: Credentials.read, read_timeout: 360)
       @url = url
       @token = token
       @request_options = { read_timeout: read_timeout }
