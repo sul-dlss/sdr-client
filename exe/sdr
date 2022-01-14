@@ -30,8 +30,8 @@ deposit_options = OptionParser.new do |opts|
   end
 
   opts.on('--type TYPE', 'The object type to create. ' \
-          'One of: "image", "book", "document", "map", "manuscript", "media", ' \
-          '"three_dimensional", "object", "collection", or "admin_policy"') do |type|
+                         'One of: "image", "book", "document", "map", "manuscript", "media", ' \
+                         '"three_dimensional", "object", "collection", or "admin_policy"') do |type|
     if %w[image book document map manuscript media three_dimensional object collection admin_policy].include?(type)
       options[:type] = "http://cocina.sul.stanford.edu/models/#{type}.jsonld"
     end
@@ -58,12 +58,12 @@ deposit_options = OptionParser.new do |opts|
   end
 
   opts.on('--viewing-direction DIRECTION', 'The viewing direction (if a book). ' \
-          'Either "left-to-right" or "right-to-left"') do |viewing_direction|
+                                           'Either "left-to-right" or "right-to-left"') do |viewing_direction|
     options[:viewing_direction] = viewing_direction if %w[left-to-right right-to-left].include?(viewing_direction)
   end
 
   opts.on('--access LEVEL', 'The access level for this object. ' \
-          'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |level|
+                            'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |level|
     options[:access] = level if %w[world stanford location-based citation-only dark].include?(level)
   end
 

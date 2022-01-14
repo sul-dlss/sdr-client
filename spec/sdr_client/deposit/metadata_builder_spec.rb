@@ -4,6 +4,7 @@ RSpec.describe SdrClient::Deposit::MetadataBuilder do
   subject(:builder) do
     described_class.new(metadata: metadata, grouping_strategy: strategy, logger: logger)
   end
+
   let(:metadata) { SdrClient::Deposit::Request.new(apo: 'foo', type: type, source_id: 'bar') }
   let(:strategy) do
     class_double(SdrClient::Deposit::MatchingFileGroupingStrategy, run: [[file_upload]])

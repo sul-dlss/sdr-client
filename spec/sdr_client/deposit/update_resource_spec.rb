@@ -24,6 +24,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
     let(:logger) { instance_double(Logger, debug: true, info: true) }
     let(:connection) { instance_double(SdrClient::Connection) }
     let(:response) { instance_double(Faraday::Response, status: 202, body: '{"jobId":9}') }
+
     before do
       allow(connection).to receive(:put).and_return(response)
     end

@@ -6,7 +6,7 @@ module SdrClient
     class CreateResource
       DRO_PATH = '/v1/resources'
 
-      def self.run(accession:, assign_doi: false, metadata:, logger:, connection:)
+      def self.run(accession:, metadata:, logger:, connection:, assign_doi: false)
         new(accession: accession,
             assign_doi: assign_doi,
             metadata: metadata,

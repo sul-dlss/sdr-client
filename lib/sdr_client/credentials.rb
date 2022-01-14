@@ -18,7 +18,7 @@ module SdrClient
     def self.read
       raise NoCredentialsError unless ::File.exist?(credentials_file)
 
-      creds = IO.readlines(credentials_file, chomp: true).first if ::File.exist?(credentials_file)
+      creds = File.readlines(credentials_file, chomp: true).first if ::File.exist?(credentials_file)
       raise NoCredentialsError if creds.nil?
 
       creds

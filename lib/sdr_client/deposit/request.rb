@@ -12,7 +12,6 @@ module SdrClient
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # rubocop:disable Metrics/ParameterLists
-      # rubocop:disable Metrics/AbcSize
       def initialize(label: nil,
                      access: 'dark',
                      download: 'none',
@@ -46,9 +45,8 @@ module SdrClient
         @files_metadata = files_metadata
         @viewing_direction = viewing_direction
       end
-      # rubocop:enable Metrics/ParameterLists
-      # rubocop:enable Metrics/AbcSize
 
+      # rubocop:enable Metrics/ParameterLists
       def as_json
         {
           access: access_struct,
@@ -62,7 +60,6 @@ module SdrClient
       end
 
       # @return [Request] a clone of this request with the file_sets added
-      # rubocop:disable Metrics/AbcSize
       def with_file_sets(file_sets)
         Request.new(label: label,
                     access: access,
@@ -81,7 +78,6 @@ module SdrClient
                     file_sets: file_sets,
                     files_metadata: files_metadata)
       end
-      # rubocop:enable Metrics/AbcSize
 
       # @param [String] filename
       # @return [Hash] the metadata for the file

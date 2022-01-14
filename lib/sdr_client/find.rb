@@ -7,7 +7,7 @@ module SdrClient
   module Find
     DRO_PATH = '/v1/resources/%<id>s'
     # @return [String] job id for the background job result
-    def self.run(druid, url:, logger: Logger.new(STDOUT))
+    def self.run(druid, url:, logger: Logger.new($stdout))
       connection = Connection.new(url: url)
       path = format(DRO_PATH, id: druid)
       logger.info("Retrieving metadata from: #{path}")

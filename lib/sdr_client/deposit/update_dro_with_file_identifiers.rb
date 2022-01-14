@@ -17,7 +17,7 @@ module SdrClient
       end
 
       def self.signed_id_map(upload_responses)
-        Hash[upload_responses.map { |response| [response.filename, response.signed_id] }]
+        upload_responses.to_h { |response| [response.filename, response.signed_id] }
       end
       private_class_method :signed_id_map
 

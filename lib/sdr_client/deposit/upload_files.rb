@@ -35,7 +35,7 @@ module SdrClient
       attr_reader :logger, :connection, :file_metadata
 
       def upload_file_metadata
-        Hash[file_metadata.map { |filename, metadata| [filename, direct_upload(metadata.to_json)] }]
+        file_metadata.transform_values { |metadata| direct_upload(metadata.to_json) }
       end
 
       # This creates a signed token that we can use to upload the file. This token has an expiration set in sdr-api,
