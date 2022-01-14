@@ -4,25 +4,25 @@ module SdrClient
   module Deposit
     # This represents the FileSet metadata that we send to the server for doing a deposit
     class FileSet
+      # @param [String] label
       # @param [Array] uploads
       # @param [Hash<String,Hash<String,String>>] uploads_metadata the file level metadata
       # @param [Array] files
-      # @param [String] label
-      def initialize(uploads: [], uploads_metadata: {}, files: [], label:)
+      def initialize(label:, uploads: [], uploads_metadata: {}, files: [])
         @label = label
-        @files = if !uploads.empty?
+        @files = if uploads.empty?
+                   files
+                 else
                    uploads.map do |upload|
                      File.new(**file_args(upload, uploads_metadata.fetch(upload.filename, {})))
                    end
-                 else
-                   files
                  end
       end
 
       def as_json
         {
-          "type": 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
-          "label": label,
+          type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+          label: label,
           structural: {
             contains: files.map(&:as_json)
           },
@@ -44,7 +44,7 @@ module SdrClient
         }
         args.merge!(upload_metadata)
         # Symbolize
-        Hash[args.map { |k, v| [k.to_sym, v] }]
+        args.transform_keys(&:to_sym)
       end
     end
   end

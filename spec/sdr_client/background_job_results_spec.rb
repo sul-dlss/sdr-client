@@ -13,6 +13,7 @@ RSpec.describe SdrClient::BackgroundJobResults do
     context 'when ok' do
       let(:status_code) { 200 }
       let(:status) { 'completed' }
+
       it 'returns the job results' do
         expect(subject['status']).to eq(status)
       end
@@ -21,6 +22,7 @@ RSpec.describe SdrClient::BackgroundJobResults do
     context 'when accepted' do
       let(:status_code) { 202 }
       let(:status) { 'pending' }
+
       it 'returns the job results' do
         expect(subject['status']).to eq(status)
       end
@@ -29,6 +31,7 @@ RSpec.describe SdrClient::BackgroundJobResults do
     context 'when error' do
       let(:status_code) { 500 }
       let(:status) { 'error' }
+
       it 'raises' do
         expect { subject }.to raise_error(/unexpected response: 500/)
       end

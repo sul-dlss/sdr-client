@@ -8,15 +8,16 @@ module SdrClient
     class ModelProcess
       # @param [Cocina::Model::RequestDRO] request_dro for depositing
       # @param [Connection] connection the connection to use
-      # @param [Array<String>] files a list of file names to upload
       # @param [Boolean] accession should the accessionWF be started
+      # @param [Array<String>] files a list of file names to upload
       # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Logger] logger the logger to use
       def initialize(request_dro:, # rubocop:disable Metrics/ParameterLists
                      connection:,
-                     files: [], accession:,
+                     accession:,
+                     files: [],
                      assign_doi: false,
-                     logger: Logger.new(STDOUT))
+                     logger: Logger.new($stdout))
         @files = files
         @connection = connection
         @request_dro = request_dro
@@ -62,7 +63,7 @@ module SdrClient
 
         # Request files without files
         filenames = files.map { |filepath| ::File.basename(filepath) }
-        request_files.keys.each do |request_filename|
+        request_files.each_key do |request_filename|
           raise "File not provided for request file #{request_filename}" unless filenames.include?(request_filename)
         end
       end
@@ -70,11 +71,9 @@ module SdrClient
       # Map of filenames to mimetypes
       def mime_types
         @mime_types ||=
-          Hash[
-            request_files.map do |filename, file|
-              [filename, file.hasMimeType || 'application/octet-stream']
-            end
-          ]
+          request_files.transform_values do |file|
+            file.hasMimeType || 'application/octet-stream'
+          end
       end
 
       # Map of filenames to request files
@@ -82,13 +81,11 @@ module SdrClient
         @request_files ||= begin
           return {} unless request_dro.structural
 
-          Hash[
-              request_dro.structural.contains.map do |file_set|
-                file_set.structural.contains.map do |file|
-                  [file.filename, file]
-                end
-              end.flatten(1)
-          ]
+          request_dro.structural.contains.map do |file_set|
+            file_set.structural.contains.map do |file|
+              [file.filename, file]
+            end
+          end.flatten(1).to_h
         end
       end
     end

@@ -2,11 +2,11 @@
 
 RSpec.describe SdrClient::Login do
   describe '.run' do
+    subject { described_class.run(url: 'http://example.com/', login_service: login) }
+
     let(:login) do
       class_double(SdrClient::LoginPrompt, run: { email: 'foo@bar.io', password: '12345' })
     end
-
-    subject { described_class.run(url: 'http://example.com/', login_service: login) }
 
     context 'with the default store' do
       before do
@@ -49,11 +49,11 @@ RSpec.describe SdrClient::Login do
     end
 
     context 'with the store passed in' do
+      subject { described_class.run(url: 'http://example.com/', login_service: login, credential_store: store) }
+
       let(:store) do
         class_double(SdrClient::Credentials, write: true)
       end
-
-      subject { described_class.run(url: 'http://example.com/', login_service: login, credential_store: store) }
 
       context 'when the login is successful' do
         let(:body) do

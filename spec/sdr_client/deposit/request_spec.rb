@@ -52,6 +52,7 @@ RSpec.describe SdrClient::Deposit::Request do
 
     describe 'as_json' do
       subject { with_file_sets.as_json }
+
       let(:expected) do
         {
           type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
@@ -117,6 +118,7 @@ RSpec.describe SdrClient::Deposit::Request do
           }
         }
       end
+
       it { is_expected.to eq expected }
     end
   end
@@ -131,6 +133,7 @@ RSpec.describe SdrClient::Deposit::Request do
 
     describe 'as_json' do
       subject { instance.as_json }
+
       let(:expected) do
         {
           type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
@@ -145,6 +148,7 @@ RSpec.describe SdrClient::Deposit::Request do
           version: 1
         }
       end
+
       it { is_expected.to eq expected }
     end
   end

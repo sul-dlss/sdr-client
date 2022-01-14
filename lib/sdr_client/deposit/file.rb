@@ -26,7 +26,7 @@ module SdrClient
 
       def as_json
         {
-          "type": 'http://cocina.sul.stanford.edu/models/file.jsonld',
+          type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
           label: @label,
           filename: @filename,
           externalIdentifier: @external_identifier,
@@ -58,7 +58,7 @@ module SdrClient
 
       def create_message_digest(algorithm, digest)
         {
-          "type": algorithm,
+          type: algorithm,
           digest: digest
         }
       end

@@ -7,17 +7,21 @@ module SdrClient
     # The process for doing a deposit
     class Process
       # @param [Request] metadata information about the object
-      # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [String] connection the server connection to use
+      # @param [Boolean] accession should the accessionWF be started
+      # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [Array<String>] files a list of file names to upload
       # @param [Boolean] assign_doi should a DOI be assigned to this item
-      # @param [Boolean] accession should the accessionWF be started
       # @param [Logger] logger the logger to use
       #
       # rubocop:disable Metrics/ParameterLists
-      def initialize(metadata:, grouping_strategy: SingleFileGroupingStrategy,
-                     connection:, files: [], accession:, assign_doi: false,
-                     logger: Logger.new(STDOUT))
+      def initialize(metadata:,
+                     connection:,
+                     accession:,
+                     grouping_strategy: SingleFileGroupingStrategy,
+                     files: [],
+                     assign_doi: false,
+                     logger: Logger.new($stdout))
         @files = files
         @connection = connection
         @metadata = metadata
@@ -63,12 +67,10 @@ module SdrClient
 
       def mime_types
         @mime_types ||=
-          Hash[
-            files.map do |filepath|
-              filename = ::File.basename(filepath)
-              [filename, metadata.for(filename)['mime_type']]
-            end
-          ]
+          files.to_h do |filepath|
+            filename = ::File.basename(filepath)
+            [filename, metadata.for(filename)['mime_type']]
+          end
       end
     end
   end

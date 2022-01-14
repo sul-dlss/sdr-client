@@ -2,11 +2,11 @@
 
 RSpec.describe SdrClient::Credentials do
   describe '.read' do
+    subject { described_class.read }
+
     let(:json) do
       '{"token":"zaa","exp":"2020-04-19"}'
     end
-
-    subject { described_class.read }
 
     context 'when the file exists' do
       before do
@@ -20,6 +20,7 @@ RSpec.describe SdrClient::Credentials do
       before do
         allow(described_class).to receive(:credentials_path).and_return('/nonexistant')
       end
+
       it 'raises' do
         expect { subject }.to raise_error(SdrClient::Credentials::NoCredentialsError)
       end

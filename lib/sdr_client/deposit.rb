@@ -28,7 +28,7 @@ module SdrClient
                  files_metadata: {},
                  accession: false,
                  grouping_strategy: SingleFileGroupingStrategy,
-                 logger: Logger.new(STDOUT))
+                 logger: Logger.new($stdout))
       augmented_metadata = FileMetadataBuilder.build(files: files, files_metadata: files_metadata)
       metadata = Request.new(label: label,
                              type: type,
@@ -59,7 +59,7 @@ module SdrClient
                        files: [],
                        url:,
                        accession:,
-                       logger: Logger.new(STDOUT))
+                       logger: Logger.new($stdout))
       connection = Connection.new(url: url)
       ModelProcess.new(request_dro: request_dro,
                        connection: connection,

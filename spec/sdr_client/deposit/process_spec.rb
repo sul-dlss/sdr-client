@@ -41,8 +41,6 @@ RSpec.describe SdrClient::Deposit::Process do
       let(:files) { ['spec/fixtures/file1.txt', 'spec/fixtures/file2.txt'] }
       let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
       let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' }
-      before do
-      end
 
       context 'when metadata upload succeeds' do
         before do
@@ -58,7 +56,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
                              '"signed_id":"BaHBLZz09Iiw",'\
                              '"direct_upload":{"url":"' + upload_url1 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
@@ -73,7 +71,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
                              '"direct_upload":{"url":"' + upload_url2 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:put, upload_url1)
@@ -99,22 +97,22 @@ RSpec.describe SdrClient::Deposit::Process do
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .with(
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
-              '"label":"This is my object","version":1,' \
-              '"access":{"access":"world","download":"none"},' \
-              '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
-              '"identification":{"sourceId":"googlebooks:12345"},' \
-              '"structural":{"contains":[' \
-              '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 1","version":1,' \
-              '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-              '"label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw",' \
-              '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
-              '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}},' \
-              '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 2","version":1,' \
-              '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-              '"label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
-              '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
-              '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
-              '"isMemberOf":["druid:gh123df4567"]}}',
+                    '"label":"This is my object","version":1,' \
+                    '"access":{"access":"world","download":"none"},' \
+                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
+                    '"identification":{"sourceId":"googlebooks:12345"},' \
+                    '"structural":{"contains":[' \
+                    '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 1","version":1,' \
+                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+                    '"label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw",' \
+                    '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
+                    '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}},' \
+                    '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 2","version":1,' \
+                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+                    '"label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
+                    '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
+                    '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
+                    '"isMemberOf":["druid:gh123df4567"]}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"jobId":"1"}',
@@ -163,7 +161,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
                              '"signed_id":"BaHBLZz09Iiw",'\
                              '"direct_upload":{"url":"' + upload_url1 + '",'\
-                             '"headers":{"Content-Type":"image/tiff"}}}',
+                                                                        '"headers":{"Content-Type":"image/tiff"}}}',
                        headers: {})
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
@@ -178,7 +176,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
                              '"direct_upload":{"url":"' + upload_url2 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:put, upload_url1)
@@ -204,26 +202,26 @@ RSpec.describe SdrClient::Deposit::Process do
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .with(
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
-              '"label":"This is my object","version":1,' \
-              '"access":{"access":"world","download":"none"},' \
-              '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
-              '"identification":{"sourceId":"googlebooks:12345"},' \
-              '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
-              '"label":"Page 1","version":1,' \
-              '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-              '"label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff",' \
-              '"externalIdentifier":"BaHBLZz09Iiw",' \
-              '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],' \
-              '"access":{"access":"dark","download":"none"},' \
-              '"administrative":{"publish":false,"sdrPreserve":false,"shelve":false}}]}},' \
-              '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
-              '"label":"Page 2","version":1,' \
-              '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-              '"label":"file2.txt","filename":"file2.txt","version":1,' \
-              '"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],' \
-              '"access":{"access":"world","download":"none"},' \
-              '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
-              '"isMemberOf":["druid:gh123df4567"]}}',
+                    '"label":"This is my object","version":1,' \
+                    '"access":{"access":"world","download":"none"},' \
+                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
+                    '"identification":{"sourceId":"googlebooks:12345"},' \
+                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
+                    '"label":"Page 1","version":1,' \
+                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+                    '"label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff",' \
+                    '"externalIdentifier":"BaHBLZz09Iiw",' \
+                    '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],' \
+                    '"access":{"access":"dark","download":"none"},' \
+                    '"administrative":{"publish":false,"sdrPreserve":false,"shelve":false}}]}},' \
+                    '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
+                    '"label":"Page 2","version":1,' \
+                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
+                    '"label":"file2.txt","filename":"file2.txt","version":1,' \
+                    '"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],' \
+                    '"access":{"access":"world","download":"none"},' \
+                    '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
+                    '"isMemberOf":["druid:gh123df4567"]}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"jobId":"1"}',
@@ -249,7 +247,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
                              '"signed_id":"BaHBLZz09Iiw",'\
                              '"direct_upload":{"url":"' + upload_url1 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
@@ -264,7 +262,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
                              '"direct_upload":{"url":"' + upload_url2 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:put, upload_url1)
@@ -289,7 +287,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .to_return(status: 400, body: '{"id":"bad_request",' \
-              '"message":"#/components/schemas/DROStructural missing required parameters: isMemberOf"}')
+                                          '"message":"#/components/schemas/DROStructural missing required parameters: isMemberOf"}')
         end
 
         it 'uploads files' do
@@ -303,7 +301,7 @@ RSpec.describe SdrClient::Deposit::Process do
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
               body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",'\
-                '"content_type":"application/octet-stream"}}',
+                    '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
@@ -312,13 +310,13 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
                              '"signed_id":"BaHBLZz09Iiw",'\
                              '"direct_upload":{"url":"' + upload_url1 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
               body: '{"blob":{"filename":"file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",'\
-                '"content_type":"application/octet-stream"}}',
+                    '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
@@ -327,7 +325,7 @@ RSpec.describe SdrClient::Deposit::Process do
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",'\
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",'\
                              '"direct_upload":{"url":"' + upload_url2 + '",'\
-                             '"headers":{"Content-Type":"application/octet-stream"}}}',
+                                                                        '"headers":{"Content-Type":"application/octet-stream"}}}',
                        headers: {})
 
           stub_request(:put, upload_url1)
