@@ -99,8 +99,8 @@ RSpec.describe SdrClient::Deposit::Process do
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
                     '"label":"This is my object","version":1,' \
                     '"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
-                    '"identification":{"sourceId":"googlebooks:12345"},' \
+                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567","releaseTags":[]},' \
+                    '"identification":{"catalogLinks":[],"sourceId":"googlebooks:12345"},' \
                     '"structural":{"contains":[' \
                     '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 1","version":1,' \
                     '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
@@ -112,7 +112,7 @@ RSpec.describe SdrClient::Deposit::Process do
                     '"label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
                     '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
                     '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
-                    '"isMemberOf":["druid:gh123df4567"]}}',
+                    '"hasMemberOrders":[],"isMemberOf":["druid:gh123df4567"]}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"jobId":"1"}',
@@ -204,8 +204,8 @@ RSpec.describe SdrClient::Deposit::Process do
               body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
                     '"label":"This is my object","version":1,' \
                     '"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567"},' \
-                    '"identification":{"sourceId":"googlebooks:12345"},' \
+                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567","releaseTags":[]},' \
+                    '"identification":{"catalogLinks":[],"sourceId":"googlebooks:12345"},' \
                     '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
                     '"label":"Page 1","version":1,' \
                     '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
@@ -221,7 +221,7 @@ RSpec.describe SdrClient::Deposit::Process do
                     '"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],' \
                     '"access":{"access":"world","download":"none"},' \
                     '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
-                    '"isMemberOf":["druid:gh123df4567"]}}',
+                    '"hasMemberOrders":[],"isMemberOf":["druid:gh123df4567"]}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"jobId":"1"}',
