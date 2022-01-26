@@ -96,23 +96,75 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .with(
-              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
-                    '"label":"This is my object","version":1,' \
-                    '"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567","releaseTags":[]},' \
-                    '"identification":{"catalogLinks":[],"sourceId":"googlebooks:12345"},' \
-                    '"structural":{"contains":[' \
-                    '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 1","version":1,' \
-                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-                    '"label":"file1.txt","filename":"file1.txt","version":1,"externalIdentifier":"BaHBLZz09Iiw",' \
-                    '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}},' \
-                    '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld","label":"Page 2","version":1,' \
-                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-                    '"label":"file2.txt","filename":"file2.txt","version":1,"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC",' \
-                    '"hasMessageDigests":[],"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
-                    '"hasMemberOrders":[],"isMemberOf":["druid:gh123df4567"]}}',
+              body: {
+                cocinaVersion: Cocina::Models::VERSION,
+                type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                label: 'This is my object',
+                version: 1,
+                access: {
+                  access: 'world',
+                  download: 'none'
+                },
+                administrative: {
+                  hasAdminPolicy: 'druid:bc123df4567',
+                  releaseTags: []
+                },
+                identification: {
+                  catalogLinks: [],
+                  sourceId: 'googlebooks:12345'
+                },
+                structural: {
+                  contains: [{
+                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    label: 'Page 1',
+                    version: 1,
+                    structural: {
+                      contains: [{
+                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        label: 'file1.txt',
+                        filename: 'file1.txt',
+                        version: 1,
+                        externalIdentifier: 'BaHBLZz09Iiw',
+                        hasMessageDigests: [],
+                        access: {
+                          access: 'world',
+                          download: 'none'
+                        },
+                        administrative: {
+                          publish: true,
+                          sdrPreserve: true,
+                          shelve: true
+                        }
+                      }]
+                    }
+                  }, {
+                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    label: 'Page 2',
+                    version: 1,
+                    structural: {
+                      contains: [{
+                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        label: 'file2.txt',
+                        filename: 'file2.txt',
+                        version: 1,
+                        externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
+                        hasMessageDigests: [],
+                        access: {
+                          access: 'world',
+                          download: 'none'
+                        },
+                        administrative: {
+                          publish: true,
+                          sdrPreserve: true,
+                          shelve: true
+                        }
+                      }]
+                    }
+                  }],
+                  hasMemberOrders: [],
+                  isMemberOf: ['druid:gh123df4567']
+                }
+              }.to_json,
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"jobId":"1"}',
@@ -201,27 +253,82 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
             .with(
-              body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
-                    '"label":"This is my object","version":1,' \
-                    '"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"hasAdminPolicy":"druid:bc123df4567","releaseTags":[]},' \
-                    '"identification":{"catalogLinks":[],"sourceId":"googlebooks:12345"},' \
-                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
-                    '"label":"Page 1","version":1,' \
-                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-                    '"label":"file1.txt","filename":"file1.txt","version":1,"hasMimeType":"image/tiff",' \
-                    '"externalIdentifier":"BaHBLZz09Iiw",' \
-                    '"hasMessageDigests":[{"type":"md5","digest":"abc123"},{"type":"sha1","digest":"def456"}],' \
-                    '"access":{"access":"dark","download":"none"},' \
-                    '"administrative":{"publish":false,"sdrPreserve":false,"shelve":false}}]}},' \
-                    '{"type":"http://cocina.sul.stanford.edu/models/resources/file.jsonld",' \
-                    '"label":"Page 2","version":1,' \
-                    '"structural":{"contains":[{"type":"http://cocina.sul.stanford.edu/models/file.jsonld",' \
-                    '"label":"file2.txt","filename":"file2.txt","version":1,' \
-                    '"externalIdentifier":"dz09IiwiZXhwIjpudWxsLC","hasMessageDigests":[],' \
-                    '"access":{"access":"world","download":"none"},' \
-                    '"administrative":{"publish":true,"sdrPreserve":true,"shelve":true}}]}}],' \
-                    '"hasMemberOrders":[],"isMemberOf":["druid:gh123df4567"]}}',
+              body: {
+                cocinaVersion: Cocina::Models::VERSION,
+                type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                label: 'This is my object',
+                version: 1,
+                access: {
+                  access: 'world',
+                  download: 'none'
+                },
+                administrative: {
+                  hasAdminPolicy: 'druid:bc123df4567',
+                  releaseTags: []
+                },
+                identification: {
+                  catalogLinks: [],
+                  sourceId: 'googlebooks:12345'
+                },
+                structural: {
+                  contains: [{
+                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    label: 'Page 1',
+                    version: 1,
+                    structural: {
+                      contains: [{
+                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        label: 'file1.txt',
+                        filename: 'file1.txt',
+                        version: 1,
+                        hasMimeType: 'image/tiff',
+                        externalIdentifier: 'BaHBLZz09Iiw',
+                        hasMessageDigests: [{
+                          type: 'md5',
+                          digest: 'abc123'
+                        }, {
+                          type: 'sha1',
+                          digest: 'def456'
+                        }],
+                        access: {
+                          access: 'dark',
+                          download: 'none'
+                        },
+                        administrative: {
+                          publish: false,
+                          sdrPreserve: false,
+                          shelve: false
+                        }
+                      }]
+                    }
+                  }, {
+                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    label: 'Page 2',
+                    version: 1,
+                    structural: {
+                      contains: [{
+                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        label: 'file2.txt',
+                        filename: 'file2.txt',
+                        version: 1,
+                        externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
+                        hasMessageDigests: [],
+                        access: {
+                          access: 'world',
+                          download: 'none'
+                        },
+                        administrative: {
+                          publish: true,
+                          sdrPreserve: true,
+                          shelve: true
+                        }
+                      }]
+                    }
+                  }],
+                  hasMemberOrders: [],
+                  isMemberOf: ['druid:gh123df4567']
+                }
+              }.to_json,
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 201, body: '{"jobId":"1"}',
