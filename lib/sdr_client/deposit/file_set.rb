@@ -8,8 +8,10 @@ module SdrClient
       # @param [Array] uploads
       # @param [Hash<String,Hash<String,String>>] uploads_metadata the file level metadata
       # @param [Array] files
-      def initialize(label:, uploads: [], uploads_metadata: {}, files: [])
+      # @param [Class] type_strategy (FileTypeFileSetStrategy) a class that helps us determine how to type the fileset
+      def initialize(label:, uploads: [], uploads_metadata: {}, files: [], type_strategy: FileTypeFileSetStrategy)
         @label = label
+        @type_strategy = type_strategy
         @files = if uploads.empty?
                    files
                  else
@@ -21,7 +23,7 @@ module SdrClient
 
       def as_json
         {
-          type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+          type: type_strategy.run(files: files),
           label: label,
           structural: {
             contains: files.map(&:as_json)
@@ -32,7 +34,7 @@ module SdrClient
 
       private
 
-      attr_reader :files, :label
+      attr_reader :files, :label, :type_strategy
 
       # This creates the metadata for each file and symbolizes the keys
       # @return [Hash<Symbol,String>]
