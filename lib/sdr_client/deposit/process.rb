@@ -10,6 +10,7 @@ module SdrClient
       # @param [String] connection the server connection to use
       # @param [Boolean] accession should the accessionWF be started
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
+      # @param [Class] file_set_type_strategy class whose run method determines file_set type
       # @param [Array<String>] files a list of file names to upload
       # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Logger] logger the logger to use
@@ -19,6 +20,7 @@ module SdrClient
                      connection:,
                      accession:,
                      grouping_strategy: SingleFileGroupingStrategy,
+                     file_set_type_strategy: FileTypeFileSetStrategy,
                      files: [],
                      assign_doi: false,
                      logger: Logger.new($stdout))
@@ -27,6 +29,7 @@ module SdrClient
         @metadata = metadata
         @logger = logger
         @grouping_strategy = grouping_strategy
+        @file_set_type_strategy = file_set_type_strategy
         @accession = accession
         @assign_doi = assign_doi
       end
@@ -43,6 +46,7 @@ module SdrClient
                                               connection: connection)
         metadata_builder = MetadataBuilder.new(metadata: metadata,
                                                grouping_strategy: grouping_strategy,
+                                               file_set_type_strategy: file_set_type_strategy,
                                                logger: logger)
         request = metadata_builder.with_uploads(upload_responses)
         model = Cocina::Models.build_request(request.as_json.with_indifferent_access)
@@ -56,7 +60,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :files, :connection, :logger, :grouping_strategy
+      attr_reader :metadata, :files, :connection, :logger, :grouping_strategy, :file_set_type_strategy
 
       def check_files_exist
         logger.info('checking to see if files exist')
