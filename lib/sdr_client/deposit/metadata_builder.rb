@@ -10,10 +10,11 @@ module SdrClient
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # @param [Logger] logger the logger to use
-      def initialize(metadata:, grouping_strategy:, logger:)
+      def initialize(metadata:, grouping_strategy:, logger:, file_set_type_strategy: FileTypeFileSetStrategy)
         @metadata = metadata
         @logger = logger
         @grouping_strategy = grouping_strategy
+        @file_set_type_strategy = file_set_type_strategy
       end
 
       # @param [UploadFiles] upload_responses the uploaded file information
@@ -34,7 +35,8 @@ module SdrClient
         grouped_uploads.map.with_index(1) do |upload_group, i|
           FileSet.new(uploads: upload_group,
                       uploads_metadata: metadata_group(upload_group),
-                      label: label(i))
+                      label: label(i),
+                      type_strategy: @file_set_type_strategy)
         end
       end
 

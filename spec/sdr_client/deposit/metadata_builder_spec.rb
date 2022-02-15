@@ -23,9 +23,24 @@ RSpec.describe SdrClient::Deposit::MetadataBuilder do
     context 'with an object type' do
       let(:type) { 'http://cocina.sul.stanford.edu/models/object.jsonld' }
 
-      it 'makes labels for the filesets' do
+      it 'makes attributes for the filesets' do
         file_set = model.dig(:structural, :contains).first
+        expect(file_set.fetch(:type)).to eq Cocina::Models::Vocab::Resources.file
         expect(file_set.fetch(:label)).to eq 'Object 1'
+      end
+
+      context 'when ImageFileSetStrategy is supplied' do
+        subject(:builder) do
+          described_class.new(
+            metadata: metadata, grouping_strategy: strategy,
+            logger: logger, file_set_type_strategy: SdrClient::Deposit::ImageFileSetStrategy
+          )
+        end
+
+        it 'sets the type to image' do
+          file_set = model.dig(:structural, :contains).first
+          expect(file_set.fetch(:type)).to eq Cocina::Models::Vocab::Resources.image
+        end
       end
     end
 
