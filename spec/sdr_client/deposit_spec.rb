@@ -76,6 +76,7 @@ RSpec.describe SdrClient::Deposit do
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
+                file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
                 accession: false)
 
         expect(process).to have_received(:run)
@@ -99,6 +100,7 @@ RSpec.describe SdrClient::Deposit do
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
+                file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
                 accession: false)
 
         expect(process).to have_received(:run)
