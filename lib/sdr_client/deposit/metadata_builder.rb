@@ -10,6 +10,7 @@ module SdrClient
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # @param [Logger] logger the logger to use
+      # @param [Class] file_set_type_strategy class whose run method determines file_set type
       def initialize(metadata:, grouping_strategy:, logger:, file_set_type_strategy: FileTypeFileSetStrategy)
         @metadata = metadata
         @logger = logger

@@ -28,6 +28,7 @@ module SdrClient
                  files_metadata: {},
                  accession: false,
                  grouping_strategy: SingleFileGroupingStrategy,
+                 file_set_type_strategy: FileTypeFileSetStrategy,
                  logger: Logger.new($stdout))
       augmented_metadata = FileMetadataBuilder.build(files: files, files_metadata: files_metadata)
       metadata = Request.new(label: label,
@@ -48,6 +49,7 @@ module SdrClient
       connection = Connection.new(url: url)
       Process.new(metadata: metadata, connection: connection, files: files,
                   grouping_strategy: grouping_strategy,
+                  file_set_type_strategy: file_set_type_strategy,
                   accession: accession,
                   logger: logger).run
     end

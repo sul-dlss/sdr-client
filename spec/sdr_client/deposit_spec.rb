@@ -76,6 +76,7 @@ RSpec.describe SdrClient::Deposit do
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
+                file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
                 accession: false)
 
         expect(process).to have_received(:run)
@@ -99,6 +100,54 @@ RSpec.describe SdrClient::Deposit do
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
+                file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
+                accession: false)
+
+        expect(process).to have_received(:run)
+      end
+    end
+
+    context 'without a file_set_type_strategy' do
+      subject(:run) do
+        described_class.run(apo: 'druid:bc123df4567',
+                            collection: 'druid:gh123df4567',
+                            source_id: 'googlebooks:12345',
+                            url: 'http://example.com/')
+      end
+
+      it 'runs the process with the default file_set_type_strategy' do
+        run
+        expect(SdrClient::Deposit::Process).to have_received(:new)
+          .with(files: [],
+                metadata: request,
+                connection: SdrClient::Connection,
+                logger: Logger,
+                grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
+                file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
+                accession: false)
+
+        expect(process).to have_received(:run)
+      end
+    end
+
+    context 'with a file_set_type_strategy' do
+      subject(:run) do
+        described_class.run(apo: 'druid:bc123df4567',
+                            collection: 'druid:gh123df4567',
+                            source_id: 'googlebooks:12345',
+                            url: 'http://example.com/',
+                            file_set_type_strategy: SdrClient::Deposit::ImageFileSetStrategy)
+      end
+
+      it 'runs the process with the specified file_set_type_strategy' do
+        run
+        expect(SdrClient::Deposit::Process).to have_received(:new)
+          .with(files: [],
+                metadata: request,
+                connection: SdrClient::Connection,
+                logger: Logger,
+                grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
+                file_set_type_strategy: SdrClient::Deposit::ImageFileSetStrategy,
                 accession: false)
 
         expect(process).to have_received(:run)
