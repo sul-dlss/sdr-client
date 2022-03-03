@@ -12,6 +12,10 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
         'access' => { 'access' => 'world', 'download' => 'world' },
         'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
         'version' => 2,
+        'description' => {
+          'title' => [{ 'value' => 'This is my object' }],
+          'purl' => 'https://purl.stanford.edu/gf123df7654'
+        },
         'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
         'identification' => { 'sourceId' => 'googlebooks:12345' },
         'label' => 'This is my object'
