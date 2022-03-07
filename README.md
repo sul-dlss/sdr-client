@@ -5,12 +5,13 @@
 
 # Sdr::Client
 
-This is a CLI for interacting with the Stanford Digital Repository API.
-The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
+This is a Ruby-based CLI for interacting with the Stanford Digital Repository API. The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
 This provides a way for consumers to easily and correctly deposit files to the SDR without requiring access to the `/dor` NFS mount or to use Hydrus.  A primary design goal was for this to have as few dependencies as possible so that it can be easily distributed by `gem install sdr-client` and then it can be used as a CLI.
 
 ## Install
+
+We recommend using the latest 3.x release of Ruby.
 
 `gem install sdr-client`
 
@@ -18,7 +19,7 @@ This provides a way for consumers to easily and correctly deposit files to the S
 
 Log in:
 ```
-sdr --service-url http://sdr-api-server:3000 login
+sdr --service-url https://sdr-api-server:3000 login
 ```
 
 Register a new object:
@@ -56,3 +57,7 @@ Display version of sdr-client:
 ```
 sdr version
 ```
+
+## Testing
+
+To test running sdr-client against the SDR API, which itself has dependencies on other SDR services, we tend to test against our running SDR QA environment. Make sure you are connected to VPN throughout your testing and provide `https://sdr-api-qa.stanford.edu` as the service URL when issuing CLI commands.

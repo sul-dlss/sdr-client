@@ -47,7 +47,7 @@ module SdrClient
       when 'deposit', 'register'
         deposit(command, options, arguments)
       when 'login'
-        status = SdrClient::Login.run(options)
+        status = SdrClient::Login.run(**options)
         puts status.failure if status.failure?
       when 'version'
         puts SdrClient::VERSION
