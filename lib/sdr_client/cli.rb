@@ -16,7 +16,7 @@ module SdrClient
 
       OPTIONS:
         --service-url (string)
-        Override the command's default URL with the given URL.
+        Override the command's default URL with the given URL. Default: https://sdr-api-prod.stanford.edu
 
         -h, --help
         Displays this screen
@@ -30,10 +30,13 @@ module SdrClient
           Accession an object into the SDR
 
         register
-          Create a draft object in SDR and retrieve a Druid identifier.
+          Create a draft object in the SDR and retrieve a Druid identifier
+
+        update
+          Update an object in the SDR
 
         login
-          Will prompt for email & password and exchange it for an login token, which it saves in ~/.sdr/token
+          Will prompt for email & password and exchange it for an login token (saved in ~/.sdr/token)
 
         version
           Display the sdr-client version
@@ -46,6 +49,13 @@ module SdrClient
         puts SdrClient::Find.run(arguments.first, **options)
       when 'deposit', 'register'
         deposit(command, options, arguments)
+      when 'update'
+        if arguments.size != 1 || !arguments.first.is_a?(String)
+          raise "Expected a single druid argument, received #{arguments}"
+        end
+
+        job_id = SdrClient::Update.run(arguments.first, **options)
+        poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
       when 'login'
         status = SdrClient::Login.run(**options)
         puts status.failure if status.failure?

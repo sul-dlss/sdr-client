@@ -91,13 +91,27 @@ deposit_options = OptionParser.new do |opts|
   end
 end
 
+update_options = OptionParser.new do |opts|
+  opts.banner = "Usage: sdr #{command} [options]"
+
+  opts.on('--admin-policy ADMIN_POLICY', 'The druid identifier of the admin policy object') do |apo|
+    options[:apo] = apo
+  end
+
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+end
+
 SdrClient::CLI.help unless command
 
 subcommands = {
-  'get' => OptionParser.new,
   'deposit' => deposit_options,
-  'register' => deposit_options,
+  'get' => OptionParser.new,
   'login' => OptionParser.new,
+  'register' => deposit_options,
+  'update' => update_options,
   'version' => OptionParser.new
 }
 

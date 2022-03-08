@@ -35,7 +35,7 @@ module SdrClient
 
       def metadata_request
         json = metadata.to_json
-        logger.debug("Starting upload metadata: #{json}")
+        logger.debug("Starting update metadata: #{json}")
 
         connection.put(path(metadata), json,
                        'Content-Type' => 'application/json',

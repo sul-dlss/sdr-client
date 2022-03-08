@@ -58,6 +58,14 @@ Display version of sdr-client:
 sdr version
 ```
 
+Update an object, changing its admin policy object (APO):
+```
+sdr --service-url https://sdr-api-server:3000 update --admin-policy druid:bx911tp9024 druid:bb408qn5061
+```
+
+
 ## Testing
 
-To test running sdr-client against the SDR API, which itself has dependencies on other SDR services, we tend to test against our running SDR QA environment. Make sure you are connected to VPN throughout your testing and provide `https://sdr-api-qa.stanford.edu` as the service URL when issuing CLI commands.
+To test running sdr-client against the SDR API, which itself has dependencies on other SDR services, we tend to test against our running SDR QA environment. Make sure you are connected to VPN throughout your testing, and pass `https://sdr-api-qa.stanford.edu` as the value to the `--service-url` flag for the commands above.
+
+**WARNING**: if you omit the `--service-url` flag, the sdr-client CLI by default operates against the production environment.
