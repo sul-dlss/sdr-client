@@ -10,6 +10,7 @@ require 'cocina/models'
 
 require 'sdr_client/version'
 require 'sdr_client/deposit'
+require 'sdr_client/update'
 require 'sdr_client/credentials'
 require 'sdr_client/find'
 require 'sdr_client/login'
