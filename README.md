@@ -58,9 +58,12 @@ Display version of sdr-client:
 sdr version
 ```
 
-Update an object, changing its admin policy object (APO):
+Update an object:
 ```
+# Change admin policy object (APO)
 sdr --service-url https://sdr-api-server:3000 update --admin-policy druid:bx911tp9024 druid:bb408qn5061
+# Change collection
+sdr --service-url https://sdr-api-server:3000 update --collection druid:pb756dt1672 druid:bb408qn5061
 ```
 
 
