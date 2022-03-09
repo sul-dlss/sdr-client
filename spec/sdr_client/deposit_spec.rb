@@ -180,7 +180,7 @@ RSpec.describe SdrClient::Deposit do
             files_metadata: {},
             label: nil,
             source_id: 'googlebooks:12345',
-            type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+            type: Cocina::Models::ObjectType.book,
             use_statement: nil,
             viewing_direction: 'left-to-right'
           )
@@ -216,7 +216,7 @@ RSpec.describe SdrClient::Deposit do
             files_metadata: {},
             label: nil,
             source_id: 'googlebooks:12345',
-            type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+            type: Cocina::Models::ObjectType.book,
             use_statement: 'Property rights reside with the repository...',
             viewing_direction: nil
           )

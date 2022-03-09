@@ -4,7 +4,7 @@ RSpec.describe SdrClient::Update do
   describe '.run' do
     # rubocop:disable Layout/LineLength
     let(:cocina_json) do
-      '{"type":"http://cocina.sul.stanford.edu/models/document.jsonld","externalIdentifier":"druid:bw581ng3176","label":"Something something better title","version":1,"access":{},"administrative":{"hasAdminPolicy":"druid:bc875mg8658"},"description":{"title":[{"value":"Something something better title"}],"purl":"https://purl.example.org/foo"}}'
+      "{\"type\":\"#{Cocina::Models::ObjectType.document}\",\"externalIdentifier\":\"druid:bw581ng3176\",\"label\":\"Something something better title\",\"version\":1,\"access\":{},\"administrative\":{\"hasAdminPolicy\":\"druid:bc875mg8658\"},\"description\":{\"title\":[{\"value\":\"Something something better title\"}],\"purl\":\"https://purl.example.org/foo\"}}"
     end
     # rubocop:enable Layout/LineLength
 

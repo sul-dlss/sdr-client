@@ -21,11 +21,11 @@ RSpec.describe SdrClient::Deposit::MetadataBuilder do
     subject(:model) { builder.with_uploads(upload_responses).as_json }
 
     context 'with an object type' do
-      let(:type) { 'http://cocina.sul.stanford.edu/models/object.jsonld' }
+      let(:type) { Cocina::Models::ObjectType.object }
 
       it 'makes attributes for the filesets' do
         file_set = model.dig(:structural, :contains).first
-        expect(file_set.fetch(:type)).to eq Cocina::Models::Vocab::Resources.file
+        expect(file_set.fetch(:type)).to eq Cocina::Models::FileSetType.file
         expect(file_set.fetch(:label)).to eq 'Object 1'
       end
 
@@ -39,7 +39,7 @@ RSpec.describe SdrClient::Deposit::MetadataBuilder do
 
         it 'sets the type to image' do
           file_set = model.dig(:structural, :contains).first
-          expect(file_set.fetch(:type)).to eq Cocina::Models::Vocab::Resources.image
+          expect(file_set.fetch(:type)).to eq Cocina::Models::FileSetType.image
         end
       end
     end

@@ -26,12 +26,12 @@ module SdrClient
 
       def as_json
         {
-          type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+          type: Cocina::Models::ObjectType.file,
           label: @label,
           filename: @filename,
           externalIdentifier: @external_identifier,
           access: {
-            access: @access,
+            view: @access,
             download: @download
           },
           administrative: {

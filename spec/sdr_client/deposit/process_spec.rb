@@ -3,7 +3,7 @@
 RSpec.describe SdrClient::Deposit::Process do
   let(:metadata) do
     SdrClient::Deposit::Request.new(label: 'This is my object',
-                                    type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                                    type: Cocina::Models::ObjectType.book,
                                     access: 'world',
                                     download: 'none',
                                     apo: 'druid:bc123df4567',
@@ -98,11 +98,11 @@ RSpec.describe SdrClient::Deposit::Process do
             .with(
               body: {
                 cocinaVersion: Cocina::Models::VERSION,
-                type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                type: Cocina::Models::ObjectType.book,
                 label: 'This is my object',
                 version: 1,
                 access: {
-                  access: 'world',
+                  view: 'world',
                   download: 'none'
                 },
                 administrative: {
@@ -115,19 +115,19 @@ RSpec.describe SdrClient::Deposit::Process do
                 },
                 structural: {
                   contains: [{
-                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    type: Cocina::Models::FileSetType.file,
                     label: 'Page 1',
                     version: 1,
                     structural: {
                       contains: [{
-                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        type: Cocina::Models::ObjectType.file,
                         label: 'file1.txt',
                         filename: 'file1.txt',
                         version: 1,
                         externalIdentifier: 'BaHBLZz09Iiw',
                         hasMessageDigests: [],
                         access: {
-                          access: 'world',
+                          view: 'world',
                           download: 'none'
                         },
                         administrative: {
@@ -138,19 +138,19 @@ RSpec.describe SdrClient::Deposit::Process do
                       }]
                     }
                   }, {
-                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    type: Cocina::Models::FileSetType.file,
                     label: 'Page 2',
                     version: 1,
                     structural: {
                       contains: [{
-                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        type: Cocina::Models::ObjectType.file,
                         label: 'file2.txt',
                         filename: 'file2.txt',
                         version: 1,
                         externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
                         hasMessageDigests: [],
                         access: {
-                          access: 'world',
+                          view: 'world',
                           download: 'none'
                         },
                         administrative: {
@@ -255,11 +255,11 @@ RSpec.describe SdrClient::Deposit::Process do
             .with(
               body: {
                 cocinaVersion: Cocina::Models::VERSION,
-                type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                type: Cocina::Models::ObjectType.book,
                 label: 'This is my object',
                 version: 1,
                 access: {
-                  access: 'world',
+                  view: 'world',
                   download: 'none'
                 },
                 administrative: {
@@ -272,12 +272,12 @@ RSpec.describe SdrClient::Deposit::Process do
                 },
                 structural: {
                   contains: [{
-                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    type: Cocina::Models::FileSetType.file,
                     label: 'Page 1',
                     version: 1,
                     structural: {
                       contains: [{
-                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        type: Cocina::Models::ObjectType.file,
                         label: 'file1.txt',
                         filename: 'file1.txt',
                         version: 1,
@@ -291,7 +291,7 @@ RSpec.describe SdrClient::Deposit::Process do
                           digest: 'def456'
                         }],
                         access: {
-                          access: 'dark',
+                          view: 'dark',
                           download: 'none'
                         },
                         administrative: {
@@ -302,19 +302,19 @@ RSpec.describe SdrClient::Deposit::Process do
                       }]
                     }
                   }, {
-                    type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    type: Cocina::Models::FileSetType.file,
                     label: 'Page 2',
                     version: 1,
                     structural: {
                       contains: [{
-                        type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        type: Cocina::Models::ObjectType.file,
                         label: 'file2.txt',
                         filename: 'file2.txt',
                         version: 1,
                         externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
                         hasMessageDigests: [],
                         access: {
-                          access: 'world',
+                          view: 'world',
                           download: 'none'
                         },
                         administrative: {

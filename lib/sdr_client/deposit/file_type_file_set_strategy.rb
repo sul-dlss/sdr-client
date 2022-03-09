@@ -7,7 +7,7 @@ module SdrClient
       # @param [Array<SdrClient::Deposit::Files>] files the files that are part of this strategy
       # @return [String] The URI that represents the type of file_set
       def self.run(files: [])
-        Cocina::Models::Vocab::Resources.file
+        Cocina::Models::FileSetType.file
       end
     end
   end

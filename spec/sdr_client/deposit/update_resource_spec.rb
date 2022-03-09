@@ -9,8 +9,8 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
     let(:dro_hash) do
       {
         'externalIdentifier' => 'druid:gf123df7654',
-        'access' => { 'access' => 'world', 'download' => 'world' },
-        'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+        'access' => { 'view' => 'world', 'download' => 'world' },
+        'type' => Cocina::Models::ObjectType.book,
         'version' => 2,
         'description' => {
           'title' => [{ 'value' => 'This is my object' }],

@@ -7,7 +7,7 @@ module SdrClient
       # @param [String] label the required object label
       # @param [Time|nil] embargo_release_date when the item should be released from embargo or nil if no embargo
       # @param [String] embargo_access access after embargo has expired if embargoed
-      # @param [String] type (http://cocina.sul.stanford.edu/models/object.jsonld) the required object type.
+      # @param [String] type (https://cocina.sul.stanford.edu/models/object) the required object type.
       # @param [Array<FileSet>] file_sets the file sets to attach.
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
@@ -24,7 +24,7 @@ module SdrClient
                      embargo_release_date: nil,
                      embargo_access: 'world',
                      embargo_download: 'world',
-                     type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
+                     type: Cocina::Models::ObjectType.object,
                      viewing_direction: nil,
                      file_sets: [],
                      files_metadata: {})
@@ -118,7 +118,7 @@ module SdrClient
 
       def access_struct
         {
-          access: access,
+          view: access,
           download: download
         }.tap do |json|
           json[:useAndReproductionStatement] = use_statement if use_statement
@@ -127,7 +127,7 @@ module SdrClient
           if embargo_release_date
             json[:embargo] = {
               releaseDate: embargo_release_date.strftime('%FT%T%:z'),
-              access: embargo_access,
+              view: embargo_access,
               download: embargo_download
             }
           end
