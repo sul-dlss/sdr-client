@@ -3,8 +3,8 @@
 RSpec.describe SdrClient::Deposit::ModelProcess do
   let(:request_dro_hash) do
     {
-      'access' => { 'access' => 'world', 'download' => 'none' },
-      'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+      'access' => { 'view' => 'world', 'download' => 'none' },
+      'type' => Cocina::Models::ObjectType.book,
       'version' => 1,
       'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
       'identification' => { 'sourceId' => 'googlebooks:12345' },
@@ -12,16 +12,16 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
         'isMemberOf' => ['druid:gh123df4567'],
         'contains' => [
           {
-            'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+            'type' => Cocina::Models::FileSetType.file,
             'label' => 'Page 1',
             'version' => 1,
             'structural' => {
               'contains' => [
                 {
-                  'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                  'type' => Cocina::Models::ObjectType.file,
                   'label' => 'file1.txt',
                   'filename' => 'file1.txt',
-                  'access' => { 'access' => 'dark', 'download' => 'none' },
+                  'access' => { 'view' => 'dark', 'download' => 'none' },
                   'administrative' => { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
                   'version' => 1,
                   'hasMessageDigests' => []
@@ -30,16 +30,16 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
             }
           },
           {
-            'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+            'type' => Cocina::Models::FileSetType.file,
             'label' => 'Page 2',
             'version' => 1,
             'structural' => {
               'contains' => [
                 {
-                  'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                  'type' => Cocina::Models::ObjectType.file,
                   'label' => 'file2.txt',
                   'filename' => 'file2.txt',
-                  'access' => { 'access' => 'dark', 'download' => 'none' },
+                  'access' => { 'view' => 'dark', 'download' => 'none' },
                   'administrative' => { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
                   'version' => 1,
                   'hasMessageDigests' => []
@@ -301,8 +301,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     context 'when no structural' do
       let(:request_dro_hash) do
         {
-          'access' => { 'access' => 'world', 'download' => 'none' },
-          'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+          'access' => { 'view' => 'world', 'download' => 'none' },
+          'type' => Cocina::Models::ObjectType.book,
           'version' => 1,
           'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
           'identification' => { 'sourceId' => 'googlebooks:12345' },
@@ -336,8 +336,8 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     context 'when assign_doi is provided' do
       let(:request_dro_hash) do
         {
-          'access' => { 'access' => 'world', 'download' => 'none' },
-          'type' => 'http://cocina.sul.stanford.edu/models/book.jsonld',
+          'access' => { 'view' => 'world', 'download' => 'none' },
+          'type' => Cocina::Models::ObjectType.book,
           'version' => 1,
           'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
           'identification' => { 'sourceId' => 'googlebooks:12345' },

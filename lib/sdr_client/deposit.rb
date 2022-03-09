@@ -5,7 +5,7 @@ require 'logger'
 module SdrClient
   # The namespace for the "deposit" command
   module Deposit
-    BOOK_TYPE = 'http://cocina.sul.stanford.edu/models/book.jsonld'
+    BOOK_TYPE = Cocina::Models::ObjectType.book
     # rubocop:disable Metrics/ParameterLists
     # rubocop:disable Metrics/MethodLength
     # @return [String] job id for the background job result

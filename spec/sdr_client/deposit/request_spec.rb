@@ -4,7 +4,7 @@ RSpec.describe SdrClient::Deposit::Request do
   context 'with all options set' do
     let(:instance) do
       described_class.new(label: 'This is my object',
-                          type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+                          type: Cocina::Models::ObjectType.book,
                           apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
                           copyright: 'copyright',
@@ -55,17 +55,17 @@ RSpec.describe SdrClient::Deposit::Request do
 
       let(:expected) do
         {
-          type: 'http://cocina.sul.stanford.edu/models/book.jsonld',
+          type: Cocina::Models::ObjectType.book,
           label: 'This is my object',
           version: 1,
           access: {
-            access: 'world',
+            view: 'world',
             copyright: 'copyright',
             download: 'world',
             useAndReproductionStatement: 'use statement',
             embargo: {
               releaseDate: '2045-01-01T00:00:00+00:00',
-              access: 'stanford',
+              view: 'stanford',
               download: 'stanford'
             }
           },
@@ -79,16 +79,16 @@ RSpec.describe SdrClient::Deposit::Request do
             isMemberOf: ['druid:gh123df4567'],
             contains: [
               {
-                type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                type: Cocina::Models::FileSetType.file,
                 label: 'Object 1',
                 version: 1,
                 structural: { contains:
                   [
                     {
-                      type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                      type: Cocina::Models::ObjectType.file,
                       label: 'file1.png',
                       filename: 'file1.png',
-                      access: { access: 'world', download: 'world' },
+                      access: { view: 'world', download: 'world' },
                       administrative: { publish: true, sdrPreserve: true, shelve: true },
                       externalIdentifier: 'foo-file1',
                       version: 1,
@@ -97,16 +97,16 @@ RSpec.describe SdrClient::Deposit::Request do
                   ] }
               },
               {
-                type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                type: Cocina::Models::FileSetType.file,
                 label: 'Object 2',
                 version: 1,
                 structural: { contains:
                   [
                     {
-                      type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                      type: Cocina::Models::ObjectType.file,
                       label: 'file2.png',
                       filename: 'file2.png',
-                      access: { access: 'dark', download: 'none' },
+                      access: { view: 'dark', download: 'none' },
                       administrative: { publish: true, sdrPreserve: true, shelve: false },
                       externalIdentifier: 'bar-file2',
                       version: 1,
@@ -126,7 +126,7 @@ RSpec.describe SdrClient::Deposit::Request do
   context 'with minimal options set' do
     let(:instance) do
       described_class.new(label: 'This is my object',
-                          type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
+                          type: Cocina::Models::ObjectType.object,
                           apo: 'druid:bc123df4567',
                           source_id: 'googlebooks:12345')
     end
@@ -136,10 +136,10 @@ RSpec.describe SdrClient::Deposit::Request do
 
       let(:expected) do
         {
-          type: 'http://cocina.sul.stanford.edu/models/object.jsonld',
+          type: Cocina::Models::ObjectType.object,
           label: 'This is my object',
           access: {
-            access: 'dark',
+            view: 'dark',
             download: 'none'
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
