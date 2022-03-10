@@ -2,23 +2,64 @@
 
 module SdrClient
   # The namespace for the "update" command
-  module Update
+  class Update
     # @return [String] job id for the background job result
-    def self.run(druid, apo:, url:, logger: Logger.new($stdout))
-      cocina_item = Cocina::Models.build(
+    def self.run(druid, **options)
+      new(druid, **options).run
+    end
+
+    def initialize(druid, **options)
+      @druid = druid
+      @url = options.fetch(:url)
+      @options = options
+    end
+
+    # @return [String] job id for the background job result
+    def run
+      SdrClient::Deposit::UpdateResource.run(
+        metadata: updated_cocina_item,
+        logger: options[:logger] || Logger.new($stdout),
+        connection: SdrClient::Connection.new(url: url)
+      )
+    end
+
+    private
+
+    attr_reader :druid, :logger, :options, :url
+
+    def updated_cocina_item
+      @updated_cocina_item ||=
+        original_cocina_item.then { |cocina_item| update_apo(cocina_item) }
+                            .then { |cocina_item| update_collection(cocina_item) }
+    end
+
+    def original_cocina_item
+      Cocina::Models.build(
         JSON.parse(
           SdrClient::Find.run(druid, url: url)
         )
       )
+    end
 
-      SdrClient::Deposit::UpdateResource.run(
-        metadata: cocina_item.new(
-          administrative: cocina_item.administrative.new(
-            hasAdminPolicy: apo
-          )
-        ),
-        logger: logger,
-        connection: Connection.new(url: url)
+    # Update the APO of a Cocina item if the options specify a new one, else return the original
+    def update_apo(cocina_item)
+      return cocina_item unless options[:apo]
+
+      cocina_item.new(
+        administrative: cocina_item.administrative.new(
+          hasAdminPolicy: options[:apo]
+        )
+      )
+    end
+
+    # Update the collection of a Cocina item if the options specify a new one, else return the original
+    def update_collection(cocina_item)
+      return cocina_item unless options[:collection]
+
+      cocina_item.new(
+        structural: cocina_item.structural.new(
+          isMemberOf: Array(options[:collection])
+        )
       )
     end
   end
