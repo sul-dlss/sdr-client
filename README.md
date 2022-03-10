@@ -64,6 +64,13 @@ Update an object:
 sdr --service-url https://sdr-api-server:3000 update --admin-policy druid:bx911tp9024 druid:bb408qn5061
 # Change collection
 sdr --service-url https://sdr-api-server:3000 update --collection druid:pb756dt1672 druid:bb408qn5061
+# Change copyright
+sdr --service-url https://sdr-api-server:3000 update --copyright "Here is a new copyright statement" druid:bb408qn5061
+# Change use and reproduction statement
+sdr --service-url https://sdr-api-server:3000 update --use-and-reproduction "Here are the terms of use..." druid:bb408qn5061
+# Change license
+sdr --service-url https://sdr-api-server:3000 update --license "https://www.apache.org/licenses/LICENSE-2.0" druid:bb408qn5061
+
 ```
 
 

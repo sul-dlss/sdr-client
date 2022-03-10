@@ -10,7 +10,7 @@ RSpec.describe SdrClient::Deposit::Request do
                           copyright: 'copyright',
                           source_id: 'googlebooks:12345',
                           catkey: '11991',
-                          use_statement: 'use statement',
+                          use_and_reproduction: 'use statement',
                           viewing_direction: 'right-to-left',
                           embargo_release_date: Time.gm(2045),
                           embargo_access: 'stanford',

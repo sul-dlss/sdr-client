@@ -31,6 +31,9 @@ module SdrClient
       @updated_cocina_item ||=
         original_cocina_item.then { |cocina_item| update_apo(cocina_item) }
                             .then { |cocina_item| update_collection(cocina_item) }
+                            .then { |cocina_item| update_copyright(cocina_item) }
+                            .then { |cocina_item| update_use_and_reproduction(cocina_item) }
+                            .then { |cocina_item| update_license(cocina_item) }
     end
 
     def original_cocina_item
@@ -59,6 +62,39 @@ module SdrClient
       cocina_item.new(
         structural: cocina_item.structural.new(
           isMemberOf: Array(options[:collection])
+        )
+      )
+    end
+
+    # Update the copyright of a Cocina item if the options specify a new one, else return the original
+    def update_copyright(cocina_item)
+      return cocina_item unless options[:copyright]
+
+      cocina_item.new(
+        access: cocina_item.access.new(
+          copyright: options[:copyright]
+        )
+      )
+    end
+
+    # Update the use_and_reproduction of a Cocina item if the options specify a new one, else return the original
+    def update_use_and_reproduction(cocina_item)
+      return cocina_item unless options[:use_and_reproduction]
+
+      cocina_item.new(
+        access: cocina_item.access.new(
+          useAndReproductionStatement: options[:use_and_reproduction]
+        )
+      )
+    end
+
+    # Update the license of a Cocina item if the options specify a new one, else return the original
+    def update_license(cocina_item)
+      return cocina_item unless options[:license]
+
+      cocina_item.new(
+        access: cocina_item.access.new(
+          license: options[:license]
         )
       )
     end
