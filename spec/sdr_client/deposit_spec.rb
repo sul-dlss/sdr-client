@@ -181,7 +181,7 @@ RSpec.describe SdrClient::Deposit do
             label: nil,
             source_id: 'googlebooks:12345',
             type: Cocina::Models::ObjectType.book,
-            use_statement: nil,
+            use_and_reproduction: nil,
             viewing_direction: 'left-to-right'
           )
 
@@ -194,7 +194,7 @@ RSpec.describe SdrClient::Deposit do
         described_class.run(apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             copyright: 'All rights reserved unless otherwise indicated.',
-                            use_statement: 'Property rights reside with the repository...',
+                            use_and_reproduction: 'Property rights reside with the repository...',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/',
                             grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
@@ -217,7 +217,7 @@ RSpec.describe SdrClient::Deposit do
             label: nil,
             source_id: 'googlebooks:12345',
             type: Cocina::Models::ObjectType.book,
-            use_statement: 'Property rights reside with the repository...',
+            use_and_reproduction: 'Property rights reside with the repository...',
             viewing_direction: nil
           )
 

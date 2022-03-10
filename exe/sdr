@@ -53,8 +53,8 @@ deposit_options = OptionParser.new do |opts|
     options[:copyright] = copyright
   end
 
-  opts.on('--use-statement STATEMENT', 'The use and reproduction statement') do |use_statement|
-    options[:use_statement] = use_statement
+  opts.on('--use-and-reproduction STATEMENT', 'The use and reproduction statement') do |use_and_reproduction|
+    options[:use_and_reproduction] = use_and_reproduction
   end
 
   opts.on('--viewing-direction DIRECTION', 'The viewing direction (if a book). ' \
@@ -100,6 +100,18 @@ update_options = OptionParser.new do |opts|
 
   opts.on('--collection COLLECTION', 'The druid identifier of the collection object') do |collection|
     options[:collection] = collection
+  end
+
+  opts.on('--copyright COPYRIGHT', 'The copyright statement') do |copyright|
+    options[:copyright] = copyright
+  end
+
+  opts.on('--use-and-reproduction STATEMENT', 'The use and reproduction statement') do |use_and_reproduction|
+    options[:use_and_reproduction] = use_and_reproduction
+  end
+
+  opts.on('--license LICENSE_URI', 'The license URI') do |license|
+    options[:license] = license
   end
 
   opts.on('-h', '--help', 'Display this screen') do
