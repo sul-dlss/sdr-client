@@ -13,7 +13,7 @@ module SdrClient
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # rubocop:disable Metrics/ParameterLists
       def initialize(label: nil,
-                     access: 'dark',
+                     view: 'dark',
                      download: 'none',
                      use_and_reproduction: nil,
                      copyright: nil,
@@ -36,7 +36,7 @@ module SdrClient
         @embargo_release_date = embargo_release_date
         @embargo_access = embargo_access
         @embargo_download = embargo_download
-        @access = access
+        @view = view
         @download = download
         @use_and_reproduction = use_and_reproduction
         @copyright = copyright
@@ -62,7 +62,7 @@ module SdrClient
       # @return [Request] a clone of this request with the file_sets added
       def with_file_sets(file_sets)
         Request.new(label: label,
-                    access: access,
+                    view: view,
                     download: download,
                     apo: apo,
                     collection: collection,
@@ -83,7 +83,7 @@ module SdrClient
       # @return [Hash] the metadata for the file
       def for(filename)
         metadata = files_metadata.fetch(filename, {}).with_indifferent_access
-        metadata[:access] = access unless metadata.key?(:access)
+        metadata[:view] = view unless metadata.key?(:view)
         metadata[:download] = download unless metadata.key?(:download)
         metadata
       end
@@ -92,7 +92,7 @@ module SdrClient
 
       private
 
-      attr_reader :access, :label, :file_sets, :source_id, :catkey, :apo, :collection,
+      attr_reader :view, :label, :file_sets, :source_id, :catkey, :apo, :collection,
                   :files_metadata, :embargo_release_date, :embargo_access, :embargo_download,
                   :viewing_direction, :use_and_reproduction, :copyright, :download
 
@@ -118,7 +118,7 @@ module SdrClient
 
       def access_struct
         {
-          view: access,
+          view: view,
           download: download
         }.tap do |json|
           json[:useAndReproductionStatement] = use_and_reproduction if use_and_reproduction

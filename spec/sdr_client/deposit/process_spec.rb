@@ -4,7 +4,7 @@ RSpec.describe SdrClient::Deposit::Process do
   let(:metadata) do
     SdrClient::Deposit::Request.new(label: 'This is my object',
                                     type: Cocina::Models::ObjectType.book,
-                                    access: 'world',
+                                    view: 'world',
                                     download: 'none',
                                     apo: 'druid:bc123df4567',
                                     collection: 'druid:gh123df4567',
@@ -191,7 +191,7 @@ RSpec.describe SdrClient::Deposit::Process do
               'md5' => 'abc123',
               'sha1' => 'def456',
               'mime_type' => 'image/tiff',
-              'access' => 'dark',
+              'view' => 'dark',
               'download' => 'none',
               'publish' => false,
               'preserve' => false,

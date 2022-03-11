@@ -6,16 +6,16 @@ module SdrClient
     class File
       # rubocop:disable Metrics/ParameterLists
       def initialize(external_identifier:, label:, filename:,
-                     access: 'dark', download: 'none', preserve: true, shelve: true,
+                     view: 'dark', download: 'none', preserve: true, shelve: true,
                      publish: true, mime_type: nil, md5: nil, sha1: nil,
                      use: nil)
         @external_identifier = external_identifier
         @label = label
         @filename = filename
-        @access = access
+        @view = view
         @download = download
         @preserve = preserve
-        @shelve = access == 'dark' ? false : shelve
+        @shelve = view == 'dark' ? false : shelve
         @publish = publish
         @mime_type = mime_type
         @md5 = md5
@@ -31,7 +31,7 @@ module SdrClient
           filename: @filename,
           externalIdentifier: @external_identifier,
           access: {
-            view: @access,
+            view: @view,
             download: @download
           },
           administrative: {

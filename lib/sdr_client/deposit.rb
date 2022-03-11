@@ -12,7 +12,7 @@ module SdrClient
     def self.run(label: nil,
                  type: BOOK_TYPE,
                  viewing_direction: nil,
-                 access: 'dark',
+                 view: 'dark',
                  download: 'none',
                  use_and_reproduction: nil,
                  copyright: nil,
@@ -33,7 +33,7 @@ module SdrClient
       augmented_metadata = FileMetadataBuilder.build(files: files, files_metadata: files_metadata)
       metadata = Request.new(label: label,
                              type: type,
-                             access: access,
+                             view: view,
                              download: download,
                              apo: apo,
                              use_and_reproduction: use_and_reproduction,
