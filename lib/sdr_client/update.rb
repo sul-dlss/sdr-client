@@ -34,6 +34,7 @@ module SdrClient
                             .then { |cocina_item| update_copyright(cocina_item) }
                             .then { |cocina_item| update_use_and_reproduction(cocina_item) }
                             .then { |cocina_item| update_license(cocina_item) }
+                            .then { |cocina_item| update_access(cocina_item) }
     end
 
     def original_cocina_item
@@ -77,7 +78,7 @@ module SdrClient
       )
     end
 
-    # Update the use_and_reproduction of a Cocina item if the options specify a new one, else return the original
+    # Update the use and reproduction statement of a Cocina item if the options specify a new one, else return the original
     def update_use_and_reproduction(cocina_item)
       return cocina_item unless options[:use_and_reproduction]
 
@@ -98,5 +99,42 @@ module SdrClient
         )
       )
     end
+
+    # rubocop:disable Style/DoubleNegation
+    # Update the access of a Cocina item if the options specify a new one, else return the original
+    def update_access(cocina_item)
+      return cocina_item unless options[:view] || options[:download] || options[:location] || options[:cdl]
+
+      cocina_item.new(
+        access: cocina_item.access.new(
+          view: options[:view],
+          download: options[:download],
+          location: options[:location],
+          controlledDigitalLending: !!options[:cdl]
+        ),
+        structural: cocina_item.structural.new(
+          contains: cocina_item.structural.contains.map do |file_set|
+            file_set.new(
+              structural: file_set.structural.new(
+                contains: file_set.structural.contains.map do |file|
+                  file.new(
+                    access: file.access.new(
+                      view: options[:view],
+                      download: options[:download],
+                      location: options[:location],
+                      controlledDigitalLending: !!options[:cdl]
+                    ),
+                    administrative: options[:view] == 'dark' ?
+                      { publish: false, shelve: false, sdrPreserve: file.administrative.sdrPreserve } :
+                      file.administrative
+                  )
+                end
+              )
+            )
+          end
+        )
+      )
+    end
+    # rubocop:enable Style/DoubleNegation
   end
 end

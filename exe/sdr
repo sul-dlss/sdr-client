@@ -62,9 +62,9 @@ deposit_options = OptionParser.new do |opts|
     options[:viewing_direction] = viewing_direction if %w[left-to-right right-to-left].include?(viewing_direction)
   end
 
-  opts.on('--access LEVEL', 'The access level for this object. ' \
-                            'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |level|
-    options[:access] = level if %w[world stanford location-based citation-only dark].include?(level)
+  opts.on('--access-view LEVEL', 'The access view level for this object. ' \
+                                 'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |access_view|
+    options[:view] = access_view if %w[world stanford location-based citation-only dark].include?(access_view)
   end
 
   opts.on('--files-metadata FILES_METADATA', 'A JSON object representing per-file metadata') do |files_metadata|
@@ -112,6 +112,30 @@ update_options = OptionParser.new do |opts|
 
   opts.on('--license LICENSE_URI', 'The license URI') do |license|
     options[:license] = license
+  end
+
+  # TODO: view must be provided along with download (consider when rewriting as thor CLI)
+  opts.on('--access-view LEVEL', 'The access view level for this object. ' \
+                                 'Either "world", "stanford", "location-based", "citation-only" or "dark"') do |access_view|
+    options[:view] = access_view if %w[world stanford location-based citation-only dark].include?(access_view)
+  end
+
+  # TODO: download must be provided along with view (consider when rewriting as thor CLI)
+  opts.on('--access-download LEVEL', 'The access download level for this object. ' \
+                                     'Either "world", "stanford", "location-based", or "none"') do |access_download|
+    options[:download] = access_download if %w[world stanford location-based none].include?(access_download)
+  end
+
+  # TODO: location cannot be present without download and view (consider when rewriting as thor CLI)
+  opts.on('--access-location LOCATION', 'The access location for this object. ' \
+                                        'Either "spec", "music", "ars", "art", "hoover", or "m&m"') do |access_location|
+    options[:location] = access_location if %w[spec music ars art hoover m&m].include?(access_location)
+  end
+
+  # TODO: cdl cannot be present without download and view (consider when rewriting as thor CLI)
+  opts.on('--access-cdl BOOLEAN', 'The access controlled digital lending setting for this object. ' \
+                                  'Either "true" or "false"') do |access_cdl|
+    options[:cdl] = access_cdl == 'true'
   end
 
   opts.on('-h', '--help', 'Display this screen') do

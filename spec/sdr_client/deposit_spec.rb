@@ -31,7 +31,7 @@ RSpec.describe SdrClient::Deposit do
         md5: '19531a7fd61429c613d156f53cf3ba76',
         sha1: 'bc59eae52d98e84f83f65fdea3d7857b9ec5c46c',
         use: 'transcription',
-        access: 'dark',
+        view: 'dark',
         download: 'none'
       ).and_call_original
       described_class.run(apo: 'druid:bc123df4567',
@@ -168,7 +168,7 @@ RSpec.describe SdrClient::Deposit do
         run
         expect(SdrClient::Deposit::Request).to have_received(:new)
           .with(
-            access: 'dark',
+            view: 'dark',
             download: 'none',
             apo: 'druid:bc123df4567',
             catkey: nil,
@@ -204,7 +204,7 @@ RSpec.describe SdrClient::Deposit do
         run
         expect(SdrClient::Deposit::Request).to have_received(:new)
           .with(
-            access: 'dark',
+            view: 'dark',
             download: 'none',
             apo: 'druid:bc123df4567',
             catkey: nil,

@@ -4,7 +4,7 @@ RSpec.describe SdrClient::Update do
   describe '.run' do
     # rubocop:disable Layout/LineLength
     let(:cocina_json) do
-      "{\"type\":\"#{Cocina::Models::ObjectType.document}\",\"externalIdentifier\":\"druid:bw581ng3176\",\"label\":\"Something something better title\",\"version\":1,\"access\":{\"copyright\":\"Some Rights Reserved\",\"useAndReproductionStatement\":\"We are OK with you using this\",\"license\":\"https://www.gnu.org/licenses/agpl.txt\"},\"administrative\":{\"hasAdminPolicy\":\"druid:bc875mg8658\"},\"description\":{\"title\":[{\"value\":\"Something something better title\"}],\"purl\":\"https://purl.example.org/foo\"},\"structural\":{\"isMemberOf\":[\"druid:jh976nm7678\"]}}"
+      "{\"type\":\"#{Cocina::Models::ObjectType.document}\",\"externalIdentifier\":\"druid:bw581ng3176\",\"label\":\"Something something better title\",\"version\":1,\"access\":{\"copyright\":\"Some Rights Reserved\",\"useAndReproductionStatement\":\"We are OK with you using this\",\"license\":\"https://www.gnu.org/licenses/agpl.txt\",\"view\":\"world\",\"download\":\"world\"},\"administrative\":{\"hasAdminPolicy\":\"druid:bc875mg8658\"},\"description\":{\"title\":[{\"value\":\"Something something better title\"}],\"purl\":\"https://purl.example.org/foo\"},\"structural\":{\"isMemberOf\":[\"druid:jh976nm7678\"],\"contains\":[{\"type\":\"https://cocina.sul.stanford.edu/models/resources/file\",\"externalIdentifier\":\"bw581ng3176_1\",\"label\":\"Test file\",\"version\":1,\"structural\":{\"contains\":[{\"type\":\"https://cocina.sul.stanford.edu/models/file\",\"externalIdentifier\":\"druid:bw581ng3176/test.txt\",\"label\":\"test.txt\",\"filename\":\"test.txt\",\"size\":11,\"version\":1,\"hasMimeType\":\"text/plain\",\"hasMessageDigests\":[{\"type\":\"sha1\",\"digest\":\"5d39343e4bb48abd97f759828282f5ebbac56c5e\"},{\"type\":\"md5\",\"digest\":\"63b8812b0c05722a9d6c51cbd2bfb54b\"}],\"access\":{\"view\":\"world\",\"download\":\"world\"},\"administrative\":{\"sdrPreserve\":true,\"shelve\":true,\"publish\":true}}]}}]}}"
     end
     # rubocop:enable Layout/LineLength
 
@@ -107,6 +107,238 @@ RSpec.describe SdrClient::Update do
       it 'updates a Cocina object' do
         expect(SdrClient::Deposit::UpdateResource).to have_received(:run).once.with(
           metadata: cocina_object_with(access: { license: new_license }),
+          logger: instance_of(Logger),
+          connection: instance_of(SdrClient::Connection)
+        )
+      end
+    end
+
+    context 'when updating the item access controls (controlled digital lending)' do
+      let(:new_view) { 'stanford' }
+      let(:new_download) { 'none' }
+      let(:new_cdl) { true }
+
+      before do
+        described_class.run(
+          'druid:bc123df4567',
+          view: new_view,
+          download: new_download,
+          cdl: new_cdl,
+          url: 'http://example.com'
+        )
+      end
+
+      it 'finds a Cocina object' do
+        expect(SdrClient::Find).to have_received(:run).once
+      end
+
+      it 'updates a Cocina object' do
+        expect(SdrClient::Deposit::UpdateResource).to have_received(:run).once.with(
+          metadata: cocina_object_with(
+            access: {
+              view: new_view,
+              download: new_download,
+              location: nil,
+              controlledDigitalLending: true
+            },
+            structural: {
+              contains: [
+                {
+                  type: Cocina::Models::FileSetType.file,
+                  externalIdentifier: 'bw581ng3176_1',
+                  label: 'Test file',
+                  version: 1,
+                  structural: {
+                    contains: [
+                      {
+                        type: Cocina::Models::ObjectType.file,
+                        externalIdentifier: 'druid:bw581ng3176/test.txt',
+                        label: 'test.txt',
+                        filename: 'test.txt',
+                        size: 11,
+                        version: 1,
+                        hasMimeType: 'text/plain',
+                        hasMessageDigests: [
+                          {
+                            type: 'sha1',
+                            digest: '5d39343e4bb48abd97f759828282f5ebbac56c5e'
+                          },
+                          {
+                            type: 'md5',
+                            digest: '63b8812b0c05722a9d6c51cbd2bfb54b'
+                          }
+                        ],
+                        access: {
+                          view: new_view,
+                          download: new_download,
+                          location: nil,
+                          controlledDigitalLending: true
+                        },
+                        administrative: {
+                          sdrPreserve: true,
+                          shelve: true,
+                          publish: true
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ),
+          logger: instance_of(Logger),
+          connection: instance_of(SdrClient::Connection)
+        )
+      end
+    end
+
+    context 'when updating the item access controls (location-based)' do
+      let(:new_view) { 'location-based' }
+      let(:new_download) { 'location-based' }
+      let(:new_location) { 'm&m' }
+
+      before do
+        described_class.run(
+          'druid:bc123df4567',
+          view: new_view,
+          download: new_download,
+          location: new_location,
+          url: 'http://example.com'
+        )
+      end
+
+      it 'finds a Cocina object' do
+        expect(SdrClient::Find).to have_received(:run).once
+      end
+
+      it 'updates a Cocina object' do
+        expect(SdrClient::Deposit::UpdateResource).to have_received(:run).once.with(
+          metadata: cocina_object_with(
+            access: {
+              view: new_view,
+              download: new_download,
+              location: new_location
+            },
+            structural: {
+              contains: [
+                {
+                  type: Cocina::Models::FileSetType.file,
+                  externalIdentifier: 'bw581ng3176_1',
+                  label: 'Test file',
+                  version: 1,
+                  structural: {
+                    contains: [
+                      {
+                        type: Cocina::Models::ObjectType.file,
+                        externalIdentifier: 'druid:bw581ng3176/test.txt',
+                        label: 'test.txt',
+                        filename: 'test.txt',
+                        size: 11,
+                        version: 1,
+                        hasMimeType: 'text/plain',
+                        hasMessageDigests: [
+                          {
+                            type: 'sha1',
+                            digest: '5d39343e4bb48abd97f759828282f5ebbac56c5e'
+                          },
+                          {
+                            type: 'md5',
+                            digest: '63b8812b0c05722a9d6c51cbd2bfb54b'
+                          }
+                        ],
+                        access: {
+                          view: new_view,
+                          download: new_download,
+                          location: new_location,
+                          controlledDigitalLending: false
+                        },
+                        administrative: {
+                          sdrPreserve: true,
+                          shelve: true,
+                          publish: true
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ),
+          logger: instance_of(Logger),
+          connection: instance_of(SdrClient::Connection)
+        )
+      end
+    end
+
+    context 'when updating the item access controls (dark)' do
+      let(:new_view) { 'dark' }
+      let(:new_download) { 'none' }
+
+      before do
+        described_class.run(
+          'druid:bc123df4567',
+          view: new_view,
+          download: new_download,
+          url: 'http://example.com'
+        )
+      end
+
+      it 'finds a Cocina object' do
+        expect(SdrClient::Find).to have_received(:run).once
+      end
+
+      it 'updates a Cocina object' do
+        expect(SdrClient::Deposit::UpdateResource).to have_received(:run).once.with(
+          metadata: cocina_object_with(
+            access: {
+              view: new_view,
+              download: new_download
+            },
+            structural: {
+              contains: [
+                {
+                  type: Cocina::Models::FileSetType.file,
+                  externalIdentifier: 'bw581ng3176_1',
+                  label: 'Test file',
+                  version: 1,
+                  structural: {
+                    contains: [
+                      {
+                        type: Cocina::Models::ObjectType.file,
+                        externalIdentifier: 'druid:bw581ng3176/test.txt',
+                        label: 'test.txt',
+                        filename: 'test.txt',
+                        size: 11,
+                        version: 1,
+                        hasMimeType: 'text/plain',
+                        hasMessageDigests: [
+                          {
+                            type: 'sha1',
+                            digest: '5d39343e4bb48abd97f759828282f5ebbac56c5e'
+                          },
+                          {
+                            type: 'md5',
+                            digest: '63b8812b0c05722a9d6c51cbd2bfb54b'
+                          }
+                        ],
+                        access: {
+                          view: new_view,
+                          download: new_download,
+                          location: nil,
+                          controlledDigitalLending: false
+                        },
+                        administrative: {
+                          sdrPreserve: true,
+                          shelve: false,
+                          publish: false
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ),
           logger: instance_of(Logger),
           connection: instance_of(SdrClient::Connection)
         )

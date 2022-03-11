@@ -15,7 +15,7 @@ RSpec.describe SdrClient::Deposit::Request do
                           embargo_release_date: Time.gm(2045),
                           embargo_access: 'stanford',
                           embargo_download: 'stanford',
-                          access: 'world',
+                          view: 'world',
                           download: 'world')
     end
     let(:with_file_sets) do
@@ -25,7 +25,7 @@ RSpec.describe SdrClient::Deposit::Request do
     let(:file_sets) do
       [
         SdrClient::Deposit::FileSet.new(uploads: [upload1], label: 'Object 1',
-                                        uploads_metadata: { 'file1.png' => { access: 'world', download: 'world' } }),
+                                        uploads_metadata: { 'file1.png' => { view: 'world', download: 'world' } }),
         SdrClient::Deposit::FileSet.new(uploads: [upload2], label: 'Object 2')
       ]
     end
