@@ -19,6 +19,7 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Exclude:
+    - 'lib/sdr_client/cli.rb'
     - 'lib/sdr_client/deposit/request.rb'
     - 'lib/sdr_client/update.rb'
 

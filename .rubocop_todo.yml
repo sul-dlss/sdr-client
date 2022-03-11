@@ -142,7 +142,7 @@ Style/StringConcatenation:
 # URISchemes: http, https
 Layout/LineLength:
   Exclude:
-    - 'exe/sdr'
+    - 'lib/sdr_client/cli.rb'
     - 'lib/sdr_client/deposit/model_process.rb'
     - 'lib/sdr_client/update.rb'
     - 'spec/sdr_client/deposit/model_process_spec.rb'
