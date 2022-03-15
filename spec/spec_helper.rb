@@ -10,6 +10,7 @@ SimpleCov.start do
   add_filter 'lib/sdr_client/cli.rb'
 end
 
+require 'cocina/rspec'
 require 'sdr_client'
 
 Dir[File.expand_path(File.join(File.dirname(__FILE__), 'support', '**', '*.rb'))].each { |f| require f }
