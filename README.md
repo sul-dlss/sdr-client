@@ -17,40 +17,23 @@ We recommend using the latest 3.x release of Ruby.
 
 ## Usage
 
+Get general help (e.g., list out commands):
+```
+sdr help
+# or:
+sdr -h
+# or:
+sdr --help
+```
+
+Get help for a specific command:
+```
+sdr help register
+```
+
 Log in:
 ```
-sdr --service-url https://sdr-api-server:3000 login
-```
-
-Register a new object:
-```
-sdr --service-url https://sdr-api-server:3000 register --label 'hey there' \
-  --admin-policy 'druid:bk123gh4567' \
-  --collection 'druid:gh456kw9876' \
-  --source-id 'googlebooks:stanford_12345' file1.png file2.png
-```
-
-Deposit (register + accession) a new object:
-```
-sdr --service-url https://sdr-api-server:3000 deposit --label 'hey there' \
-  --admin-policy 'druid:bk123gh4567' \
-  --collection 'druid:gh456kw9876' \
-  --source-id 'googlebooks:stanford_12345' file1.png file2.png
-```
-
-Deposit a new object, providing metadata for files:
-```
-sdr --service-url https://sdr-api-server:3000 deposit --label 'hey there' \
-  --files-metadata '{"image42.jp2":{"mime_type":"image/jp2"},"ocr.html":{"use":"transcription"}}'
-  --admin-policy 'druid:bk123gh4567' \
-  --collection 'druid:gh456kw9876' \
-  --source-id 'googlebooks:stanford_12345' image42.jp2 ocr.html
-```
-
-View the object:
-```
-sdr --service-url https://sdr-api-server:3000 get druid:bw581ng3176
-{"type":"https://cocina.sul.stanford.edu/models/document","externalIdentifier":"druid:bw581ng3176","label":"Something something better title","version":1,"access":{"view":"stanford","copyright":"This work is copyrighted by the creator.","download":"stanford","useAndReproductionStatement":"This document is available only to the Stanford faculty, staff and student community."},"administrative":{"hasAdminPolicy":"druid:zx485kb6348"},"description":{"title":[{"value":"Something something better title"}],"contributor":[{"name":[{"value":"Hodge, Amy"}],"type":"person","role":[{"value":"Author"},{"value":"author","uri":"http://id.loc.gov/vocabulary/relators/aut","source":{"code":"marcrelator","uri":"http://id.loc.gov/vocabulary/relators/"}},{"value":"Creator"}]}],"form":[{"structuredValue":[{"value":"Text","type":"type"},{"value":"Report","type":"subtype"}],"type":"resource type","source":{"value":"Stanford self-deposit resource types"}},{"value":"reports","type":"genre","uri":"http://vocab.getty.edu/aat/300027267","source":{"code":"aat"}},{"value":"text","type":"resource type","source":{"value":"MODS resource types"}}],"note":[{"value":";alkdfjlsadkjf;l","type":"summary"},{"value":"amyhodge@stanford.edu","type":"contact","displayLabel":"Contact"}],"subject":[{"value":"lkfj","type":"topic"},{"value":";kfj","type":"topic"},{"value":"fjwelkb","type":"topic"}]},"identification":{"sourceId":"hydrus:20"},"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/resources/file","externalIdentifier":"bw581ng3176_1","label":"Test file","version":1,"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/file","externalIdentifier":"druid:bw581ng3176/test.txt","label":"test.txt","filename":"test.txt","size":11,"version":1,"hasMimeType":"text/plain","hasMessageDigests":[{"type":"sha1","digest":"5d39343e4bb48abd97f759828282f5ebbac56c5e"},{"type":"md5","digest":"63b8812b0c05722a9d6c51cbd2bfb54b"}],"access":{"view":"world","download":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}]}}
+sdr login --url https://sdr-api-server:3000
 ```
 
 Display version of sdr-client:
@@ -58,24 +41,58 @@ Display version of sdr-client:
 sdr version
 ```
 
+Register a new object:
+```
+sdr register file1.png file2.png --url https://sdr-api-server:3000 \
+  --label 'hey there' \
+  --admin-policy 'druid:bk123gh4567' \
+  --collection 'druid:gh456kw9876' \
+  --source-id 'googlebooks:stanford_12345'
+```
+
+Deposit (register + accession) a new object:
+```
+sdr deposit file1.png file2.png --url https://sdr-api-server:3000 \
+  --label 'hey there' \
+  --admin-policy 'druid:bk123gh4567' \
+  --collection 'druid:gh456kw9876' \
+  --source-id 'googlebooks:stanford_12345'
+```
+
+Deposit a new object, providing metadata for files:
+```
+sdr deposit image42.jp2 ocr.html --url https://sdr-api-server:3000 \
+  --label 'hey there' \
+  --files-metadata '{"image42.jp2":{"mime_type":"image/jp2"},"ocr.html":{"use":"transcription"}}'
+  --admin-policy 'druid:bk123gh4567' \
+  --collection 'druid:gh456kw9876' \
+  --source-id 'googlebooks:stanford_12345'
+```
+
+View the object:
+```
+sdr get druid:bw581ng3176 --url https://sdr-api-server:3000
+{"type":"https://cocina.sul.stanford.edu/models/document","externalIdentifier":"druid:bw581ng3176","label":"Something something better title","version":1,"access":{"view":"stanford","copyright":"This work is copyrighted by the creator.","download":"stanford","useAndReproductionStatement":"This document is available only to the Stanford faculty, staff and student community."},"administrative":{"hasAdminPolicy":"druid:zx485kb6348"},"description":{"title":[{"value":"Something something better title"}],"contributor":[{"name":[{"value":"Hodge, Amy"}],"type":"person","role":[{"value":"Author"},{"value":"author","uri":"http://id.loc.gov/vocabulary/relators/aut","source":{"code":"marcrelator","uri":"http://id.loc.gov/vocabulary/relators/"}},{"value":"Creator"}]}],"form":[{"structuredValue":[{"value":"Text","type":"type"},{"value":"Report","type":"subtype"}],"type":"resource type","source":{"value":"Stanford self-deposit resource types"}},{"value":"reports","type":"genre","uri":"http://vocab.getty.edu/aat/300027267","source":{"code":"aat"}},{"value":"text","type":"resource type","source":{"value":"MODS resource types"}}],"note":[{"value":";alkdfjlsadkjf;l","type":"summary"},{"value":"amyhodge@stanford.edu","type":"contact","displayLabel":"Contact"}],"subject":[{"value":"lkfj","type":"topic"},{"value":";kfj","type":"topic"},{"value":"fjwelkb","type":"topic"}]},"identification":{"sourceId":"hydrus:20"},"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/resources/file","externalIdentifier":"bw581ng3176_1","label":"Test file","version":1,"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/file","externalIdentifier":"druid:bw581ng3176/test.txt","label":"test.txt","filename":"test.txt","size":11,"version":1,"hasMimeType":"text/plain","hasMessageDigests":[{"type":"sha1","digest":"5d39343e4bb48abd97f759828282f5ebbac56c5e"},{"type":"md5","digest":"63b8812b0c05722a9d6c51cbd2bfb54b"}],"access":{"view":"world","download":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}]}}
+```
+
 Update an object:
 ```
 # Change admin policy object (APO)
-sdr --service-url https://sdr-api-server:3000 update --admin-policy druid:bx911tp9024 druid:bb408qn5061
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --admin-policy druid:bx911tp9024
 # Change collection
-sdr --service-url https://sdr-api-server:3000 update --collection druid:pb756dt1672 druid:bb408qn5061
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --collection druid:pb756dt1672
 # Change copyright
-sdr --service-url https://sdr-api-server:3000 update --copyright "Here is a new copyright statement" druid:bb408qn5061
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --copyright "Here is a new copyright statement"
 # Change use and reproduction statement
-sdr --service-url https://sdr-api-server:3000 update --use-and-reproduction "Here are the terms of use..." druid:bb408qn5061
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --use-and-reproduction "Here are the terms of use..."
 # Change license
-sdr --service-url https://sdr-api-server:3000 update --license "https://www.apache.org/licenses/LICENSE-2.0" druid:bb408qn5061
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --license "https://www.apache.org/licenses/LICENSE-2.0"
 # Change access controls
-sdr --service-url https://sdr-api-server:3000 update --access-view "location-based" --access-download "none" --access-location "music" --access-cdl false  druid:bb408qn5061
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --view "location-based" --download "none" --location "music" --cdl false
 ```
 
 ## Testing
 
-To test running sdr-client against the SDR API, which itself has dependencies on other SDR services, we tend to test against our running SDR QA environment. Make sure you are connected to VPN throughout your testing, and pass `https://sdr-api-qa.stanford.edu` as the value to the `--service-url` flag for the commands above.
+To test running sdr-client against the SDR API, which itself has dependencies on other SDR services, we tend to test against our running SDR QA environment. Make sure you are connected to VPN throughout your testing, and pass `https://sdr-api-qa.stanford.edu` as the value to the `--url` flag for the commands above.
 
-**WARNING**: if you omit the `--service-url` flag, the sdr-client CLI by default operates against the production environment.
+**WARNING**: if you omit the `--url` flag, the sdr-client CLI by default operates against the production environment.

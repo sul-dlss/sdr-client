@@ -8,7 +8,9 @@ module SdrClient
 
     # @return [Result] the status of the call
     def self.run(url:, login_service: LoginPrompt, credential_store: Credentials)
-      request_json = JSON.generate(login_service.run)
+      request_json = JSON.generate(
+        login_service.respond_to?(:run) ? login_service.run : login_service.call
+      )
       response = Faraday.post(url + LOGIN_PATH, request_json, 'Content-Type' => 'application/json')
       case response.status
       when 200

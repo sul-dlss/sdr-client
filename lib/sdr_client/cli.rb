@@ -1,111 +1,172 @@
 # frozen_string_literal: true
 
+require 'thor'
+
 module SdrClient
-  # The command line interface
-  module CLI
-    HELP = <<~HELP
-      DESCRIPTION:
-        The SDR Command Line Interface is a tool to interact with the Stanford Digital Repository.
+  # The SDR command-line interface
+  class CLI < Thor
+    include Thor::Actions
 
-      SYNOPSIS:
-        sdr [options] <command>
+    # Make sure Thor commands preserve exit statuses
+    # @see https://github.com/rails/thor/wiki/Making-An-Executable
+    def self.exit_on_failure?
+      true
+    end
 
-        To see help text for each command you can run:
-
-        sdr [options] <command> help
-
-      OPTIONS:
-        --service-url (string)
-        Override the command's default URL with the given URL. Default: https://sdr-api-prod.stanford.edu
-
-        -h, --help
-        Displays this screen
-
-
-      COMMANDS:
-        get
-          Retrieve an object from the SDR
-
-        deposit
-          Accession an object into the SDR
-
-        register
-          Create a draft object in the SDR and retrieve a Druid identifier
-
-        update
-          Update an object in the SDR
-
-        login
-          Will prompt for email & password and exchange it for an login token (saved in ~/.sdr/token)
-
-        version
-          Display the sdr-client version
-
-    HELP
-
-    def self.start(command, options, arguments = [])
-      case command
-      when 'get'
-        puts SdrClient::Find.run(arguments.first, **options)
-      when 'deposit', 'register'
-        deposit(command, options, arguments)
-      when 'update'
-        if arguments.size != 1 || !arguments.first.is_a?(String)
-          raise "Expected a single druid argument, received #{arguments}"
-        end
-
-        job_id = SdrClient::Update.run(arguments.first, **options)
-        poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
-      when 'login'
-        status = SdrClient::Login.run(**options)
-        puts status.failure if status.failure?
-      when 'version'
-        puts SdrClient::VERSION
-      else
-        raise "Unknown command #{command}"
-      end
-    rescue SdrClient::Credentials::NoCredentialsError
-      puts 'Log in first'
+    # Print out help and exit with error code if command not found
+    def self.handle_no_command_error(command)
+      puts "Command '#{command}' not found, displaying help:"
+      puts
+      puts help
       exit(1)
     end
 
-    def self.deposit(command, options, arguments)
-      options[:files] = arguments if arguments.present?
-      display_errors(validate_deposit_options(options))
-      job_id = SdrClient::Deposit.run(accession: command == 'deposit', **options)
+    def self.default_url
+      'https://sdr-api-prod.stanford.edu'
+    end
+
+    package_name 'sdr'
+
+    class_option :url, desc: 'URL of SDR API endpoint', type: :string, default: default_url
+
+    desc 'get DRUID', 'Retrieve an object from the SDR'
+    def get(druid)
+      say SdrClient::Find.run(druid, url: options[:url])
+    rescue SdrClient::Credentials::NoCredentialsError
+      say_error 'Log in first'
+      exit(1)
+    end
+
+    desc 'login', 'Prompt for email & password and create a login token (saved in ~/.sdr/token)'
+    def login
+      status = SdrClient::Login.run(
+        url: options[:url],
+        login_service: lambda do
+          {
+            email: ask('Email:'),
+            password: ask('Password:', echo: false)
+          }
+        end
+      )
+      return puts unless status.failure?
+
+      say_error status.failure
+      exit(1)
+    end
+
+    desc 'version', 'Display the SDR CLI version'
+    def version
+      say SdrClient::VERSION
+    end
+
+    desc 'update DRUID', 'Update an object in the SDR'
+    option :skip_polling, type: :boolean, default: false, aliases: '-s', desc: 'Print out job ID instead of polling for result'
+    option :apo, desc: 'Druid identifier of the admin policy object', aliases: '--admin-policy'
+    option :collection, desc: 'Druid identifier of the collection object'
+    option :copyright, desc: 'Copyright statement'
+    option :use_and_reproduction, desc: 'Use and reproduction statement'
+    option :license, desc: 'License URI'
+    option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
+    option :download, enum: %w[world stanford location-based none], desc: 'Access download level for the object'
+    option :location, enum: %w[spec music ars art hoover m&m], desc: 'Access location for the object'
+    option :cdl, type: :boolean, default: false
+    def update(druid)
+      validate_druid!(druid)
+      job_id = SdrClient::Update.run(druid, **options)
       poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
+    rescue SdrClient::Credentials::NoCredentialsError
+      say_error 'Log in first'
+      exit(1)
     end
 
-    def self.display_errors(errors)
-      return if errors.empty?
-
-      raise errors.map { |k, v| "#{k} #{v}" }.join("\n")
+    desc 'deposit OPTIONAL_FILES', 'Deposit (accession) an object into the SDR'
+    option :skip_polling, type: :boolean, default: false, aliases: '-s', desc: 'Print out job ID instead of polling for result'
+    option :apo, required: true, desc: 'Druid identifier of the admin policy object', aliases: '--admin-policy'
+    option :source_id, required: true, desc: 'Source ID for this object'
+    option :label, desc: 'Object label'
+    option :type, enum: %w[image book document map manuscript media three_dimensional object collection admin_policy], desc: 'The object type'
+    option :collection, desc: 'Druid identifier of the collection object'
+    option :catkey, desc: 'Catkey for this item'
+    option :copyright, desc: 'Copyright statement'
+    option :use_and_reproduction, desc: 'Use and reproduction statement'
+    option :viewing_direction, enum: %w[left-to-right right-to-left], desc: 'Viewing direction (if a book)'
+    option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
+    option :files_metadata, desc: 'JSON string representing per-file metadata'
+    option :grouping_strategy, enum: %w[default filename], desc: 'Strategy for grouping files into filesets'
+    def deposit(*files)
+      register_or_deposit(files: files, accession: true)
     end
 
-    def self.validate_deposit_options(options)
-      {}.tap do |errors|
-        errors['admin-policy'] = 'is a required argument' unless options[:apo]
-        errors['source-id'] = 'is a required argument' unless options[:source_id]
+    desc 'register OPTIONAL_FILES', 'Create a draft object in the SDR and retrieve a Druid identifier'
+    option :skip_polling, type: :boolean, default: false, aliases: '-s', desc: 'Print out job ID instead of polling for result'
+    option :apo, required: true, desc: 'Druid identifier of the admin policy object', aliases: '--admin-policy'
+    option :source_id, required: true, desc: 'Source ID for this object'
+    option :label, desc: 'Object label'
+    option :type, enum: %w[image book document map manuscript media three_dimensional object collection admin_policy], desc: 'The object type'
+    option :collection, desc: 'Druid identifier of the collection object'
+    option :catkey, desc: 'Catkey for this item'
+    option :copyright, desc: 'Copyright statement'
+    option :use_and_reproduction, desc: 'Use and reproduction statement'
+    option :viewing_direction, enum: %w[left-to-right right-to-left], desc: 'Viewing direction (if a book)'
+    option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
+    option :files_metadata, desc: 'JSON string representing per-file metadata'
+    option :grouping_strategy, enum: %w[default filename], desc: 'Strategy for grouping files into filesets'
+    def register(*files)
+      register_or_deposit(files: files, accession: false)
+    end
+
+    private
+
+    def register_or_deposit(files:, accession:)
+      opts = munge_options(options, files)
+      skip_polling = opts.delete(:skip_polling)
+      job_id = SdrClient::Deposit.run(accession: accession, **opts)
+      return if skip_polling
+
+      poll_for_job_complete(job_id: job_id, url: opts[:url])
+    rescue SdrClient::Credentials::NoCredentialsError
+      say_error 'Log in first'
+      exit(1)
+    end
+
+    def munge_options(options, files)
+      options.to_h.symbolize_keys.tap do |opts|
+        opts[:files] = files if files.present?
+        opts[:type] = Cocina::Models::ObjectType.public_send(options[:type]) if options[:type]
+        opts[:files_metadata] = JSON.parse(options[:files_metadata]) if options[:files_metadata]
+        if options[:grouping_strategy]
+          opts[:grouping_strategy] = if options[:grouping_strategy] == 'filename'
+                                       SdrClient::Deposit::MatchingFileGroupingStrategy
+                                     else
+                                       SdrClient::Deposit::SingleFileGroupingStrategy
+                                     end
+        end
       end
     end
 
-    def self.help
-      puts HELP
-      exit
+    def validate_druid!(druid)
+      return if druid.present?
+
+      say_error "Not a valid druid: #{druid.inspect}"
+      exit(1)
     end
 
-    def self.poll_for_job_complete(job_id:, url:)
+    def poll_for_job_complete(job_id:, url:)
+      # the extra args to `say` prevent appending a newline
+      say('SDR is processing your request', nil, false)
       result = nil
-      1.upto(5) do |_n|
+      (1).upto(60) do
         result = SdrClient::BackgroundJobResults.show(url: url, job_id: job_id)
-        break unless %w[pending processing].include? result['status']
+        break unless %w[pending processing].include?(result['status'])
 
-        sleep 5
+        # the extra args to `say` prevent appending a newline
+        say('.', nil, false)
+        sleep 1
       end
       if result['status'] == 'complete'
-        puts result.dig('output', 'druid')
+        say " success! (druid: #{result.dig('output', 'druid')})"
       else
-        warn "Job #{job_id} did not complete\n#{result.inspect}"
+        say_error "Job #{job_id} did not complete\n#{result.inspect}"
       end
     end
   end
