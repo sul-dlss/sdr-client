@@ -18,7 +18,8 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
         },
         'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
         'identification' => { 'sourceId' => 'googlebooks:12345' },
-        'label' => 'This is my object'
+        'label' => 'This is my object',
+        'structural' => {}
       }
     end
     let(:metadata) do
