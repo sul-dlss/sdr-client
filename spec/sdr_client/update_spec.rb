@@ -2,11 +2,46 @@
 
 RSpec.describe SdrClient::Update do
   describe '.run' do
-    # rubocop:disable Layout/LineLength
     let(:cocina_json) do
-      "{\"type\":\"#{Cocina::Models::ObjectType.document}\",\"externalIdentifier\":\"druid:bw581ng3176\",\"label\":\"Something something better title\",\"version\":1,\"access\":{\"copyright\":\"Some Rights Reserved\",\"useAndReproductionStatement\":\"We are OK with you using this\",\"license\":\"https://www.gnu.org/licenses/agpl.txt\",\"view\":\"world\",\"download\":\"world\"},\"administrative\":{\"hasAdminPolicy\":\"druid:bc875mg8658\"},\"description\":{\"title\":[{\"value\":\"Something something better title\"}],\"purl\":\"https://purl.example.org/foo\"},\"structural\":{\"isMemberOf\":[\"druid:jh976nm7678\"],\"contains\":[{\"type\":\"https://cocina.sul.stanford.edu/models/resources/file\",\"externalIdentifier\":\"bw581ng3176_1\",\"label\":\"Test file\",\"version\":1,\"structural\":{\"contains\":[{\"type\":\"https://cocina.sul.stanford.edu/models/file\",\"externalIdentifier\":\"druid:bw581ng3176/test.txt\",\"label\":\"test.txt\",\"filename\":\"test.txt\",\"size\":11,\"version\":1,\"hasMimeType\":\"text/plain\",\"hasMessageDigests\":[{\"type\":\"sha1\",\"digest\":\"5d39343e4bb48abd97f759828282f5ebbac56c5e\"},{\"type\":\"md5\",\"digest\":\"63b8812b0c05722a9d6c51cbd2bfb54b\"}],\"access\":{\"view\":\"world\",\"download\":\"world\"},\"administrative\":{\"sdrPreserve\":true,\"shelve\":true,\"publish\":true}}]}}]}}"
+      { 'type' => Cocina::Models::ObjectType.document,
+        'externalIdentifier' => 'druid:bw581ng3176',
+        'label' => 'Something something better title',
+        'version' => 1,
+        'access' =>
+         { 'copyright' => 'Some Rights Reserved',
+           'useAndReproductionStatement' => 'We are OK with you using this',
+           'license' => 'https://www.gnu.org/licenses/agpl.txt',
+           'view' => 'world',
+           'download' => 'world' },
+        'administrative' => { 'hasAdminPolicy' => 'druid:bc875mg8658' },
+        'identification' => {},
+        'description' =>
+         { 'title' => [{ 'value' => 'Something something better title' }],
+           'purl' => 'https://purl.example.org/foo' },
+        'structural' =>
+         { 'isMemberOf' => ['druid:jh976nm7678'],
+           'contains' =>
+           [{ 'type' => Cocina::Models::FileSetType.file,
+              'externalIdentifier' => 'bw581ng3176_1',
+              'label' => 'Test file',
+              'version' => 1,
+              'structural' =>
+              { 'contains' =>
+                [{ 'type' => Cocina::Models::ObjectType.file,
+                   'externalIdentifier' => 'druid:bw581ng3176/test.txt',
+                   'label' => 'test.txt',
+                   'filename' => 'test.txt',
+                   'size' => 11,
+                   'version' => 1,
+                   'hasMimeType' => 'text/plain',
+                   'hasMessageDigests' =>
+                   [{ 'type' => 'sha1',
+                      'digest' => '5d39343e4bb48abd97f759828282f5ebbac56c5e' },
+                    { 'type' => 'md5', 'digest' => '63b8812b0c05722a9d6c51cbd2bfb54b' }],
+                   'access' => { 'view' => 'world', 'download' => 'world' },
+                   'administrative' =>
+                   { 'sdrPreserve' => true, 'shelve' => true, 'publish' => true } }] } }] } }.to_json
     end
-    # rubocop:enable Layout/LineLength
 
     before do
       allow(SdrClient::Find).to receive(:run).and_return(cocina_json)
