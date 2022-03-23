@@ -379,5 +379,113 @@ RSpec.describe SdrClient::Update do
         )
       end
     end
+
+    context 'when updating the full cocina' do
+      let(:cocina_file) { 'bw581ng3176.json' }
+      let(:new_cocina) do
+        {
+          type: Cocina::Models::ObjectType.document,
+          externalIdentifier: 'druid:bw581ng3176',
+          label: 'An EVEN better title',
+          version: 1,
+          access: {
+            copyright: 'More Rights Reserved',
+            useAndReproductionStatement: 'We are OK with you using this',
+            license: 'https://www.gnu.org/licenses/agpl.txt',
+            view: 'world',
+            download: 'world'
+          },
+          administrative: { hasAdminPolicy: 'druid:bc875mg8658' },
+          identification: {},
+          description: {
+            title: [{ value: 'Even better title' }],
+            purl: 'https://purl.example.org/bw581ng3176'
+          },
+          structural: {}
+        }
+      end
+      let(:file_check) { true }
+      let(:readable_check) { true }
+
+      before do
+        allow(File).to receive(:file?).and_return(file_check)
+        allow(File).to receive(:readable?).and_return(readable_check)
+        allow(File).to receive(:read).and_return(new_cocina.to_json)
+      end
+
+      context 'when happy path' do
+        before do
+          described_class.run('druid:bw581ng3176', cocina_file: cocina_file, url: 'http://example.com')
+        end
+
+        it 'finds a Cocina object' do
+          expect(SdrClient::Find).to have_received(:run).once
+        end
+
+        it 'updates a Cocina object' do
+          expect(SdrClient::Deposit::UpdateResource).to have_received(:run).once.with(
+            metadata: cocina_object_with(**new_cocina),
+            logger: instance_of(Logger),
+            connection: instance_of(SdrClient::Connection)
+          )
+        end
+      end
+
+      context 'when given cocina file that is not a file' do
+        let(:file_check) { false }
+        let(:readable_check) { true }
+
+        it 'raises a runtime error' do
+          expect { described_class.run('druid:bw581ng3176', cocina_file: cocina_file, url: 'http://example.com') }.to raise_error(
+            RuntimeError,
+            /File not found: #{cocina_file}/
+          )
+        end
+      end
+
+      context 'when given cocina file that is not readable' do
+        let(:file_check) { true }
+        let(:readable_check) { false }
+
+        it 'raises a runtime error' do
+          expect { described_class.run('druid:bw581ng3176', cocina_file: cocina_file, url: 'http://example.com') }.to raise_error(
+            RuntimeError,
+            /File not found: #{cocina_file}/
+          )
+        end
+      end
+
+      context 'when given cocina file with a non-matching external identifier' do
+        let(:new_cocina) do
+          {
+            type: Cocina::Models::ObjectType.document,
+            externalIdentifier: 'druid:bw581ng3179', # this is different from above
+            label: 'An EVEN better title',
+            version: 1,
+            access: {
+              copyright: 'More Rights Reserved',
+              useAndReproductionStatement: 'We are OK with you using this',
+              license: 'https://www.gnu.org/licenses/agpl.txt',
+              view: 'world',
+              download: 'world'
+            },
+            administrative: { hasAdminPolicy: 'druid:bc875mg8658' },
+            identification: {},
+            description: {
+              title: [{ value: 'Even better title' }],
+              purl: 'https://purl.example.org/bw581ng3176'
+            },
+            structural: {}
+          }
+        end
+
+        it 'raises a runtime error' do
+          expect { described_class.run('druid:bw581ng3176', cocina_file: cocina_file, url: 'http://example.com') }.to raise_error(
+            RuntimeError,
+            /Cocina in #{cocina_file} has a different external identifier/
+          )
+        end
+      end
+    end
   end
 end
