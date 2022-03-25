@@ -69,7 +69,8 @@ module SdrClient
     option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
     option :download, enum: %w[world stanford location-based none], desc: 'Access download level for the object'
     option :location, enum: %w[spec music ars art hoover m&m], desc: 'Access location for the object'
-    option :cdl, type: :boolean, default: false
+    option :cdl, type: :boolean, default: false, desc: 'Controlled digital lending'
+    option :cocina_file, desc: 'Path to a file containing Cocina JSON'
     def update(druid)
       validate_druid!(druid)
       job_id = SdrClient::Update.run(druid, **options)
@@ -153,7 +154,7 @@ module SdrClient
 
     def poll_for_job_complete(job_id:, url:)
       # the extra args to `say` prevent appending a newline
-      say('SDR is processing your request', nil, false)
+      say('SDR is processing your request.', nil, false)
       result = nil
       (1).upto(60) do
         result = SdrClient::BackgroundJobResults.show(url: url, job_id: job_id)
@@ -163,10 +164,15 @@ module SdrClient
         say('.', nil, false)
         sleep 1
       end
+
       if result['status'] == 'complete'
-        say " success! (druid: #{result.dig('output', 'druid')})"
+        if (errors = result.dig('output', 'errors'))
+          say_error " errored! #{errors}"
+        else
+          say " success! (druid: #{result.dig('output', 'druid')})"
+        end
       else
-        say_error "Job #{job_id} did not complete\n#{result.inspect}"
+        say_error " job #{job_id} did not complete\n#{result.inspect}"
       end
     end
   end

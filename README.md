@@ -79,16 +79,25 @@ Update an object:
 ```
 # Change admin policy object (APO)
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --admin-policy druid:bx911tp9024
+
 # Change collection
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --collection druid:pb756dt1672
+
 # Change copyright
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --copyright "Here is a new copyright statement"
+
 # Change use and reproduction statement
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --use-and-reproduction "Here are the terms of use..."
+
 # Change license
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --license "https://www.apache.org/licenses/LICENSE-2.0"
+
 # Change access controls
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --view "location-based" --download "none" --location "music" --cdl false
+
+# Change Cocina wholesale from a file (note that you can use this flag with the
+# others above, and the flags above will replace what's supplied in the cocina file)
+sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --cocina-file bb408qn5061.json
 ```
 
 ## Testing
