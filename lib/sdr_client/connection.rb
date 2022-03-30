@@ -6,10 +6,10 @@ module SdrClient
     include Dry::Monads[:result]
 
     # @param [Integer] read_timeout the value in seconds to set the read timeout
-    def initialize(url:, token: Credentials.read, read_timeout: 360)
+    def initialize(url:, token: Credentials.read, read_timeout: default_timeout, timeout: default_timeout)
       @url = url
       @token = token
-      @request_options = { read_timeout: read_timeout }
+      @request_options = { read_timeout: read_timeout, timeout: timeout }
     end
 
     def connection
@@ -39,5 +39,11 @@ module SdrClient
     private
 
     attr_reader :url, :token, :request_options
+
+    # NOTE: This is the number of seconds it roughly takes for H2 to
+    #       successfully shunt ~10GB files over to SDR API
+    def default_timeout
+      900
+    end
   end
 end
