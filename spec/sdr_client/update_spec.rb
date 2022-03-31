@@ -14,7 +14,7 @@ RSpec.describe SdrClient::Update do
            'view' => 'world',
            'download' => 'world' },
         'administrative' => { 'hasAdminPolicy' => 'druid:bc875mg8658' },
-        'identification' => {},
+        'identification' => { sourceId: 'sul:123' },
         'description' =>
          { 'title' => [{ 'value' => 'Something something better title' }],
            'purl' => 'https://purl.example.org/foo' },
@@ -396,7 +396,7 @@ RSpec.describe SdrClient::Update do
             download: 'world'
           },
           administrative: { hasAdminPolicy: 'druid:bc875mg8658' },
-          identification: {},
+          identification: { sourceId: 'sul:123' },
           description: {
             title: [{ value: 'Even better title' }],
             purl: 'https://purl.example.org/bw581ng3176'
