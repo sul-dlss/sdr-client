@@ -72,7 +72,7 @@ RSpec.describe SdrClient::Deposit::Request do
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: {
             sourceId: 'googlebooks:12345',
-            catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991' }]
+            catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991', refresh: true }]
           },
           structural: {
             hasMemberOrders: [{ viewingDirection: 'right-to-left' }],
