@@ -17,7 +17,7 @@ RSpec.describe SdrClient::Update do
         'identification' => { sourceId: 'sul:123' },
         'description' =>
          { 'title' => [{ 'value' => 'Something something better title' }],
-           'purl' => 'https://purl.example.org/foo' },
+           'purl' => 'https://purl.stanford.edu/bw581ng3176' },
         'structural' =>
          { 'isMemberOf' => ['druid:jh976nm7678'],
            'contains' =>
