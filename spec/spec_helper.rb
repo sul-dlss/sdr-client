@@ -10,6 +10,7 @@ SimpleCov.start do
   add_filter 'lib/sdr_client/cli.rb'
 end
 
+require 'cocina/models'
 require 'cocina/rspec'
 require 'sdr_client'
 

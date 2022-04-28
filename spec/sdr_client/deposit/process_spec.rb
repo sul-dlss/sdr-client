@@ -103,7 +103,8 @@ RSpec.describe SdrClient::Deposit::Process do
                 version: 1,
                 access: {
                   view: 'world',
-                  download: 'none'
+                  download: 'none',
+                  controlledDigitalLending: false
                 },
                 administrative: {
                   hasAdminPolicy: 'druid:bc123df4567',
@@ -128,7 +129,8 @@ RSpec.describe SdrClient::Deposit::Process do
                         hasMessageDigests: [],
                         access: {
                           view: 'world',
-                          download: 'none'
+                          download: 'none',
+                          controlledDigitalLending: false
                         },
                         administrative: {
                           publish: true,
@@ -151,7 +153,8 @@ RSpec.describe SdrClient::Deposit::Process do
                         hasMessageDigests: [],
                         access: {
                           view: 'world',
-                          download: 'none'
+                          download: 'none',
+                          controlledDigitalLending: false
                         },
                         administrative: {
                           publish: true,
@@ -260,7 +263,8 @@ RSpec.describe SdrClient::Deposit::Process do
                 version: 1,
                 access: {
                   view: 'world',
-                  download: 'none'
+                  download: 'none',
+                  controlledDigitalLending: false
                 },
                 administrative: {
                   hasAdminPolicy: 'druid:bc123df4567',
@@ -292,7 +296,8 @@ RSpec.describe SdrClient::Deposit::Process do
                         }],
                         access: {
                           view: 'dark',
-                          download: 'none'
+                          download: 'none',
+                          controlledDigitalLending: false
                         },
                         administrative: {
                           publish: false,
@@ -315,7 +320,8 @@ RSpec.describe SdrClient::Deposit::Process do
                         hasMessageDigests: [],
                         access: {
                           view: 'world',
-                          download: 'none'
+                          download: 'none',
+                          controlledDigitalLending: false
                         },
                         administrative: {
                           publish: true,
