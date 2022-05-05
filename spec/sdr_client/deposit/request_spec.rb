@@ -53,69 +53,77 @@ RSpec.describe SdrClient::Deposit::Request do
     describe 'as_json' do
       subject { with_file_sets.as_json }
 
+      let(:expected_structural) do
+        {
+          hasMemberOrders: [{ viewingDirection: 'right-to-left' }],
+          isMemberOf: ['druid:gh123df4567'],
+          contains: [
+            {
+              type: Cocina::Models::FileSetType.file,
+              label: 'Object 1',
+              version: 1,
+              structural: { contains:
+                [
+                  {
+                    type: Cocina::Models::ObjectType.file,
+                    label: 'file1.png',
+                    filename: 'file1.png',
+                    access: { view: 'world', download: 'world' },
+                    administrative: { publish: true, sdrPreserve: true, shelve: true },
+                    externalIdentifier: 'foo-file1',
+                    version: 1,
+                    hasMessageDigests: []
+                  }
+                ] }
+            },
+            {
+              type: Cocina::Models::FileSetType.file,
+              label: 'Object 2',
+              version: 1,
+              structural: { contains:
+                [
+                  {
+                    type: Cocina::Models::ObjectType.file,
+                    label: 'file2.png',
+                    filename: 'file2.png',
+                    access: { view: 'dark', download: 'none' },
+                    administrative: { publish: true, sdrPreserve: true, shelve: false },
+                    externalIdentifier: 'bar-file2',
+                    version: 1,
+                    hasMessageDigests: []
+                  }
+                ] }
+            }
+          ]
+        }
+      end
+
+      let(:expected_access) do
+        {
+          view: 'world',
+          copyright: 'copyright',
+          download: 'world',
+          useAndReproductionStatement: 'use statement',
+          embargo: {
+            releaseDate: '2045-01-01T00:00:00+00:00',
+            view: 'stanford',
+            download: 'stanford'
+          }
+        }
+      end
+
       let(:expected) do
         {
           type: Cocina::Models::ObjectType.book,
           label: 'This is my object',
           version: 1,
-          access: {
-            view: 'world',
-            copyright: 'copyright',
-            download: 'world',
-            useAndReproductionStatement: 'use statement',
-            embargo: {
-              releaseDate: '2045-01-01T00:00:00+00:00',
-              view: 'stanford',
-              download: 'stanford'
-            }
-          },
+          access: expected_access,
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: {
             sourceId: 'googlebooks:12345',
             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991', refresh: true }]
           },
-          structural: {
-            hasMemberOrders: [{ viewingDirection: 'right-to-left' }],
-            isMemberOf: ['druid:gh123df4567'],
-            contains: [
-              {
-                type: Cocina::Models::FileSetType.file,
-                label: 'Object 1',
-                version: 1,
-                structural: { contains:
-                  [
-                    {
-                      type: Cocina::Models::ObjectType.file,
-                      label: 'file1.png',
-                      filename: 'file1.png',
-                      access: { view: 'world', download: 'world' },
-                      administrative: { publish: true, sdrPreserve: true, shelve: true },
-                      externalIdentifier: 'foo-file1',
-                      version: 1,
-                      hasMessageDigests: []
-                    }
-                  ] }
-              },
-              {
-                type: Cocina::Models::FileSetType.file,
-                label: 'Object 2',
-                version: 1,
-                structural: { contains:
-                  [
-                    {
-                      type: Cocina::Models::ObjectType.file,
-                      label: 'file2.png',
-                      filename: 'file2.png',
-                      access: { view: 'dark', download: 'none' },
-                      administrative: { publish: true, sdrPreserve: true, shelve: false },
-                      externalIdentifier: 'bar-file2',
-                      version: 1,
-                      hasMessageDigests: []
-                    }
-                  ] }
-              }
-            ]
-          }
+          structural: expected_structural
         }
       end
 

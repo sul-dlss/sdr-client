@@ -11,7 +11,7 @@ RSpec.describe SdrClient::Deposit do
 
     let(:files) { ['spec/fixtures/file1.txt'] }
 
-    let(:request_dro) { instance_double(Cocina::Models::RequestDRO) }
+    let(:request_dro) { build(:request_dro) }
     let(:connection) { instance_double(SdrClient::Connection) }
     let(:upload_url) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
 
