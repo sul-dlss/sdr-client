@@ -49,10 +49,9 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     build(
       :request_dro, type: Cocina::Models::ObjectType.book, label: 'This is my object'
     ).new(
-      access: { 'view' => 'world', 'download' => 'none' }
-    ).then do |request_dro|
-      structural.present? ? request_dro.new(structural: structural) : request_dro
-    end
+      access: { 'view' => 'world', 'download' => 'none' },
+      structural: structural
+    )
   end
 
   let(:request_dro_hash) { request_dro.to_h }
@@ -299,7 +298,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     end
 
     context 'when no structural' do
-      let(:structural) { nil }
+      let(:structural) { {} }
       let(:files) { [] }
 
       before do
@@ -323,7 +322,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     end
 
     context 'when assign_doi is provided' do
-      let(:structural) { nil }
+      let(:structural) { {} }
       let(:files) { [] }
 
       let(:instance) do

@@ -45,8 +45,7 @@ RSpec.describe SdrClient::Deposit::Process do
       let(:access) do
         {
           view: 'world',
-          download: 'none',
-          controlledDigitalLending: false
+          download: 'none'
         }
       end
 
@@ -66,8 +65,7 @@ RSpec.describe SdrClient::Deposit::Process do
                 hasMessageDigests: [],
                 access: {
                   view: 'world',
-                  download: 'none',
-                  controlledDigitalLending: false
+                  download: 'none'
                 },
                 administrative: {
                   publish: true,
@@ -90,8 +88,7 @@ RSpec.describe SdrClient::Deposit::Process do
                 hasMessageDigests: [],
                 access: {
                   view: 'world',
-                  download: 'none',
-                  controlledDigitalLending: false
+                  download: 'none'
                 },
                 administrative: {
                   publish: true,
@@ -204,8 +201,7 @@ RSpec.describe SdrClient::Deposit::Process do
         let(:access) do
           {
             view: 'world',
-            download: 'none',
-            controlledDigitalLending: false
+            download: 'none'
           }
         end
 
@@ -232,8 +228,7 @@ RSpec.describe SdrClient::Deposit::Process do
                   }],
                   access: {
                     view: 'dark',
-                    download: 'none',
-                    controlledDigitalLending: false
+                    download: 'none'
                   },
                   administrative: {
                     publish: false,
@@ -256,8 +251,7 @@ RSpec.describe SdrClient::Deposit::Process do
                   hasMessageDigests: [],
                   access: {
                     view: 'world',
-                    download: 'none',
-                    controlledDigitalLending: false
+                    download: 'none'
                   },
                   administrative: {
                     publish: true,
