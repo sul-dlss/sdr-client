@@ -6,9 +6,9 @@ RSpec.describe SdrClient::Deposit::Process do
                                     type: Cocina::Models::ObjectType.book,
                                     view: 'world',
                                     download: 'none',
-                                    apo: 'druid:bc123df4567',
+                                    apo: 'druid:hv992ry2431',
                                     collection: 'druid:gh123df4567',
-                                    source_id: 'googlebooks:12345',
+                                    source_id: 'sul:1234',
                                     files_metadata: files_metadata)
   end
 
@@ -41,6 +41,75 @@ RSpec.describe SdrClient::Deposit::Process do
       let(:files) { ['spec/fixtures/file1.txt', 'spec/fixtures/file2.txt'] }
       let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
       let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' }
+
+      let(:access) do
+        {
+          view: 'world',
+          download: 'none'
+        }
+      end
+
+      let(:structural) do
+        {
+          contains: [{
+            type: Cocina::Models::FileSetType.file,
+            label: 'Page 1',
+            version: 1,
+            structural: {
+              contains: [{
+                type: Cocina::Models::ObjectType.file,
+                label: 'file1.txt',
+                filename: 'file1.txt',
+                version: 1,
+                externalIdentifier: 'BaHBLZz09Iiw',
+                hasMessageDigests: [],
+                access: {
+                  view: 'world',
+                  download: 'none'
+                },
+                administrative: {
+                  publish: true,
+                  sdrPreserve: true,
+                  shelve: true
+                }
+              }]
+            }
+          }, {
+            type: Cocina::Models::FileSetType.file,
+            label: 'Page 2',
+            version: 1,
+            structural: {
+              contains: [{
+                type: Cocina::Models::ObjectType.file,
+                label: 'file2.txt',
+                filename: 'file2.txt',
+                version: 1,
+                externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
+                hasMessageDigests: [],
+                access: {
+                  view: 'world',
+                  download: 'none'
+                },
+                administrative: {
+                  publish: true,
+                  sdrPreserve: true,
+                  shelve: true
+                }
+              }]
+            }
+          }],
+          hasMemberOrders: [],
+          isMemberOf: ['druid:gh123df4567']
+        }
+      end
+
+      let(:request_dro) do
+        build(
+          :request_dro, type: Cocina::Models::ObjectType.book, label: 'This is my object'
+        ).new(
+          access: access, structural: structural
+        )
+      end
 
       context 'when metadata upload succeeds' do
         before do
@@ -95,81 +164,7 @@ RSpec.describe SdrClient::Deposit::Process do
             .to_return(status: 204)
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
-            .with(
-              body: {
-                cocinaVersion: Cocina::Models::VERSION,
-                type: Cocina::Models::ObjectType.book,
-                label: 'This is my object',
-                version: 1,
-                access: {
-                  view: 'world',
-                  download: 'none',
-                  controlledDigitalLending: false
-                },
-                administrative: {
-                  hasAdminPolicy: 'druid:bc123df4567',
-                  releaseTags: []
-                },
-                identification: {
-                  catalogLinks: [],
-                  sourceId: 'googlebooks:12345'
-                },
-                structural: {
-                  contains: [{
-                    type: Cocina::Models::FileSetType.file,
-                    label: 'Page 1',
-                    version: 1,
-                    structural: {
-                      contains: [{
-                        type: Cocina::Models::ObjectType.file,
-                        label: 'file1.txt',
-                        filename: 'file1.txt',
-                        version: 1,
-                        externalIdentifier: 'BaHBLZz09Iiw',
-                        hasMessageDigests: [],
-                        access: {
-                          view: 'world',
-                          download: 'none',
-                          controlledDigitalLending: false
-                        },
-                        administrative: {
-                          publish: true,
-                          sdrPreserve: true,
-                          shelve: true
-                        }
-                      }]
-                    }
-                  }, {
-                    type: Cocina::Models::FileSetType.file,
-                    label: 'Page 2',
-                    version: 1,
-                    structural: {
-                      contains: [{
-                        type: Cocina::Models::ObjectType.file,
-                        label: 'file2.txt',
-                        filename: 'file2.txt',
-                        version: 1,
-                        externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
-                        hasMessageDigests: [],
-                        access: {
-                          view: 'world',
-                          download: 'none',
-                          controlledDigitalLending: false
-                        },
-                        administrative: {
-                          publish: true,
-                          sdrPreserve: true,
-                          shelve: true
-                        }
-                      }]
-                    }
-                  }],
-                  hasMemberOrders: [],
-                  isMemberOf: ['druid:gh123df4567']
-                }
-              }.to_json,
-              headers: { 'Content-Type' => 'application/json' }
-            )
+            .with(body: request_dro.to_h.except(:description).to_json, headers: { 'Content-Type' => 'application/json' })
             .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end
@@ -200,6 +195,74 @@ RSpec.describe SdrClient::Deposit::Process do
               'preserve' => false,
               'shelve' => false
             }
+          }
+        end
+
+        let(:access) do
+          {
+            view: 'world',
+            download: 'none'
+          }
+        end
+
+        let(:structural) do
+          {
+            contains: [{
+              type: Cocina::Models::FileSetType.file,
+              label: 'Page 1',
+              version: 1,
+              structural: {
+                contains: [{
+                  type: Cocina::Models::ObjectType.file,
+                  label: 'file1.txt',
+                  filename: 'file1.txt',
+                  version: 1,
+                  hasMimeType: 'image/tiff',
+                  externalIdentifier: 'BaHBLZz09Iiw',
+                  hasMessageDigests: [{
+                    type: 'md5',
+                    digest: 'abc123'
+                  }, {
+                    type: 'sha1',
+                    digest: 'def456'
+                  }],
+                  access: {
+                    view: 'dark',
+                    download: 'none'
+                  },
+                  administrative: {
+                    publish: false,
+                    sdrPreserve: false,
+                    shelve: false
+                  }
+                }]
+              }
+            }, {
+              type: Cocina::Models::FileSetType.file,
+              label: 'Page 2',
+              version: 1,
+              structural: {
+                contains: [{
+                  type: Cocina::Models::ObjectType.file,
+                  label: 'file2.txt',
+                  filename: 'file2.txt',
+                  version: 1,
+                  externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
+                  hasMessageDigests: [],
+                  access: {
+                    view: 'world',
+                    download: 'none'
+                  },
+                  administrative: {
+                    publish: true,
+                    sdrPreserve: true,
+                    shelve: true
+                  }
+                }]
+              }
+            }],
+            hasMemberOrders: [],
+            isMemberOf: ['druid:gh123df4567']
           }
         end
 
@@ -255,88 +318,7 @@ RSpec.describe SdrClient::Deposit::Process do
             .to_return(status: 204)
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
-            .with(
-              body: {
-                cocinaVersion: Cocina::Models::VERSION,
-                type: Cocina::Models::ObjectType.book,
-                label: 'This is my object',
-                version: 1,
-                access: {
-                  view: 'world',
-                  download: 'none',
-                  controlledDigitalLending: false
-                },
-                administrative: {
-                  hasAdminPolicy: 'druid:bc123df4567',
-                  releaseTags: []
-                },
-                identification: {
-                  catalogLinks: [],
-                  sourceId: 'googlebooks:12345'
-                },
-                structural: {
-                  contains: [{
-                    type: Cocina::Models::FileSetType.file,
-                    label: 'Page 1',
-                    version: 1,
-                    structural: {
-                      contains: [{
-                        type: Cocina::Models::ObjectType.file,
-                        label: 'file1.txt',
-                        filename: 'file1.txt',
-                        version: 1,
-                        hasMimeType: 'image/tiff',
-                        externalIdentifier: 'BaHBLZz09Iiw',
-                        hasMessageDigests: [{
-                          type: 'md5',
-                          digest: 'abc123'
-                        }, {
-                          type: 'sha1',
-                          digest: 'def456'
-                        }],
-                        access: {
-                          view: 'dark',
-                          download: 'none',
-                          controlledDigitalLending: false
-                        },
-                        administrative: {
-                          publish: false,
-                          sdrPreserve: false,
-                          shelve: false
-                        }
-                      }]
-                    }
-                  }, {
-                    type: Cocina::Models::FileSetType.file,
-                    label: 'Page 2',
-                    version: 1,
-                    structural: {
-                      contains: [{
-                        type: Cocina::Models::ObjectType.file,
-                        label: 'file2.txt',
-                        filename: 'file2.txt',
-                        version: 1,
-                        externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
-                        hasMessageDigests: [],
-                        access: {
-                          view: 'world',
-                          download: 'none',
-                          controlledDigitalLending: false
-                        },
-                        administrative: {
-                          publish: true,
-                          sdrPreserve: true,
-                          shelve: true
-                        }
-                      }]
-                    }
-                  }],
-                  hasMemberOrders: [],
-                  isMemberOf: ['druid:gh123df4567']
-                }
-              }.to_json,
-              headers: { 'Content-Type' => 'application/json' }
-            )
+            .with(body: request_dro.to_h.except(:description).to_json, headers: { 'Content-Type' => 'application/json' })
             .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end

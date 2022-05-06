@@ -44,7 +44,7 @@ RSpec.describe SdrClient::Deposit::MetadataBuilder do
       end
     end
 
-    context 'with an book type' do
+    context 'with a book type' do
       let(:type) { SdrClient::Deposit::BOOK_TYPE }
 
       it 'makes labels for the filesets' do

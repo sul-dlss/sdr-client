@@ -1,65 +1,64 @@
 # frozen_string_literal: true
 
 RSpec.describe SdrClient::Deposit::ModelProcess do
-  let(:request_dro_hash) do
+  let(:structural) do
     {
-      'access' => { 'view' => 'world', 'download' => 'none' },
-      'type' => Cocina::Models::ObjectType.book,
-      'version' => 1,
-      'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
-      'identification' => { 'sourceId' => 'googlebooks:12345' },
-      'structural' => {
-        'isMemberOf' => ['druid:gh123df4567'],
-        'contains' => [
-          {
-            'type' => Cocina::Models::FileSetType.file,
-            'label' => 'Page 1',
-            'version' => 1,
-            'structural' => {
-              'contains' => [
-                {
-                  'type' => Cocina::Models::ObjectType.file,
-                  'label' => 'file1.txt',
-                  'filename' => 'file1.txt',
-                  'access' => { 'view' => 'dark', 'download' => 'none' },
-                  'administrative' => { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
-                  'version' => 1,
-                  'hasMessageDigests' => []
-                }
-              ]
-            }
-          },
-          {
-            'type' => Cocina::Models::FileSetType.file,
-            'label' => 'Page 2',
-            'version' => 1,
-            'structural' => {
-              'contains' => [
-                {
-                  'type' => Cocina::Models::ObjectType.file,
-                  'label' => 'file2.txt',
-                  'filename' => 'file2.txt',
-                  'access' => { 'view' => 'dark', 'download' => 'none' },
-                  'administrative' => { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
-                  'version' => 1,
-                  'hasMessageDigests' => []
-                }
-              ]
-            }
+      isMemberOf: ['druid:gh123df4567'],
+      contains: [
+        {
+          type: Cocina::Models::FileSetType.file,
+          label: 'Page 1',
+          version: 1,
+          structural: {
+            contains: [
+              {
+                type: Cocina::Models::ObjectType.file,
+                label: 'file1.txt',
+                filename: 'file1.txt',
+                access: { 'view' => 'dark', 'download' => 'none' },
+                administrative: { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
+                version: 1,
+                hasMessageDigests: []
+              }
+            ]
           }
-        ]
-      },
-      'label' => 'This is my object'
-
+        },
+        {
+          type: Cocina::Models::FileSetType.file,
+          label: 'Page 2',
+          version: 1,
+          structural: {
+            contains: [
+              {
+                type: Cocina::Models::ObjectType.file,
+                label: 'file2.txt',
+                filename: 'file2.txt',
+                access: { 'view' => 'dark', 'download' => 'none' },
+                administrative: { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
+                version: 1,
+                hasMessageDigests: []
+              }
+            ]
+          }
+        }
+      ]
     }
   end
+
   let(:request_dro) do
-    Cocina::Models::RequestDRO.new(request_dro_hash)
+    build(
+      :request_dro, type: Cocina::Models::ObjectType.book, label: 'This is my object'
+    ).new(
+      access: { 'view' => 'world', 'download' => 'none' },
+      structural: structural
+    )
   end
+
+  let(:request_dro_hash) { request_dro.to_h }
 
   let(:submitted_request_dro) do
     # When submitted, expect to have externalIdentifiers added.
-    submitted_request_dro_hash = request_dro_hash.dup
+    submitted_request_dro_hash = request_dro_hash.dup.with_indifferent_access
     contains = submitted_request_dro_hash['structural']['contains']
     contains[0]['structural']['contains'][0]['externalIdentifier'] = 'BaHBLZz09Iiw'
     contains[1]['structural']['contains'][0]['externalIdentifier'] = 'dz09IiwiZXhwIjpudWxsLC'
@@ -299,18 +298,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     end
 
     context 'when no structural' do
-      let(:request_dro_hash) do
-        {
-          'access' => { 'view' => 'world', 'download' => 'none' },
-          'type' => Cocina::Models::ObjectType.book,
-          'version' => 1,
-          'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
-          'identification' => { 'sourceId' => 'googlebooks:12345' },
-          'label' => 'This is my object'
-
-        }
-      end
-
+      let(:structural) { {} }
       let(:files) { [] }
 
       before do
@@ -334,18 +322,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
     end
 
     context 'when assign_doi is provided' do
-      let(:request_dro_hash) do
-        {
-          'access' => { 'view' => 'world', 'download' => 'none' },
-          'type' => Cocina::Models::ObjectType.book,
-          'version' => 1,
-          'administrative' => { 'hasAdminPolicy' => 'druid:bc123df4567' },
-          'identification' => { 'sourceId' => 'googlebooks:12345' },
-          'label' => 'This is my object'
-
-        }
-      end
-
+      let(:structural) { {} }
       let(:files) { [] }
 
       let(:instance) do
