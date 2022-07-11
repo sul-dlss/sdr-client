@@ -156,7 +156,7 @@ module SdrClient
       # the extra args to `say` prevent appending a newline
       say('SDR is processing your request.', nil, false)
       result = nil
-      (1).upto(60) do
+      1.upto(60) do
         result = SdrClient::BackgroundJobResults.show(url: url, job_id: job_id)
         break unless %w[pending processing].include?(result['status'])
 

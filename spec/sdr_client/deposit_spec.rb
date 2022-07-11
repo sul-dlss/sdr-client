@@ -11,10 +11,10 @@ RSpec.describe SdrClient::Deposit do
       stub_request(:post, 'http://example.com/v1/direct_uploads')
         .to_return(
           status: 200,
-          body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file four.txt",'\
+          body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file four.txt",' \
                 '"content_type":"text/html","metadata":{},"byte_size":27,' \
-                '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",'\
-                '"signed_id":"BaHBLZz09Iiw",'\
+                '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",' \
+                '"signed_id":"BaHBLZz09Iiw",' \
                 '"direct_upload":{"url":"' + upload_url + '","headers":{"Content-Type":"text/html"}}}',
           headers: {}
         )
