@@ -8,7 +8,7 @@ module SdrClient
     # @param [String] a json string that contains a field 'token'
     def self.write(body)
       json = JSON.parse(body)
-      Dir.mkdir(credentials_path, 0o700)
+      FileUtils.mkdir_p(credentials_path, mode: 0o700)
       File.atomic_write(credentials_file) do |file|
         file.write(json.fetch('token'))
       end

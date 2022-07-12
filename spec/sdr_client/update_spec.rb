@@ -306,7 +306,7 @@ RSpec.describe SdrClient::Update do
       end
     end
 
-    context 'when updating the full cocina' do
+    context 'when updating the full cocina via file' do
       let(:cocina_file) { 'bw581ng3176.json' }
       let(:new_cocina) do
         build(
@@ -394,6 +394,83 @@ RSpec.describe SdrClient::Update do
           expect { described_class.run('druid:bw581ng3176', cocina_file: cocina_file, url: 'http://example.com') }.to raise_error(
             RuntimeError,
             /Cocina in #{cocina_file} has a different external identifier/
+          )
+        end
+      end
+    end
+
+    context 'when updating the full cocina via pipe' do
+      let(:new_cocina) do
+        build(
+          :dro,
+          id: 'druid:bw581ng3176', label: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658', source_id: 'sul:123'
+        ).new(
+          access: {
+            copyright: 'More Rights Reserved',
+            useAndReproductionStatement: 'We are OK with you using this',
+            license: 'https://www.gnu.org/licenses/agpl.txt',
+            view: 'world',
+            download: 'world'
+          }
+        )
+      end
+      let(:stdin_check) { true }
+
+      before do
+        allow($stdin).to receive(:stat).and_return(instance_double(File::Stat, pipe?: stdin_check))
+        allow($stdin).to receive(:read).and_return(new_cocina.to_json)
+      end
+
+      context 'when happy path' do
+        before do
+          described_class.run('druid:bw581ng3176', cocina_pipe: true, url: 'http://example.com')
+        end
+
+        it 'finds a Cocina object' do
+          expect(SdrClient::Find).to have_received(:run).once
+        end
+
+        it 'updates a Cocina object' do
+          expect(SdrClient::Deposit::UpdateResource).to have_received(:run).once.with(
+            metadata: cocina_object_with(**new_cocina),
+            logger: instance_of(Logger),
+            connection: instance_of(SdrClient::Connection)
+          )
+        end
+      end
+
+      context 'when given cocina pipe without stdin' do
+        let(:stdin_check) { false }
+
+        it 'raises a runtime error' do
+          expect { described_class.run('druid:bw581ng3176', cocina_pipe: true, url: 'http://example.com') }.to raise_error(
+            RuntimeError,
+            /No pipe provided/
+          )
+        end
+      end
+
+      context 'when given piped cocina with a non-matching external identifier' do
+        let(:new_cocina) do
+          build(
+            :dro,
+            id: 'druid:bw581ng3179', # this is different from above
+            label: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658'
+          ).new(
+            access: {
+              copyright: 'More Rights Reserved',
+              useAndReproductionStatement: 'We are OK with you using this',
+              license: 'https://www.gnu.org/licenses/agpl.txt',
+              view: 'world',
+              download: 'world'
+            }
+          )
+        end
+
+        it 'raises a runtime error' do
+          expect { described_class.run('druid:bw581ng3176', cocina_pipe: true, url: 'http://example.com') }.to raise_error(
+            RuntimeError,
+            /Cocina piped in has a different external identifier/
           )
         end
       end

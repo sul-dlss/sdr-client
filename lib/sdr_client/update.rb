@@ -50,10 +50,22 @@ module SdrClient
       @cocina_hash_from_file ||= JSON.parse(File.read(options[:cocina_file]), symbolize_names: true)
     end
 
+    def cocina_hash_from_pipe
+      @cocina_hash_from_pipe ||= JSON.parse($stdin.read, symbolize_names: true)
+    end
+
     # Update the Cocina in full
     def update_cocina(cocina_object)
-      return cocina_object unless options[:cocina_file]
+      if options[:cocina_file]
+        update_cocina_from_file(cocina_object)
+      elsif options[:cocina_pipe]
+        update_cocina_from_pipe(cocina_object)
+      else
+        cocina_object
+      end
+    end
 
+    def update_cocina_from_file(cocina_object)
       if !File.file?(options[:cocina_file]) || !File.readable?(options[:cocina_file])
         raise "File not found: #{options[:cocina_file]}"
       end
@@ -64,6 +76,17 @@ module SdrClient
       end
 
       cocina_object.new(cocina_hash_from_file)
+    end
+
+    def update_cocina_from_pipe(cocina_object)
+      raise 'No pipe provided' unless $stdin.stat.pipe?
+
+      # NOTE: We may want to add more checks later. For now, make sure the identifiers match.
+      if cocina_object.externalIdentifier != cocina_hash_from_pipe[:externalIdentifier]
+        raise "Cocina piped in has a different external identifier than #{cocina_object.externalIdentifier}: #{cocina_hash_from_pipe[:externalIdentifier]}"
+      end
+
+      cocina_object.new(cocina_hash_from_pipe)
     end
 
     # Update the APO of a Cocina item if the options specify a new one, else return the original
