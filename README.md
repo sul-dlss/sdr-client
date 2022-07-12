@@ -95,9 +95,12 @@ sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --license "https:
 # Change access controls
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --view "location-based" --download "none" --location "music" --cdl false
 
-# Change Cocina wholesale from a file (note that you can use this flag with the
-# others above, and the flags above will replace what's supplied in the cocina file)
+# Change Cocina wholesale, either:
+# 1. From a file
 sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --cocina-file bb408qn5061.json
+# 2. Piped in on the command-line
+sdr get druid:b408qn5061 --url https://sdr-api-server:3000 | exe/remove_w3cdtf_encoding_from_event_dates | sdr update druid:bb408qn5061 --url https://sdr-api-server:3000 --cocina-pipe
+# Note that you can use either of these flags with the others above, and the flags above will replace what's supplied in the cocina file or pipe
 ```
 
 ## Testing

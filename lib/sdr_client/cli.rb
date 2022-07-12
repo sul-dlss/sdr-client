@@ -31,7 +31,7 @@ module SdrClient
 
     desc 'get DRUID', 'Retrieve an object from the SDR'
     def get(druid)
-      say SdrClient::Find.run(druid, url: options[:url])
+      say SdrClient::Find.run(druid, url: options[:url], logger: Logger.new($stderr))
     rescue SdrClient::Credentials::NoCredentialsError
       say_error 'Log in first'
       exit(1)
@@ -71,10 +71,11 @@ module SdrClient
     option :location, enum: %w[spec music ars art hoover m&m], desc: 'Access location for the object'
     option :cdl, type: :boolean, default: false, desc: 'Controlled digital lending'
     option :cocina_file, desc: 'Path to a file containing Cocina JSON'
+    option :cocina_pipe, type: :boolean, default: false, desc: 'Indicate Cocina JSON is being piped in'
     def update(druid)
       validate_druid!(druid)
       job_id = SdrClient::Update.run(druid, **options)
-      poll_for_job_complete(job_id: job_id, url: options[:url]) # TODO: add an option that skips this
+      poll_for_job_complete(job_id: job_id, url: options[:url])
     rescue SdrClient::Credentials::NoCredentialsError
       say_error 'Log in first'
       exit(1)

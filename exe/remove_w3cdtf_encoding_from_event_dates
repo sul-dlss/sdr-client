@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift 'lib'
+
+require 'sdr_client'
+
+output = JSON.parse($stdin.read).tap do |hash|
+  hash.dig('description', 'event').each do |event|
+    event['date'].each do |event_date|
+      event_date.delete('encoding') if event_date.dig('encoding', 'code') == 'w3cdtf'
+    end
+  end
+end.to_json
+
+puts output
