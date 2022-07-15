@@ -27,6 +27,7 @@ module SdrClient
                  files: [],
                  files_metadata: {},
                  accession: false,
+                 priority: nil,
                  grouping_strategy: SingleFileGroupingStrategy,
                  file_set_type_strategy: FileTypeFileSetStrategy,
                  logger: Logger.new($stdout))
@@ -51,6 +52,7 @@ module SdrClient
                   grouping_strategy: grouping_strategy,
                   file_set_type_strategy: file_set_type_strategy,
                   accession: accession,
+                  priority: priority,
                   logger: logger).run
     end
     # rubocop:enable Metrics/MethodLength

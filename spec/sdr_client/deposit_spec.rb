@@ -5,7 +5,7 @@ RSpec.describe SdrClient::Deposit do
     let(:upload_url) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
 
     before do
-      stub_request(:post, 'http://example.com/v1/resources?accession=true')
+      stub_request(:post, 'http://example.com/v1/resources?accession=true&priority=low')
         .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
                    headers: { 'Location' => 'http://example.com/background_job/1' })
       stub_request(:post, 'http://example.com/v1/direct_uploads')
@@ -46,6 +46,7 @@ RSpec.describe SdrClient::Deposit do
                             }
                           },
                           accession: true,
+                          priority: 'low',
                           grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
     end
   end
@@ -77,7 +78,8 @@ RSpec.describe SdrClient::Deposit do
                 connection: SdrClient::Connection,
                 logger: Logger,
                 file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
-                accession: false)
+                accession: false,
+                priority: nil)
 
         expect(process).to have_received(:run)
       end
@@ -101,7 +103,8 @@ RSpec.describe SdrClient::Deposit do
                 connection: SdrClient::Connection,
                 logger: Logger,
                 file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
-                accession: false)
+                accession: false,
+                priority: nil)
 
         expect(process).to have_received(:run)
       end
@@ -124,7 +127,8 @@ RSpec.describe SdrClient::Deposit do
                 logger: Logger,
                 grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 file_set_type_strategy: SdrClient::Deposit::FileTypeFileSetStrategy,
-                accession: false)
+                accession: false,
+                priority: nil)
 
         expect(process).to have_received(:run)
       end
@@ -148,7 +152,8 @@ RSpec.describe SdrClient::Deposit do
                 logger: Logger,
                 grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 file_set_type_strategy: SdrClient::Deposit::ImageFileSetStrategy,
-                accession: false)
+                accession: false,
+                priority: nil)
 
         expect(process).to have_received(:run)
       end

@@ -5,9 +5,10 @@ module SdrClient
     # Creates a resource (metadata) in SDR
     class CreateResource
       DRO_PATH = '/v1/resources'
-
-      def self.run(accession:, metadata:, logger:, connection:, assign_doi: false)
+      # rubocop:disable Metrics/ParameterLists
+      def self.run(accession:, metadata:, logger:, connection:, assign_doi: false, priority: nil)
         new(accession: accession,
+            priority: priority,
             assign_doi: assign_doi,
             metadata: metadata,
             logger: logger,
@@ -18,13 +19,17 @@ module SdrClient
       # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Cocina::Models::RequestDRO, Cocina::Models::RequestCollection] metadata
       # @param [Hash<Symbol,String>] the result of the metadata call
-      def initialize(accession:, assign_doi:, metadata:, logger:, connection:)
+      # @param [String] priority what processing priority should be used
+      #                          either 'low' or 'default'
+      def initialize(accession:, assign_doi:, metadata:, logger:, connection:, priority: nil)
         @accession = accession
+        @priority = priority
         @assign_doi = assign_doi
         @metadata = metadata
         @logger = logger
         @connection = connection
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # @param [Hash<Symbol,String>] the result of the metadata call
       # @return [String] job id for the background job result
@@ -39,7 +44,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :logger, :connection
+      attr_reader :metadata, :logger, :connection, :priority
 
       def metadata_request
         json = metadata.to_json
@@ -60,6 +65,7 @@ module SdrClient
 
       def path
         params = { accession: accession? }
+        params[:priority] = priority if priority
         params[:assign_doi] = true if assign_doi? # false is default
         DRO_PATH + '?' + params.map { |k, v| "#{k}=#{v}" }.join('&')
       end
