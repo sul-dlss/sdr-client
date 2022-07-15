@@ -56,21 +56,23 @@ module SdrClient
                   logger: logger).run
     end
     # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Metrics/ParameterLists
 
     # @param [Array<String>] files absolute paths to files
     def self.model_run(request_dro:,
                        files: [],
                        url:,
                        accession:,
+                       priority: nil,
                        logger: Logger.new($stdout))
       connection = Connection.new(url: url)
       ModelProcess.new(request_dro: request_dro,
                        connection: connection,
                        files: files,
                        logger: logger,
-                       accession: accession).run
+                       accession: accession,
+                       priority: priority).run
     end
+    # rubocop:enable Metrics/ParameterLists
   end
 end
 require 'json'
