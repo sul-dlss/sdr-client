@@ -9,6 +9,8 @@ module SdrClient
       # @param [Request] metadata information about the object
       # @param [String] connection the server connection to use
       # @param [Boolean] accession should the accessionWF be started
+      # @param [String] priority (nil) what processing priority should be used
+      #                          either 'low' or 'default'
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [Class] file_set_type_strategy class whose run method determines file_set type
       # @param [Array<String>] files a list of file names to upload
@@ -19,6 +21,7 @@ module SdrClient
       def initialize(metadata:,
                      connection:,
                      accession:,
+                     priority: nil,
                      grouping_strategy: SingleFileGroupingStrategy,
                      file_set_type_strategy: FileTypeFileSetStrategy,
                      files: [],
@@ -31,6 +34,7 @@ module SdrClient
         @grouping_strategy = grouping_strategy
         @file_set_type_strategy = file_set_type_strategy
         @accession = accession
+        @priority = priority
         @assign_doi = assign_doi
       end
       # rubocop:enable Metrics/ParameterLists
@@ -51,6 +55,7 @@ module SdrClient
         request = metadata_builder.with_uploads(upload_responses)
         model = Cocina::Models.build_request(request.as_json.with_indifferent_access)
         CreateResource.run(accession: @accession,
+                           priority: @priority,
                            assign_doi: @assign_doi,
                            metadata: model,
                            logger: logger,
