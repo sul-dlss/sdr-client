@@ -9,12 +9,15 @@ module SdrClient
       # @param [Cocina::Model::RequestDRO] request_dro for depositing
       # @param [Connection] connection the connection to use
       # @param [Boolean] accession should the accessionWF be started
+      # @param [String] priority (nil) what processing priority should be used
+      #                          either 'low' or 'default'
       # @param [Array<String>] files a list of file names to upload
       # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Logger] logger the logger to use
       def initialize(request_dro:, # rubocop:disable Metrics/ParameterLists
                      connection:,
                      accession:,
+                     priority: nil,
                      files: [],
                      assign_doi: false,
                      logger: Logger.new($stdout))
@@ -23,6 +26,7 @@ module SdrClient
         @request_dro = request_dro
         @logger = logger
         @accession = accession
+        @priority = priority
         @assign_doi = assign_doi
       end
 
@@ -36,6 +40,7 @@ module SdrClient
                                               connection: connection)
         new_request_dro = UpdateDroWithFileIdentifiers.update(request_dro: request_dro, upload_responses: upload_responses)
         CreateResource.run(accession: @accession,
+                           priority: @priority,
                            assign_doi: @assign_doi,
                            metadata: new_request_dro,
                            logger: logger,

@@ -5,14 +5,8 @@ module SdrClient
     # Creates a resource (metadata) in SDR
     class CreateResource
       DRO_PATH = '/v1/resources'
-      # rubocop:disable Metrics/ParameterLists
-      def self.run(accession:, metadata:, logger:, connection:, assign_doi: false, priority: nil)
-        new(accession: accession,
-            priority: priority,
-            assign_doi: assign_doi,
-            metadata: metadata,
-            logger: logger,
-            connection: connection).run
+      def self.run(**args)
+        new(**args).run
       end
 
       # @param [Boolean] accession should the accessionWF be started
@@ -21,7 +15,8 @@ module SdrClient
       # @param [Hash<Symbol,String>] the result of the metadata call
       # @param [String] priority what processing priority should be used
       #                          either 'low' or 'default'
-      def initialize(accession:, assign_doi:, metadata:, logger:, connection:, priority: nil)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(accession:, metadata:, logger:, connection:, assign_doi: false, priority: nil)
         @accession = accession
         @priority = priority
         @assign_doi = assign_doi
