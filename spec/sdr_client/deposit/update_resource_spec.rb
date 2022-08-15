@@ -3,7 +3,8 @@
 RSpec.describe SdrClient::Deposit::UpdateResource do
   describe 'run' do
     subject(:request) do
-      described_class.run(metadata: metadata, logger: logger, connection: connection)
+      described_class.run(metadata: metadata, logger: logger, connection: connection,
+                          version_description: 'Updated metadata')
     end
 
     let(:dro_hash) do
@@ -27,18 +28,29 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
     end
 
     let(:logger) { instance_double(Logger, debug: true, info: true) }
-    let(:connection) { instance_double(SdrClient::Connection) }
-    let(:response) { instance_double(Faraday::Response, status: 202, body: '{"jobId":9}') }
-
-    before do
-      allow(connection).to receive(:put).and_return(response)
-    end
+    let(:connection) { SdrClient::Connection.new(url: 'https://sdr-api-prod.stanford.edu') }
 
     context 'when it is successful' do
+      before do
+        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata')
+          .with(
+            body: metadata.to_json
+          )
+          .to_return(status: 202, body: '{"jobId":9}')
+      end
+
       it { is_expected.to eq 9 }
     end
 
     context 'when there is an error' do
+      before do
+        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata')
+          .with(
+            body: metadata.to_json
+          )
+          .to_return(status: 422, body: 'broken')
+      end
+
       let(:response) { instance_double(Faraday::Response, status: 422, body: 'broken') }
 
       it 'raises an error' do
