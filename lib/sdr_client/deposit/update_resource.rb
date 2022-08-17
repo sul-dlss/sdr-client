@@ -6,16 +6,18 @@ module SdrClient
     class UpdateResource
       DRO_PATH = '/v1/resources/%<id>s'
 
-      def self.run(metadata:, logger:, connection:)
-        new(metadata: metadata, logger: logger, connection: connection).run
+      def self.run(metadata:, logger:, connection:, version_description: nil)
+        new(metadata: metadata, logger: logger, connection: connection, version_description: version_description).run
       end
 
       # @param [Cocina::Models::DRO] metadata
       # @param [Hash<Symbol,String>] the result of the metadata call
-      def initialize(metadata:, logger:, connection:)
+      # @param [String] version_description
+      def initialize(metadata:, logger:, connection:, version_description: nil)
         @metadata = metadata
         @logger = logger
         @connection = connection
+        @version_description = version_description
       end
 
       # @param [Hash<Symbol,String>] the result of the metadata call
@@ -31,7 +33,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :logger, :connection
+      attr_reader :metadata, :logger, :connection, :version_description
 
       def metadata_request
         json = metadata.to_json
@@ -39,7 +41,9 @@ module SdrClient
 
         connection.put(path(metadata), json,
                        'Content-Type' => 'application/json',
-                       'X-Cocina-Models-Version' => Cocina::Models::VERSION)
+                       'X-Cocina-Models-Version' => Cocina::Models::VERSION) do |req|
+                         req.params['versionDescription'] = version_description if version_description
+                       end
       end
 
       def path(metadata)
