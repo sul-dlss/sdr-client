@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sdr-client (0.90.0)
+    sdr-client (0.91.0)
       activesupport
       cocina-models (~> 0.83.0)
       dry-monads
@@ -79,11 +79,13 @@ GEM
     json (2.6.2)
     jsonpath (1.1.2)
       multi_json
+    mini_portile2 (2.8.0)
     minitest (5.16.2)
     multi_json (1.15.0)
-    nokogiri (1.13.8-x86_64-darwin)
+    nokogiri (1.13.8)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-linux)
+    nokogiri (1.13.8-x86_64-darwin)
       racc (~> 1.4)
     openapi3_parser (0.9.2)
       commonmarker (~> 0.17)
