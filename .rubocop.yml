@@ -14,7 +14,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'sdr-client.gemspec'
-  IgnoredMethods:
+  AllowedMethods:
     - 'OptionParser.new'
 
 Metrics/ClassLength:
