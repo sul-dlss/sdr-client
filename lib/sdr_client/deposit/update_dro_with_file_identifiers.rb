@@ -24,7 +24,7 @@ module SdrClient
       def self.updated_structural(structural, signed_ids)
         structural[:contains].each do |file_set|
           file_set[:structural][:contains].each do |file|
-            file[:externalIdentifier] = signed_ids[file[:filename]]
+            file[:externalIdentifier] = signed_ids[file[:filename]] if signed_ids.key?(file[:filename])
           end
         end
         structural
