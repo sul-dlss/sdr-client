@@ -10,7 +10,7 @@ module SdrClient
         # Call `#values` on the result of the grouping operation because 1)
         # `Process#build_filesets` expects an array of arrays, not an array of
         # hashes, and 2) the keys aren't used anywhere
-        uploads.group_by { |ul| ::File.basename(ul.filename, '.*') }.values
+        uploads.group_by { |ul| ::File.join(::File.dirname(ul.filename), ::File.basename(ul.filename, '.*')) }.values
       end
     end
   end

@@ -31,13 +31,12 @@ module SdrClient
       # @return [Hash<String, Hash<String, String>>]
       def build
         files.each do |file_path|
-          file_key = ::File.basename(file_path)
           OPERATIONS.each do |operation|
             result = operation.for(file_path: file_path)
             next if result.nil?
 
-            files_metadata[file_key] ||= {}
-            files_metadata[file_key][operation::NAME] = result
+            files_metadata[file_path] ||= {}
+            files_metadata[file_path][operation::NAME] = result
           end
         end
         files_metadata

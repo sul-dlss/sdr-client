@@ -28,6 +28,8 @@ module SdrClient
       def run
         file_metadata.map do |filename, metadata|
           direct_upload(metadata.to_json).tap do |response|
+            # ActiveStorage modifies the filename provided in response, so setting here.
+            response.filename = filename
             upload_file(filename: filename,
                         url: response.direct_upload.fetch('url'),
                         content_type: response.content_type,

@@ -61,15 +61,12 @@ module SdrClient
       def child_files_match
         # Files without request files.
         files.each do |filepath|
-          filename = ::File.basename(filepath)
-
-          raise "Request file not provided for #{filepath}" if request_files[filename].nil?
+          raise "Request file not provided for #{filepath}" if request_files[filepath].nil?
         end
 
         # Request files without files
-        filenames = files.map { |filepath| ::File.basename(filepath) }
         request_files.each_key do |request_filename|
-          raise "File not provided for request file #{request_filename}" unless filenames.include?(request_filename)
+          raise "File not provided for request file #{request_filename}" unless files.include?(request_filename)
         end
       end
 
