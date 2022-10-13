@@ -11,9 +11,10 @@ This provides a way for consumers to easily and correctly deposit files to the S
 
 ## Install
 
-We recommend using the latest 3.x release of Ruby.
+Ruby 3 is required. The latest 3.x release is recommended.
 
 `gem install sdr-client`
+Note that some commands require the lastest version of the client. Use this command to update the client as necessary.
 
 ## Usage
 
@@ -35,6 +36,7 @@ Log in:
 ```
 sdr login --url https://sdr-api-server:3000
 ```
+You will be prompted for an email and password. Note that this is for an SDR API account, not SUNET account.
 
 Display version of sdr-client:
 ```
