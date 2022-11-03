@@ -25,7 +25,7 @@ RSpec.describe SdrClient::Deposit do
     it 'passes files metadata through to Process' do
       expect(SdrClient::Deposit::File).to receive(:new).with(
         external_identifier: 'BaHBLZz09Iiw',
-        filename: 'file four.txt',
+        filename: 'spec/fixtures/file four.txt',
         label: 'file four.txt',
         mime_type: 'text/plain',
         md5: '19531a7fd61429c613d156f53cf3ba76',
@@ -40,7 +40,7 @@ RSpec.describe SdrClient::Deposit do
                           url: 'http://example.com/',
                           files: ['spec/fixtures/file four.txt'],
                           files_metadata: {
-                            'file four.txt' => {
+                            'spec/fixtures/file four.txt' => {
                               'mime_type' => 'text/plain',
                               'use' => 'transcription'
                             }

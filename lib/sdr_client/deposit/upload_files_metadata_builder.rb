@@ -34,7 +34,7 @@ module SdrClient
       # This can be overridden in the case that the file on disk has a different
       # name than we want to repo to know about.
       def filename_for(file_path)
-        ::File.basename(file_path)
+        file_path
       end
 
       def mime_type_for(file_path)

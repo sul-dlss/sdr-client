@@ -41,7 +41,7 @@ module SdrClient
       def file_args(upload, upload_metadata)
         args = {
           external_identifier: upload.signed_id,
-          label: upload.filename,
+          label: ::File.basename(upload.filename),
           filename: upload.filename
         }
         args.merge!(upload_metadata)

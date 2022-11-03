@@ -77,8 +77,7 @@ module SdrClient
       def mime_types
         @mime_types ||=
           files.to_h do |filepath|
-            filename = ::File.basename(filepath)
-            [filename, metadata.for(filename)['mime_type']]
+            [filepath, metadata.for(filepath)['mime_type']]
           end
       end
     end
