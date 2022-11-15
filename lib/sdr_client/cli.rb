@@ -72,6 +72,7 @@ module SdrClient
     option :cdl, type: :boolean, default: false, desc: 'Controlled digital lending'
     option :cocina_file, desc: 'Path to a file containing Cocina JSON'
     option :cocina_pipe, type: :boolean, default: false, desc: 'Indicate Cocina JSON is being piped in'
+    option :basepath, default: Dir.getwd, desc: 'Base path for the files'
     def update(druid)
       validate_druid!(druid)
       job_id = SdrClient::Update.run(druid, **options)
@@ -95,6 +96,7 @@ module SdrClient
     option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
     option :files_metadata, desc: 'JSON string representing per-file metadata'
     option :grouping_strategy, enum: %w[default filename], desc: 'Strategy for grouping files into filesets'
+    option :basepath, default: Dir.getwd, desc: 'Base path for the files'
     def deposit(*files)
       register_or_deposit(files: files, accession: true)
     end
@@ -113,6 +115,7 @@ module SdrClient
     option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
     option :files_metadata, desc: 'JSON string representing per-file metadata'
     option :grouping_strategy, enum: %w[default filename], desc: 'Strategy for grouping files into filesets'
+    option :basepath, default: Dir.getwd, desc: 'Base path for the files'
     def register(*files)
       register_or_deposit(files: files, accession: false)
     end

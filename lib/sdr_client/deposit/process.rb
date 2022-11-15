@@ -13,7 +13,8 @@ module SdrClient
       #                          either 'low' or 'default'
       # @param [Class] grouping_strategy class whose run method groups an array of uploads
       # @param [Class] file_set_type_strategy class whose run method determines file_set type
-      # @param [Array<String>] files a list of file names to upload
+      # @param [Array<String>] files a list of relative filepaths to upload
+      # @param [String] basepath filepath to which filepaths are relative
       # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Logger] logger the logger to use
       #
@@ -21,6 +22,7 @@ module SdrClient
       def initialize(metadata:,
                      connection:,
                      accession:,
+                     basepath:,
                      priority: nil,
                      grouping_strategy: SingleFileGroupingStrategy,
                      file_set_type_strategy: FileTypeFileSetStrategy,
@@ -36,6 +38,7 @@ module SdrClient
         @accession = accession
         @priority = priority
         @assign_doi = assign_doi
+        @basepath = basepath
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -44,8 +47,9 @@ module SdrClient
       def run
         check_files_exist
 
-        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types)
+        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types, basepath: basepath)
         upload_responses = UploadFiles.upload(file_metadata: file_metadata,
+                                              filepath_map: filepath_map,
                                               logger: logger,
                                               connection: connection)
         metadata_builder = MetadataBuilder.new(metadata: metadata,
@@ -65,12 +69,12 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :files, :connection, :logger, :grouping_strategy, :file_set_type_strategy
+      attr_reader :metadata, :files, :connection, :logger, :grouping_strategy, :file_set_type_strategy, :basepath
 
       def check_files_exist
         logger.info('checking to see if files exist')
-        files.each do |file_name|
-          raise Errno::ENOENT, file_name unless ::File.exist?(file_name)
+        files.each do |filepath|
+          raise Errno::ENOENT, filepath unless ::File.exist?(absolute_filepath_for(filepath))
         end
       end
 
@@ -79,6 +83,16 @@ module SdrClient
           files.to_h do |filepath|
             [filepath, metadata.for(filepath)['mime_type']]
           end
+      end
+
+      def filepath_map
+        @filepath_map ||= files.each_with_object({}) do |filepath, obj|
+          obj[filepath] = absolute_filepath_for(filepath)
+        end
+      end
+
+      def absolute_filepath_for(filepath)
+        ::File.join(basepath, filepath)
       end
     end
   end

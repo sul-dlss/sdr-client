@@ -8,8 +8,8 @@ module SdrClient
       # SHA1 for this file.
       class SHA1
         NAME = 'sha1'
-        def self.for(file_path:, **)
-          Digest::SHA1.file(file_path).hexdigest
+        def self.for(filepath:, **)
+          Digest::SHA1.file(filepath).hexdigest
         end
       end
     end

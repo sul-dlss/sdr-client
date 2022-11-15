@@ -8,40 +8,43 @@ module SdrClient
     class UploadFiles
       BLOB_PATH = '/v1/direct_uploads'
 
-      # @param [Hash<String,Files::DirectUploadRequest>] the metadata for uploading the files
+      # @param [Hash<String,Files::DirectUploadRequest>] file_metadata map of relative filepaths to file metadata
+      # @param [Hash<String,String>] filepath_map map of relative filepaths to absolute filepaths
       # @param [Logger] logger the logger to use
       # @param [Connection] connection
-      def self.upload(file_metadata:, logger:, connection:)
-        new(file_metadata: file_metadata, logger: logger, connection: connection).run
+      def self.upload(file_metadata:, filepath_map:, logger:, connection:)
+        new(file_metadata: file_metadata, filepath_map: filepath_map, logger: logger, connection: connection).run
       end
 
-      # @param [Hash<String,Files::DirectUploadRequest>] the metadata for uploading the files
+      # @param [Hash<String,Files::DirectUploadRequest>] file_metadata map of relative filepaths to file metadata
+      # @param [Hash<String,String>] filepath_map map of relative filepaths to absolute filepaths
       # @param [Logger] logger the logger to use
       # @param [Connection] connection
-      def initialize(file_metadata:, logger:, connection:)
+      def initialize(file_metadata:, filepath_map:, logger:, connection:)
         @file_metadata = file_metadata
+        @filepath_map = filepath_map
         @logger = logger
         @connection = connection
       end
 
       # @return [Array<Files::DirectUploadResponse>] the responses from the server for the uploads
       def run
-        file_metadata.map do |filename, metadata|
+        file_metadata.map do |filepath, metadata|
           direct_upload(metadata.to_json).tap do |response|
-            # ActiveStorage modifies the filename provided in response, so setting here.
-            response.filename = filename
-            upload_file(filename: filename,
+            # ActiveStorage modifies the filename provided in response, so setting here with the relative filename
+            response.filename = filepath
+            upload_file(filename: filepath,
                         url: response.direct_upload.fetch('url'),
                         content_type: response.content_type,
                         content_length: response.byte_size)
-            logger.info("Upload of #{filename} complete")
+            logger.info("Upload of #{filepath} complete")
           end
         end
       end
 
       private
 
-      attr_reader :logger, :connection, :file_metadata
+      attr_reader :logger, :connection, :file_metadata, :filepath_map
 
       def direct_upload(metadata_json)
         logger.info("Starting an upload request: #{metadata_json}")
@@ -63,7 +66,7 @@ module SdrClient
         logger.info("Uploading `#{filename}' to #{url}")
 
         upload_response = connection.put(url) do |req|
-          req.body = ::File.open(filename)
+          req.body = ::File.open(filepath_map[filename])
           req.headers['Content-Type'] = content_type
           req.headers['Content-Length'] = content_length.to_s
         end

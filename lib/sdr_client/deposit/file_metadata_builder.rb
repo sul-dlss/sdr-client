@@ -18,25 +18,26 @@ module SdrClient
 
       # @param (see #initialize)
       # @return (see #build)
-      def self.build(files:, files_metadata:)
-        new(files: files, files_metadata: files_metadata.dup).build
+      def self.build(files:, files_metadata:, basepath:)
+        new(files: files, files_metadata: files_metadata.dup, basepath: basepath).build
       end
 
-      # @param [Array<String>] files the list of files for which to generate metadata
-      def initialize(files:, files_metadata:)
+      # @param [Array<String>] files the list of relative filepaths for which to generate metadata
+      def initialize(files:, files_metadata:, basepath:)
         @files = files
         @files_metadata = files_metadata
+        @basepath = basepath
       end
 
-      # @return [Hash<String, Hash<String, String>>]
+      # @return [Hash<String, Hash<String, String>>] a map of relative filepaths to a map of metadata
       def build
-        files.each do |file_path|
+        files.each do |filepath|
           OPERATIONS.each do |operation|
-            result = operation.for(file_path: file_path)
+            result = operation.for(filepath: absolute_filepath_for(filepath))
             next if result.nil?
 
-            files_metadata[file_path] ||= {}
-            files_metadata[file_path][operation::NAME] = result
+            files_metadata[filepath] ||= {}
+            files_metadata[filepath][operation::NAME] = result
           end
         end
         files_metadata
@@ -44,7 +45,11 @@ module SdrClient
 
       private
 
-      attr_reader :files, :files_metadata
+      attr_reader :files, :files_metadata, :basepath
+
+      def absolute_filepath_for(filepath)
+        ::File.join(basepath, filepath)
+      end
     end
   end
 end

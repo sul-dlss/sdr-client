@@ -8,8 +8,8 @@ module SdrClient
       # Mime-type for this file.
       class MimeType
         NAME = 'mime_type'
-        def self.for(file_path:, **)
-          argv = Shellwords.escape(file_path)
+        def self.for(filepath:, **)
+          argv = Shellwords.escape(filepath)
           `file --mime-type -b #{argv}`.chomp
         end
       end
