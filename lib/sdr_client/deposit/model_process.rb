@@ -11,17 +11,20 @@ module SdrClient
       # @param [Boolean] accession should the accessionWF be started
       # @param [String] priority (nil) what processing priority should be used
       #                          either 'low' or 'default'
-      # @param [Array<String>] files a list of file names to upload
+      # @param [Array<String>] files a list of relative filepaths to upload
+      # @param [String] basepath filepath to which filepaths are relative
       # @param [Boolean] assign_doi should a DOI be assigned to this item
       # @param [Logger] logger the logger to use
       def initialize(request_dro:, # rubocop:disable Metrics/ParameterLists
                      connection:,
                      accession:,
+                     basepath:,
                      priority: nil,
                      files: [],
                      assign_doi: false,
                      logger: Logger.new($stdout))
         @files = files
+        @basepath = basepath
         @connection = connection
         @request_dro = request_dro
         @logger = logger
@@ -34,10 +37,14 @@ module SdrClient
         check_files_exist
         child_files_match
 
-        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types)
+        # file_metadata is a map of relative filepaths to Files::DirectUploadRequests
+        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types, basepath: basepath)
+        # upload_response is an array of Files::DirectUploadResponse
         upload_responses = UploadFiles.upload(file_metadata: file_metadata,
+                                              filepath_map: filepath_map,
                                               logger: logger,
                                               connection: connection)
+
         new_request_dro = UpdateDroWithFileIdentifiers.update(request_dro: request_dro, upload_responses: upload_responses)
         CreateResource.run(accession: @accession,
                            priority: @priority,
@@ -49,12 +56,12 @@ module SdrClient
 
       private
 
-      attr_reader :request_dro, :files, :logger, :connection
+      attr_reader :request_dro, :files, :logger, :connection, :basepath
 
       def check_files_exist
         logger.info('checking to see if files exist')
-        files.each do |file_name|
-          raise Errno::ENOENT, file_name unless ::File.exist?(file_name)
+        files.each do |filepath|
+          raise Errno::ENOENT, filepath unless ::File.exist?(absolute_filepath_for(filepath))
         end
       end
 
@@ -70,7 +77,7 @@ module SdrClient
         end
       end
 
-      # Map of filenames to mimetypes
+      # Map of relative filepaths to mimetypes
       def mime_types
         @mime_types ||=
           request_files.transform_values do |file|
@@ -78,7 +85,7 @@ module SdrClient
           end
       end
 
-      # Map of filenames to request files
+      # Map of absolute filepaths to Cocina::Models::RequestFiles
       def request_files
         @request_files ||= begin
           return {} unless request_dro.structural
@@ -88,6 +95,16 @@ module SdrClient
               [file.filename, file]
             end
           end.flatten(1).to_h
+        end
+      end
+
+      def absolute_filepath_for(filename)
+        ::File.join(basepath, filename)
+      end
+
+      def filepath_map
+        @filepath_map ||= files.each_with_object({}) do |filepath, obj|
+          obj[filepath] = absolute_filepath_for(filepath)
         end
       end
     end

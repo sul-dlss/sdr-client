@@ -6,39 +6,36 @@ module SdrClient
   module Deposit
     # Collecting all the metadata about the files for a deposit
     class UploadFilesMetadataBuilder
-      # @param [Array<String>] files a list of filepaths to upload
+      # @param [Array<String>] files a list of relative filepaths to upload
       # @param [Hash<String,String>] mime_types a map of filenames to mime types
+      # @param [String] basepath path to which files are relative
       # @return [Hash<String, Files::DirectUploadRequest>] the metadata for uploading the files
-      def self.build(files:, mime_types:)
-        new(files: files, mime_types: mime_types).build
+      def self.build(files:, mime_types:, basepath:)
+        new(files: files, mime_types: mime_types, basepath: basepath).build
       end
 
-      # @param [Array<String>] files a list of filepaths to upload
+      # @param [Array<String>] files a list of absolute filepaths to upload
       # @param [Hash<String,String>] mime_types a map of filenames to mime types
-      def initialize(files:, mime_types:)
+      # @param [String] basepath path to which files are relative
+      def initialize(files:, mime_types:, basepath:)
         @files = files
         @mime_types = mime_types
+        @basepath = basepath
       end
 
-      attr_reader :files, :mime_types
+      attr_reader :files, :mime_types, :basepath
 
       # @return [Hash<String, Files::DirectUploadRequest>] the metadata for uploading the files
       def build
-        files.each_with_object({}) do |path, obj|
-          obj[path] = Files::DirectUploadRequest.from_file(path,
-                                                           file_name: filename_for(path),
-                                                           content_type: mime_type_for(path))
+        files.each_with_object({}) do |filepath, obj|
+          obj[filepath] = Files::DirectUploadRequest.from_file(absolute_filepath_for(filepath),
+                                                               file_name: filepath,
+                                                               content_type: mime_types[filepath])
         end
       end
 
-      # This can be overridden in the case that the file on disk has a different
-      # name than we want to repo to know about.
-      def filename_for(file_path)
-        file_path
-      end
-
-      def mime_type_for(file_path)
-        mime_types[filename_for(file_path)]
+      def absolute_filepath_for(filepath)
+        ::File.join(basepath, filepath)
       end
     end
   end

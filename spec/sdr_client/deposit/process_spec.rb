@@ -18,6 +18,7 @@ RSpec.describe SdrClient::Deposit::Process do
     described_class.new(metadata: metadata,
                         connection: connection,
                         files: files,
+                        basepath: basepath,
                         logger: logger,
                         accession: accession)
   end
@@ -25,6 +26,8 @@ RSpec.describe SdrClient::Deposit::Process do
   let(:logger) { instance_double(Logger, info: nil, debug: nil) }
 
   let(:files_metadata) { {} }
+
+  let(:basepath) { 'spec/fixtures' }
 
   describe '.run' do
     subject { instance.run }
@@ -38,7 +41,7 @@ RSpec.describe SdrClient::Deposit::Process do
     end
 
     context 'when files exist' do
-      let(:files) { ['spec/fixtures/file1.txt', 'spec/fixtures/file2.txt'] }
+      let(:files) { ['file1.txt', 'dir1/file2.txt'] }
       let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
       let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' }
 
@@ -59,7 +62,7 @@ RSpec.describe SdrClient::Deposit::Process do
               contains: [{
                 type: Cocina::Models::ObjectType.file,
                 label: 'file1.txt',
-                filename: 'spec/fixtures/file1.txt',
+                filename: 'file1.txt',
                 version: 1,
                 externalIdentifier: 'BaHBLZz09Iiw',
                 hasMessageDigests: [],
@@ -82,7 +85,7 @@ RSpec.describe SdrClient::Deposit::Process do
               contains: [{
                 type: Cocina::Models::ObjectType.file,
                 label: 'file2.txt',
-                filename: 'spec/fixtures/file2.txt',
+                filename: 'dir1/file2.txt',
                 version: 1,
                 externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
                 hasMessageDigests: [],
@@ -115,12 +118,12 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"spec/fixtures/file1.txt",' \
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":27,' \
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",' \
                              '"signed_id":"BaHBLZz09Iiw",' \
@@ -130,12 +133,12 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
+              body: '{"blob":{"filename":"dir1/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"spec/fixtures/file2.txt",' \
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"dir1-file2.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":36,' \
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",' \
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",' \
@@ -185,7 +188,7 @@ RSpec.describe SdrClient::Deposit::Process do
       context 'when metadata upload succeeds with additional file metadata' do
         let(:files_metadata) do
           {
-            'spec/fixtures/file1.txt' => {
+            'file1.txt' => {
               'md5' => 'abc123',
               'sha1' => 'def456',
               'mime_type' => 'image/tiff',
@@ -215,7 +218,7 @@ RSpec.describe SdrClient::Deposit::Process do
                 contains: [{
                   type: Cocina::Models::ObjectType.file,
                   label: 'file1.txt',
-                  filename: 'spec/fixtures/file1.txt',
+                  filename: 'file1.txt',
                   version: 1,
                   hasMimeType: 'image/tiff',
                   externalIdentifier: 'BaHBLZz09Iiw',
@@ -245,7 +248,7 @@ RSpec.describe SdrClient::Deposit::Process do
                 contains: [{
                   type: Cocina::Models::ObjectType.file,
                   label: 'file2.txt',
-                  filename: 'spec/fixtures/file2.txt',
+                  filename: 'dir1/file2.txt',
                   version: 1,
                   externalIdentifier: 'dz09IiwiZXhwIjpudWxsLC',
                   hasMessageDigests: [],
@@ -269,12 +272,12 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
                     '"content_type":"image/tiff"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"spec/fixtures/file1.txt",' \
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",' \
                              '"content_type":"image/tiff","metadata":{},"byte_size":27,' \
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",' \
                              '"signed_id":"BaHBLZz09Iiw",' \
@@ -284,12 +287,12 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
+              body: '{"blob":{"filename":"dir1/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"spec/fixtures/file2.txt",' \
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"dir1-file2.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":36,' \
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",' \
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",' \
@@ -332,12 +335,12 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"spec/fixtures/file1.txt",' \
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":27,' \
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",' \
                              '"signed_id":"BaHBLZz09Iiw",' \
@@ -347,12 +350,12 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
+              body: '{"blob":{"filename":"dir1/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"spec/fixtures/file2.txt",' \
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"dir1-file2.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":36,' \
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",' \
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",' \
@@ -395,12 +398,12 @@ RSpec.describe SdrClient::Deposit::Process do
         before do
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
+              body: '{"blob":{"filename":"file1.txt","byte_size":27,"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"spec/fixtures/file1.txt",' \
+                       body: '{"id":37,"key":"gugv9ii3e79k933cjv36x732497s","filename":"file1.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":27,' \
                              '"checksum":"hagfaf2F1Cx0r3jnHtIe9Q==","created_at":"2019-11-16T21:36:03.122Z",' \
                              '"signed_id":"BaHBLZz09Iiw",' \
@@ -410,12 +413,12 @@ RSpec.describe SdrClient::Deposit::Process do
 
           stub_request(:post, 'http://example.com:3000/v1/direct_uploads')
             .with(
-              body: '{"blob":{"filename":"spec/fixtures/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
+              body: '{"blob":{"filename":"dir1/file2.txt","byte_size":36,"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==",' \
                     '"content_type":"application/octet-stream"}}',
               headers: { 'Content-Type' => 'application/json' }
             )
             .to_return(status: 200,
-                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"spec/fixtures/file2.txt",' \
+                       body: '{"id":38,"key":"08y78dduz8w077l3lbcrrd5vjk4x","filename":"dir1-file2.txt",' \
                              '"content_type":"application/octet-stream","metadata":{},"byte_size":36,' \
                              '"checksum":"LzYE2VS+iI3+Wx65v2MJ5A==","created_at":"2019-11-16T21:37:16.657Z",' \
                              '"signed_id":"dz09IiwiZXhwIjpudWxsLC",' \

@@ -4,6 +4,8 @@ RSpec.describe SdrClient::Deposit do
   describe 'integration tests' do
     let(:upload_url) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
 
+    let(:basepath) { 'spec/fixtures' }
+
     before do
       stub_request(:post, 'http://example.com/v1/resources?accession=true&priority=low')
         .to_return(status: 201, body: '{"druid":"druid:bc333df7777"}',
@@ -25,7 +27,7 @@ RSpec.describe SdrClient::Deposit do
     it 'passes files metadata through to Process' do
       expect(SdrClient::Deposit::File).to receive(:new).with(
         external_identifier: 'BaHBLZz09Iiw',
-        filename: 'spec/fixtures/file four.txt',
+        filename: 'file four.txt',
         label: 'file four.txt',
         mime_type: 'text/plain',
         md5: '19531a7fd61429c613d156f53cf3ba76',
@@ -38,9 +40,10 @@ RSpec.describe SdrClient::Deposit do
                           collection: 'druid:gh123df4567',
                           source_id: 'googlebooks:12345',
                           url: 'http://example.com/',
-                          files: ['spec/fixtures/file four.txt'],
+                          files: ['file four.txt'],
+                          basepath: basepath,
                           files_metadata: {
-                            'spec/fixtures/file four.txt' => {
+                            'file four.txt' => {
                               'mime_type' => 'text/plain',
                               'use' => 'transcription'
                             }
@@ -74,6 +77,7 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(grouping_strategy: SdrClient::Deposit::SingleFileGroupingStrategy,
                 files: [],
+                basepath: Dir.getwd,
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
@@ -99,6 +103,7 @@ RSpec.describe SdrClient::Deposit do
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy,
                 files: [],
+                basepath: Dir.getwd,
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
@@ -122,6 +127,7 @@ RSpec.describe SdrClient::Deposit do
         run
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(files: [],
+                basepath: Dir.getwd,
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,
@@ -147,6 +153,7 @@ RSpec.describe SdrClient::Deposit do
         run
         expect(SdrClient::Deposit::Process).to have_received(:new)
           .with(files: [],
+                basepath: Dir.getwd,
                 metadata: request,
                 connection: SdrClient::Connection,
                 logger: Logger,

@@ -8,8 +8,8 @@ module SdrClient
       # MD5 for this file.
       class MD5
         NAME = 'md5'
-        def self.for(file_path:, **)
-          Digest::MD5.file(file_path).hexdigest
+        def self.for(filepath:, **)
+          Digest::MD5.file(filepath).hexdigest
         end
       end
     end
