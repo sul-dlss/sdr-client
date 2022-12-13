@@ -32,9 +32,9 @@ RSpec.describe SdrClient::Find do
       end
       let(:logger_spy) { instance_double(Logger, error: nil, info: nil) }
 
-      it 'logs an error and raises Failed' do
+      it 'logs an error and raises' do
         expect { described_class.run('druid:bw581ng3176', url: 'http://example.com/', logger: logger_spy) }
-          .to raise_error(described_class::Failed, /HTTP 500 error.+zigged when we should have zagged/)
+          .to raise_error(/unexpected response: 500.+Internal server error.+zigged when we should have zagged/)
         expect(logger_spy).to have_received(:error).once
       end
     end

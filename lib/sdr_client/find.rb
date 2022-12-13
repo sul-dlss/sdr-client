@@ -7,9 +7,6 @@ module SdrClient
   module Find
     DRO_PATH = '/v1/resources/%<id>s'
 
-    # Raised when find returns an unsuccessful response
-    class Failed < StandardError; end
-
     # @raise [Failed] if the find operation fails
     # @return [String] JSON for the given Cocina object or an error
     def self.run(druid, url:, logger: Logger.new($stdout))
@@ -17,12 +14,10 @@ module SdrClient
       path = format(DRO_PATH, id: druid)
       logger.info("Retrieving metadata from: #{path}")
       response = connection.get(path)
-      unless response.success?
-        error_message = "There was an HTTP #{response.status} error making the request: #{response.body}"
-        logger.error(error_message)
-        raise Failed, error_message
-      end
-      response.body
+      return response.body if response.success?
+
+      logger.error("There was an HTTP #{response.status} error making the request: #{response.body}")
+      UnexpectedResponse.call(response)
     end
   end
 end

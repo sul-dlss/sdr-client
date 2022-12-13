@@ -1,0 +1,4 @@
+authentication_proxy_url:
+  'https://sdr-api-prod.stanford.edu': 'https://argo.stanford.edu/settings/tokens'
+  'https://sdr-api-qa.stanford.edu': 'https://argo-qa.stanford.edu/settings/tokens'
+  'https://sdr-api-stage.stanford.edu': 'https://argo-stage.stanford.edu/settings/tokens'
