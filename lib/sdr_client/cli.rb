@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'launchy'
 require 'thor'
+require_relative 'cli/config'
 
 module SdrClient
   # The SDR command-line interface
@@ -31,32 +33,19 @@ module SdrClient
 
     desc 'get DRUID', 'Retrieve an object from the SDR'
     def get(druid)
-      say SdrClient::Find.run(druid, url: options[:url], logger: Logger.new($stderr))
-    rescue SdrClient::Credentials::NoCredentialsError
-      say_error 'Log in first'
-      exit(1)
+      rescue_expected_exceptions do
+        say Find.run(druid, url: options[:url], logger: Logger.new($stderr))
+      end
     end
 
-    desc 'login', 'Prompt for email & password and create a login token (saved in ~/.sdr/token)'
+    desc 'login', 'Open authentication proxy UI, or prompt for username and password, and then prompt for token (saved in ~/.sdr/credentials)'
     def login
-      status = SdrClient::Login.run(
-        url: options[:url],
-        login_service: lambda do
-          {
-            email: ask('Email:'),
-            password: ask('Password:', echo: false)
-          }
-        end
-      )
-      return puts unless status.failure?
-
-      say_error status.failure
-      exit(1)
+      authentication_proxy_url ? login_via_proxy : login_via_credentials
     end
 
     desc 'version', 'Display the SDR CLI version'
     def version
-      say SdrClient::VERSION
+      say VERSION
     end
 
     desc 'update DRUID', 'Update an object in the SDR'
@@ -74,12 +63,11 @@ module SdrClient
     option :cocina_pipe, type: :boolean, default: false, desc: 'Indicate Cocina JSON is being piped in'
     option :basepath, default: Dir.getwd, desc: 'Base path for the files'
     def update(druid)
-      validate_druid!(druid)
-      job_id = SdrClient::Update.run(druid, **options)
-      poll_for_job_complete(job_id: job_id, url: options[:url])
-    rescue SdrClient::Credentials::NoCredentialsError
-      say_error 'Log in first'
-      exit(1)
+      rescue_expected_exceptions do
+        validate_druid!(druid)
+        job_id = Update.run(druid, **options)
+        poll_for_job_complete(job_id: job_id, url: options[:url])
+      end
     end
 
     desc 'deposit OPTIONAL_FILES', 'Deposit (accession) an object into the SDR'
@@ -122,16 +110,63 @@ module SdrClient
 
     private
 
-    def register_or_deposit(files:, accession:)
-      opts = munge_options(options, files)
-      skip_polling = opts.delete(:skip_polling)
-      job_id = SdrClient::Deposit.run(accession: accession, **opts)
-      return if skip_polling
-
-      poll_for_job_complete(job_id: job_id, url: opts[:url])
-    rescue SdrClient::Credentials::NoCredentialsError
-      say_error 'Log in first'
+    def rescue_expected_exceptions
+      yield
+    rescue UnexpectedResponse::TokenExpired
+      say_error 'Token has expired! Please log in again.'
       exit(1)
+    rescue Credentials::NoCredentialsError
+      say_error 'No token found! Please log in first.'
+      exit(1)
+    end
+
+    def login_via_proxy
+      say 'Opened the configured authentication proxy in your browser. Once there, generate a new token and copy the entire value.'
+      Launchy.open(authentication_proxy_url)
+      # Some CLI environments will pop up a message about opening the URL in
+      # an existing browse. Since this is OS-dependency, and not something
+      # we can control via Launchy, just wait a bit before rendering the
+      # `ask` prompt so it's clearer to the user what's happening
+      sleep 0.5
+      token_string = ask('Paste token here:')
+      Credentials.write(token_string)
+      expiry = JSON.parse(token_string)['exp']
+      say "You are now authenticated for #{options[:url]} until #{expiry}"
+    rescue StandardError => e
+      say_error "Error logging in via proxy: #{e}"
+      exit(1)
+    end
+
+    def login_via_credentials
+      status = Login.run(
+        url: options[:url],
+        login_service: lambda do
+          {
+            email: ask('Email:'),
+            password: ask('Password:', echo: false)
+          }
+        end
+      )
+
+      return puts unless status.failure?
+
+      say_error status.failure
+      exit(1)
+    end
+
+    def authentication_proxy_url
+      @authentication_proxy_url ||= Settings.authentication_proxy_url[options[:url]]
+    end
+
+    def register_or_deposit(files:, accession:)
+      rescue_expected_exceptions do
+        opts = munge_options(options, files)
+        skip_polling = opts.delete(:skip_polling)
+        job_id = Deposit.run(accession: accession, **opts)
+        return if skip_polling
+
+        poll_for_job_complete(job_id: job_id, url: opts[:url])
+      end
     end
 
     def munge_options(options, files)
@@ -141,9 +176,9 @@ module SdrClient
         opts[:files_metadata] = JSON.parse(options[:files_metadata]) if options[:files_metadata]
         if options[:grouping_strategy]
           opts[:grouping_strategy] = if options[:grouping_strategy] == 'filename'
-                                       SdrClient::Deposit::MatchingFileGroupingStrategy
+                                       Deposit::MatchingFileGroupingStrategy
                                      else
-                                       SdrClient::Deposit::SingleFileGroupingStrategy
+                                       Deposit::SingleFileGroupingStrategy
                                      end
         end
       end
@@ -161,7 +196,7 @@ module SdrClient
       say('SDR is processing your request.', nil, false)
       result = nil
       1.upto(60) do
-        result = SdrClient::BackgroundJobResults.show(url: url, job_id: job_id)
+        result = BackgroundJobResults.show(url: url, job_id: job_id)
         break unless %w[pending processing].include?(result['status'])
 
         # the extra args to `say` prevent appending a newline
