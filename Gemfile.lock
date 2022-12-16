@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sdr-client (2.0.0)
+    sdr-client (2.0.1)
       activesupport
       cocina-models (~> 0.86.0)
       config
@@ -94,7 +94,7 @@ GEM
       activesupport (>= 3.0, < 8.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    faraday (2.7.1)
+    faraday (2.7.2)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
