@@ -27,4 +27,6 @@ Config.setup do |config|
   config.env_converter = :downcase
 end
 
-Config.load_and_set_settings('config/settings.yml')
+Config.load_and_set_settings(
+  File.join(__dir__, '../../..', 'config/settings.yml')
+)
