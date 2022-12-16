@@ -4,8 +4,10 @@ PATH
     sdr-client (2.0.0)
       activesupport
       cocina-models (~> 0.86.0)
+      config
       dry-monads
       faraday (>= 0.16)
+      launchy
 
 GEM
   remote: https://rubygems.org/
@@ -189,8 +191,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.0)
   byebug
-  config
-  launchy
   rake (~> 13.0)
   rspec (~> 3.0)
   rspec_junit_formatter
