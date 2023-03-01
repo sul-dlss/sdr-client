@@ -21,6 +21,7 @@ module SdrClient
                      collection: nil,
                      source_id:,
                      catkey: nil,
+                     folio_instance_hrid: nil,
                      embargo_release_date: nil,
                      embargo_access: 'world',
                      embargo_download: 'world',
@@ -33,6 +34,7 @@ module SdrClient
         @source_id = source_id
         @collection = collection
         @catkey = catkey
+        @folio_instance_hrid = folio_instance_hrid
         @embargo_release_date = embargo_release_date
         @embargo_access = embargo_access
         @embargo_download = embargo_download
@@ -69,6 +71,7 @@ module SdrClient
                     copyright: copyright,
                     source_id: source_id,
                     catkey: catkey,
+                    folio_instance_hrid: folio_instance_hrid,
                     embargo_release_date: embargo_release_date,
                     embargo_access: embargo_access,
                     embargo_download: embargo_download,
@@ -92,7 +95,7 @@ module SdrClient
 
       private
 
-      attr_reader :view, :label, :file_sets, :source_id, :catkey, :apo, :collection,
+      attr_reader :view, :label, :file_sets, :source_id, :catkey, :folio_instance_hrid, :apo, :collection,
                   :files_metadata, :embargo_release_date, :embargo_access, :embargo_download,
                   :viewing_direction, :use_and_reproduction, :copyright, :download
 
@@ -104,7 +107,13 @@ module SdrClient
 
       def identification
         { sourceId: source_id }.tap do |json|
-          json[:catalogLinks] = [{ catalog: 'symphony', catalogRecordId: catkey, refresh: true }] if catkey
+          json[:catalogLinks] = []
+          json[:catalogLinks] << { catalog: 'symphony', catalogRecordId: catkey, refresh: true } if catkey
+          if folio_instance_hrid
+            json[:catalogLinks] << { catalog: 'folio', catalogRecordId: folio_instance_hrid,
+                                     refresh: true }
+          end
+          json.delete(:catalogLinks) if json[:catalogLinks].empty?
         end
       end
 
