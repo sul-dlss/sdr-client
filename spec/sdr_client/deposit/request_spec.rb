@@ -10,6 +10,7 @@ RSpec.describe SdrClient::Deposit::Request do
                           copyright: 'copyright',
                           source_id: 'googlebooks:12345',
                           catkey: '11991',
+                          folio_instance_hrid: 'a11991',
                           use_and_reproduction: 'use statement',
                           viewing_direction: 'right-to-left',
                           embargo_release_date: Time.gm(2045),
@@ -121,7 +122,8 @@ RSpec.describe SdrClient::Deposit::Request do
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: {
             sourceId: 'googlebooks:12345',
-            catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991', refresh: true }]
+            catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991', refresh: true },
+                           { catalog: 'folio', catalogRecordId: 'a11991', refresh: true }]
           },
           structural: expected_structural
         }
@@ -152,6 +154,70 @@ RSpec.describe SdrClient::Deposit::Request do
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
           identification: { sourceId: 'googlebooks:12345' },
+          structural: {},
+          version: 1
+        }
+      end
+
+      it { is_expected.to eq expected }
+    end
+  end
+
+  context 'with minimal options set along with just a catkey' do
+    let(:instance) do
+      described_class.new(label: 'This is my object',
+                          type: Cocina::Models::ObjectType.object,
+                          apo: 'druid:bc123df4567',
+                          catkey: '11991',
+                          source_id: 'googlebooks:12345')
+    end
+
+    describe 'as_json' do
+      subject { instance.as_json }
+
+      let(:expected) do
+        {
+          type: Cocina::Models::ObjectType.object,
+          label: 'This is my object',
+          access: {
+            view: 'dark',
+            download: 'none'
+          },
+          administrative: { hasAdminPolicy: 'druid:bc123df4567' },
+          identification: { sourceId: 'googlebooks:12345',
+                            catalogLinks: [{ catalog: 'symphony', catalogRecordId: '11991', refresh: true }] },
+          structural: {},
+          version: 1
+        }
+      end
+
+      it { is_expected.to eq expected }
+    end
+  end
+
+  context 'with minimal options set along with just a folio_instance_hrid' do
+    let(:instance) do
+      described_class.new(label: 'This is my object',
+                          type: Cocina::Models::ObjectType.object,
+                          apo: 'druid:bc123df4567',
+                          folio_instance_hrid: 'a11991',
+                          source_id: 'googlebooks:12345')
+    end
+
+    describe 'as_json' do
+      subject { instance.as_json }
+
+      let(:expected) do
+        {
+          type: Cocina::Models::ObjectType.object,
+          label: 'This is my object',
+          access: {
+            view: 'dark',
+            download: 'none'
+          },
+          administrative: { hasAdminPolicy: 'druid:bc123df4567' },
+          identification: { sourceId: 'googlebooks:12345',
+                            catalogLinks: [{ catalog: 'folio', catalogRecordId: 'a11991', refresh: true }] },
           structural: {},
           version: 1
         }
