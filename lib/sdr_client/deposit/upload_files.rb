@@ -28,9 +28,12 @@ module SdrClient
       end
 
       # @return [Array<Files::DirectUploadResponse>] the responses from the server for the uploads
-      def run
+      def run # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         file_metadata.map do |filepath, metadata|
+          log_message("metadata.to_json=#{metadata.to_json}", 'SdrClient::Deposit::UploadFiles#run file_metadata.map')
           direct_upload(metadata.to_json).tap do |response|
+            log_message("response=#{response}", 'SdrClient::Deposit::UploadFiles#run direct_upload')
+            log_message("response.content_type=#{response.content_type}", 'SdrClient::Deposit::UploadFiles#run direct_upload') # rubocop:disable Layout/LineLength
             # ActiveStorage modifies the filename provided in response, so setting here with the relative filename
             response.filename = filepath
             upload_file(filename: filepath,
@@ -45,6 +48,16 @@ module SdrClient
       private
 
       attr_reader :logger, :connection, :file_metadata, :filepath_map
+
+      def log_message(message, progname = nil, severity = Logger::Severity::INFO)
+        logger = if defined?(::Rails) == 'constant'
+                   ::Rails.logger
+                 else
+                   Logger.new($stdout)
+                 end
+
+        logger.log(severity, message, progname)
+      end
 
       def direct_upload(metadata_json)
         logger.info("Starting an upload request: #{metadata_json}")
