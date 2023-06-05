@@ -35,7 +35,7 @@ module SdrClient
             response.filename = filepath
             upload_file(filename: filepath,
                         url: response.direct_upload.fetch('url'),
-                        content_type: response.content_type,
+                        content_type: 'application/octet-stream',
                         content_length: response.byte_size)
             logger.info("Upload of #{filepath} complete")
           end
