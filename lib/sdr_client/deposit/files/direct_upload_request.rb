@@ -25,14 +25,14 @@ module SdrClient
           JSON.generate(as_json)
         end
 
+        # Invalid JSON files with a content type of application/json will trigger 400 errors in sdr-api
+        # since they are parsed and rejected (not clear why and what part of the stack is doing this).
+        # The work around is to change the content_type for any JSON files to something different and
+        # specific to avoid the parsing, and thaen have this changed back to application/json after .
+        # upload is complete. There is a similar change in sdr-api to change the content_type back.
+        # See https://github.com/sul-dlss/happy-heron/issues/3075 for the original bug report
+        # See https://github.com/sul-dlss/sdr-api/pull/585 for the change in sdr-api
         def self.clean_content_type(content_type)
-          # Invalid JSON files with a content type of application/json will trigger 400 errors in sdr-api
-          # since they are parsed and rejected (not clear why and what part of the stack is doing this).
-          # The work around is to change the content_type for any JSON files to something different and
-          # specific to avoid the parsing, and thaen have this changed back to application/json after .
-          # upload is complete. There is a similar change in sdr-api to change the content_type back.
-          # See https://github.com/sul-dlss/happy-heron/issues/3075 for the original bug report
-          # See https://github.com/sul-dlss/sdr-api/pull/585 for the change in sdr-api
           return 'application/octet-stream' if content_type.blank?
 
           return 'application/x-stanford-json' if content_type == 'application/json'
