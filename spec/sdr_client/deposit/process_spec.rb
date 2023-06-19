@@ -42,8 +42,8 @@ RSpec.describe SdrClient::Deposit::Process do
 
     context 'when files exist' do
       let(:files) { ['file1.txt', 'dir1/file2.txt'] }
-      let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' }
-      let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' }
+      let(:upload_url1) { 'http://localhost:3000/v1/disk/GpscGFUTmxO' } # rubocop:disable RSpec/IndexedLet
+      let(:upload_url2) { 'http://localhost:3000/v1/disk/npoa1pIVjZP' } # rubocop:disable RSpec/IndexedLet
 
       let(:access) do
         {
