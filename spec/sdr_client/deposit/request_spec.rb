@@ -25,13 +25,13 @@ RSpec.describe SdrClient::Deposit::Request do
 
     let(:file_sets) do
       [
-        SdrClient::Deposit::FileSet.new(uploads: [upload1], label: 'Object 1',
+        SdrClient::Deposit::FileSet.new(uploads: [file1_upload_response], label: 'Object 1',
                                         uploads_metadata: { 'file1.png' => { view: 'world', download: 'world' } }),
-        SdrClient::Deposit::FileSet.new(uploads: [upload2], label: 'Object 2')
+        SdrClient::Deposit::FileSet.new(uploads: [file2_upload_response], label: 'Object 2')
       ]
     end
 
-    let(:upload1) do
+    let(:file1_upload_response) do
       SdrClient::Deposit::Files::DirectUploadResponse.new(
         checksum: '',
         byte_size: '',
@@ -41,7 +41,7 @@ RSpec.describe SdrClient::Deposit::Request do
       )
     end
 
-    let(:upload2) do
+    let(:file2_upload_response) do
       SdrClient::Deposit::Files::DirectUploadResponse.new(
         checksum: '',
         byte_size: '',
