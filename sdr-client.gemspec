@@ -34,14 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '>= 0.16'
   spec.add_dependency 'launchy'
 
-  spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'rubocop', '~> 1.24'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.1'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'thor'
-  spec.add_development_dependency 'webmock', '~> 3.7'
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
