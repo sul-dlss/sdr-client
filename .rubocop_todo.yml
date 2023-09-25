@@ -56,7 +56,7 @@ Metrics/MethodLength:
 RSpec/ExampleLength:
   Exclude:
     - 'spec/sdr_client/deposit_spec.rb'
-    - 'spec/sdr_client/model_deposit_spec.rb'
+    - 'spec/sdr_client/deposit_model_spec.rb'
     - 'spec/sdr_client/update_spec.rb'
 
 # Offense count: 1
@@ -75,7 +75,7 @@ RSpec/MultipleExpectations:
     - 'spec/sdr_client/deposit_spec.rb'
     - 'spec/sdr_client/find_spec.rb'
     - 'spec/sdr_client/login_spec.rb'
-    - 'spec/sdr_client/model_deposit_spec.rb'
+    - 'spec/sdr_client/deposit_model_spec.rb'
 
 # Offense count: 24
 # Configuration parameters: EnforcedStyle, IgnoreSharedExamples.
