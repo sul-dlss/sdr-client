@@ -173,7 +173,7 @@ module SdrClient
 
     def munge_options(options, files)
       options.to_h.symbolize_keys.tap do |opts|
-        opts[:files] = files if files.present?
+        opts[:files] = expand_files(files) if files.present?
         opts[:type] = Cocina::Models::ObjectType.public_send(options[:type]) if options[:type]
         opts[:files_metadata] = JSON.parse(options[:files_metadata]) if options[:files_metadata]
         if options[:grouping_strategy]
@@ -184,6 +184,16 @@ module SdrClient
                                      end
         end
       end
+    end
+
+    def expand_files(files)
+      files.map do |file|
+        if Dir.exist?(file)
+          Dir.glob("#{file}/**/*").select { |f| File.file?(f) }
+        else
+          file
+        end
+      end.flatten
     end
 
     def validate_druid!(druid)
