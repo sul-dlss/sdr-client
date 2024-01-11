@@ -3,7 +3,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1210855d46d4f424bf30/test_coverage)](https://codeclimate.com/github/sul-dlss/sdr-client/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/sdr-client.svg)](https://badge.fury.io/rb/sdr-client)
 
-# Sdr::Client
+# SdrClient
 
 This is a Ruby-based CLI for interacting with the Stanford Digital Repository API. The code for the SDR API server is at https://github.com/sul-dlss/sdr-api
 
