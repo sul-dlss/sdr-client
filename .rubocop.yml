@@ -22,6 +22,9 @@ Metrics/ClassLength:
     - 'lib/sdr_client/cli.rb'
     - 'lib/sdr_client/deposit/request.rb'
     - 'lib/sdr_client/update.rb'
+    - 'lib/sdr_client/redesigned_client.rb'
+    - 'lib/sdr_client/redesigned_client/cli.rb'
+    - 'lib/sdr_client/redesigned_client/cli/update.rb'
 
 Naming/FileName:
   Exclude:
