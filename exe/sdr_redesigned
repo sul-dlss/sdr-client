@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift 'lib'
+
+require 'sdr_client'
+require 'sdr_client/redesigned_client'
+require 'sdr_client/redesigned_client/cli'
+
+SdrClient::RedesignedClient::CLI.start(ARGV)
