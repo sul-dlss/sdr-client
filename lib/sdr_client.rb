@@ -1,21 +1,24 @@
 # frozen_string_literal: true
 
+require 'zeitwerk'
+# Zeitwerk doesn't auto-load these dependencies
 require 'dry/monads'
 require 'faraday'
 require 'active_support'
 require 'active_support/core_ext'
 require 'cocina/models'
 
-require 'sdr_client/version'
-require 'sdr_client/unexpected_response'
-require 'sdr_client/deposit'
-require 'sdr_client/update'
-require 'sdr_client/credentials'
-require 'sdr_client/find'
-require 'sdr_client/login'
-require 'sdr_client/login_prompt'
-require 'sdr_client/connection'
-require 'sdr_client/background_job_results'
+loader = Zeitwerk::Loader.for_gem
+loader.ignore(
+  "#{__dir__}/sdr-client.rb",
+  "#{__dir__}/sdr_client/cli.rb",
+  "#{__dir__}/sdr_client/cli/config.rb"
+)
+loader.inflector.inflect(
+  'md5' => 'MD5',
+  'sha1' => 'SHA1'
+)
+loader.setup
 
 module SdrClient
   class Error < StandardError; end
