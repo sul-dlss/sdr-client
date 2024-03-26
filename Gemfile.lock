@@ -8,6 +8,7 @@ PATH
       dry-monads
       faraday (>= 0.16)
       launchy
+      zeitwerk
 
 GEM
   remote: https://rubygems.org/
