@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'shellwords'
-
 module SdrClient
   module Deposit
     module FileMetadataBuilderOperations

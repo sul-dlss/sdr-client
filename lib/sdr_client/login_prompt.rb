@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'io/console'
-
 module SdrClient
   # The namespace for the "login" command
   module LoginPrompt

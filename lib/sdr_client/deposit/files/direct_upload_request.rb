@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'digest'
-
 module SdrClient
   module Deposit
     module Files

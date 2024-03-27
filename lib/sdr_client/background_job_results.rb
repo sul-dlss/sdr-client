@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
-
 module SdrClient
   # API calls around background job results from dor-services-app
   module BackgroundJobResults
