@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'sdr_client/deposit/file_metadata_builder_operations/mime_type'
-require 'sdr_client/deposit/file_metadata_builder_operations/md5'
-require 'sdr_client/deposit/file_metadata_builder_operations/sha1'
-
 module SdrClient
   module Deposit
     # Build basic metadata for files, iterating over a series of operations

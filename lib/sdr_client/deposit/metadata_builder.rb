@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logger'
-
 module SdrClient
   module Deposit
     # Constructs the deposit metadata for the DRO

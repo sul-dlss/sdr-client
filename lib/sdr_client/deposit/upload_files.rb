@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logger'
-
 module SdrClient
   module Deposit
     # The file uploading part of a deposit

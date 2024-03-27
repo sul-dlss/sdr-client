@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logger'
-
 module SdrClient
   # The namespace for the "get" command
   module Find

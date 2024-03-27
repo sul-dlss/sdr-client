@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logger'
-
 module SdrClient
   # The namespace for the "deposit" command
   module Deposit
@@ -88,22 +86,3 @@ module SdrClient
     # rubocop:enable Metrics/ParameterLists
   end
 end
-require 'json'
-require 'sdr_client/deposit/create_resource'
-require 'sdr_client/deposit/single_file_grouping_strategy'
-require 'sdr_client/deposit/matching_file_grouping_strategy'
-require 'sdr_client/deposit/file_type_file_set_strategy'
-require 'sdr_client/deposit/image_file_set_strategy'
-require 'sdr_client/deposit/files/direct_upload_request'
-require 'sdr_client/deposit/files/direct_upload_response'
-require 'sdr_client/deposit/file'
-require 'sdr_client/deposit/file_metadata_builder'
-require 'sdr_client/deposit/file_set'
-require 'sdr_client/deposit/request'
-require 'sdr_client/deposit/metadata_builder'
-require 'sdr_client/deposit/model_process'
-require 'sdr_client/deposit/process'
-require 'sdr_client/deposit/update_resource'
-require 'sdr_client/deposit/update_dro_with_file_identifiers'
-require 'sdr_client/deposit/upload_files'
-require 'sdr_client/deposit/upload_files_metadata_builder'

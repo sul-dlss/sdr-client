@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logger'
-
 module SdrClient
   module Deposit
     # The process for doing a deposit from a Cocina Model

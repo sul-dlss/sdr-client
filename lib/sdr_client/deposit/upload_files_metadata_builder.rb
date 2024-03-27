@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logger'
-
 module SdrClient
   module Deposit
     # Collecting all the metadata about the files for a deposit
