@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'byebug'
-require 'webmock/rspec'
+# It is advised to load simplecov before everything else
 require 'simplecov'
 
 SimpleCov.start do
   add_filter '/spec/'
   add_filter 'lib/sdr_client/cli.rb'
+  add_filter 'lib/sdr_client/cli/'
 end
 
-require 'cocina/models'
-require 'cocina/rspec'
+require 'bundler/setup'
 require 'sdr_client'
+require 'cocina/rspec'
+require 'byebug'
+require 'webmock/rspec'
 
 Dir[File.expand_path(File.join(File.dirname(__FILE__), 'support', '**', '*.rb'))].each { |f| require f }
 

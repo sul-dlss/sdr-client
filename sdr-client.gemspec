@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'dry-monads'
   spec.add_dependency 'faraday', '>= 0.16'
   spec.add_dependency 'launchy'
+  spec.add_dependency 'zeitwerk'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
