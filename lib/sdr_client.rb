@@ -12,9 +12,9 @@ loader = Zeitwerk::Loader.for_gem
 loader.ignore(
   "#{__dir__}/sdr-client.rb",
   "#{__dir__}/sdr_client/cli.rb",
-  "#{__dir__}/sdr_client/cli/config.rb",
+  "#{__dir__}/sdr_client/cli",
   "#{__dir__}/sdr_client/redesigned_client/cli.rb",
-  "#{__dir__}/sdr_client/redesigned_client/cli/config.rb"
+  "#{__dir__}/sdr_client/redesigned_client/cli"
 )
 loader.inflector.inflect(
   'md5' => 'MD5',
