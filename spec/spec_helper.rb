@@ -7,6 +7,8 @@ SimpleCov.start do
   add_filter '/spec/'
   add_filter 'lib/sdr_client/cli.rb'
   add_filter 'lib/sdr_client/cli/'
+  add_filter 'lib/sdr_client/redesigned_client/cli.rb'
+  add_filter 'lib/sdr_client/redesigned_client/cli/'
 end
 
 require 'bundler/setup'
