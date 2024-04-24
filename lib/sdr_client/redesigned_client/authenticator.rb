@@ -10,7 +10,7 @@ module SdrClient
 
       # Request an access_token
       def token
-        response = connection.post(path, request_body)
+        response = connection.post(path, request_body, content_type: 'application/json')
 
         UnexpectedResponse.call(response) unless response.success?
 
