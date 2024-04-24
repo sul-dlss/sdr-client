@@ -64,17 +64,26 @@ module SdrClient
         validate_druid!(druid)
         # Make sure client is configured
         client
-        job_id = CLI::Update.run(druid, **options)
+        job_id = Update.run(druid, **options)
         if options[:skip_polling]
           say "job ID #{job_id} queued (not polling because `-s` flag was supplied)"
           return
         end
 
+        # the extra args to `say` prevent appending a newline
+        say('SDR is processing your request.', nil, false)
+
         job_status = client.job_status(job_id: job_id)
-        if job_status.wait_until_complete
-          say "success! (druid: #{job_status.druid})"
+        job_status.wait_until_complete { say('.', nil, false) }
+
+        if job_status.complete?
+          if job_status.errors
+            say_error " errored! #{job_status.errors}"
+          else
+            say " success! (druid: #{job_status.druid})"
+          end
         else
-          say_error "errored! #{job_status.errors}"
+          say_error " job #{job_id} did not complete\n#{job_status.result.inspect}"
         end
       end
 
@@ -143,7 +152,7 @@ module SdrClient
         sleep 0.5
         token_string = ask('Paste token here:')
         expiry = JSON.parse(token_string)['exp']
-        CLI::Credentials.write(token_string)
+        Credentials.write(token_string)
         say "You are now authenticated for #{options[:url]} until #{expiry}"
         token_string
       end
