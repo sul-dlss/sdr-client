@@ -46,7 +46,7 @@ module SdrClient
         end
 
         def cocina_hash_from_file
-          @cocina_hash_from_file ||= JSON.parse(File.read(options[:cocina_file]), symbolize_names: true)
+          @cocina_hash_from_file ||= JSON.parse(::File.read(options[:cocina_file]), symbolize_names: true)
         end
 
         def cocina_hash_from_pipe
@@ -65,7 +65,7 @@ module SdrClient
         end
 
         def update_cocina_from_file(cocina_object)
-          if !File.file?(options[:cocina_file]) || !File.readable?(options[:cocina_file])
+          if !::File.file?(options[:cocina_file]) || !::File.readable?(options[:cocina_file])
             raise "File not found: #{options[:cocina_file]}"
           end
 

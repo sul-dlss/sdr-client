@@ -35,6 +35,7 @@ module SdrClient
           model: request_builder.to_cocina,
           basepath: basepath,
           files: files,
+          accession: accession,
           request_builder: request_builder,
           **options
         )
