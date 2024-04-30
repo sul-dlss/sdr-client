@@ -14,6 +14,7 @@ module SdrClient
       # @param [Array<String>] files a list of relative filepaths to upload
       # @param [Hash] options optional parameters
       # @option options [Boolean] assign_doi should a DOI be assigned to this item
+      # @option options [Hash<String,String>] filepath_map map of relative filepaths to absolute filepaths
       # @option options [String] priority what processing priority should be used ('low', 'default')
       # @option options [String] user_versions action (none, new, update) to take for user version when closing version
       # @option options [String] grouping_strategy what strategy will be used to group files
@@ -31,7 +32,8 @@ module SdrClient
         check_files_exist!
         child_files_match! unless options[:request_builder]
 
-        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types, basepath: basepath)
+        file_metadata = UploadFilesMetadataBuilder.build(files: files, mime_types: mime_types,
+                                                         basepath: basepath, filepath_map: filepath_map)
         upload_responses = UploadFiles.upload(file_metadata: file_metadata,
                                               filepath_map: filepath_map)
         if options[:request_builder]
@@ -60,16 +62,22 @@ module SdrClient
       def check_files_exist!
         SdrClient::RedesignedClient.config.logger.info('checking to see if files exist')
         files.each do |filepath|
-          raise Errno::ENOENT, filepath unless ::File.exist?(absolute_filepath_for(filepath))
+          absolute_filepath = absolute_filepath_for(filepath)
+          next if ::File.exist?(absolute_filepath)
+
+          # raise Errno::ENOENT, absolute_filepath
+          raise "Filepath not found: #{filepath} (absolute path: #{absolute_filepath}) (filemath map: #{filepath_map})"
         end
       end
 
-      def child_files_match!
+      def child_files_match! # rubocop:disable Metrics/AbcSize
         # Files without request files.
         files.each do |filepath|
           raise "Request file not provided for #{filepath}" if request_files[filepath].nil?
         end
 
+        SdrClient::RedesignedClient.config.logger.info("request files: #{request_files.keys}")
+        SdrClient::RedesignedClient.config.logger.info("files: #{files}")
         # Request files without files
         request_files.each_key do |request_filename|
           raise "File not provided for request file #{request_filename}" unless files.include?(request_filename)
@@ -92,7 +100,7 @@ module SdrClient
       # Map of absolute filepaths to Cocina::Models::RequestFiles
       def request_files
         @request_files ||=
-          if model.structural
+          if model.respond_to?(:structural) && model.structural
             model.structural.contains.map do |file_set|
               file_set.structural.contains.map do |file|
                 [file.filename, file]
@@ -104,12 +112,12 @@ module SdrClient
       end
 
       def absolute_filepath_for(filename)
-        ::File.join(basepath, filename)
+        filepath_map.fetch(filename)
       end
 
       def filepath_map
-        @filepath_map ||= files.each_with_object({}) do |filepath, obj|
-          obj[filepath] = absolute_filepath_for(filepath)
+        @filepath_map ||= options[:filepath_map] || files.each_with_object({}) do |filepath, obj|
+          obj[filepath] = ::File.join(basepath, filename)
         end
       end
     end
