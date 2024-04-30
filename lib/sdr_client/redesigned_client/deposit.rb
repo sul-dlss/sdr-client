@@ -71,6 +71,8 @@ module SdrClient
           raise "Request file not provided for #{filepath}" if request_files[filepath].nil?
         end
 
+        SdrClient::RedesignedClient.config.logger.info("request files: #{request_files.keys}")
+        SdrClient::RedesignedClient.config.logger.info("files: #{files}")
         # Request files without files
         request_files.each_key do |request_filename|
           raise "File not provided for request file #{request_filename}" unless files.include?(request_filename)
