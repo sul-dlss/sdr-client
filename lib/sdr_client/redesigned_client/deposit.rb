@@ -14,6 +14,7 @@ module SdrClient
       # @param [Array<String>] files a list of relative filepaths to upload
       # @param [Hash] options optional parameters
       # @option options [Boolean] assign_doi should a DOI be assigned to this item
+      # @option options [Hash<String,String>] filepath_map map of relative filepaths to absolute filepaths
       # @option options [String] priority what processing priority should be used ('low', 'default')
       # @option options [String] user_versions action (none, new, update) to take for user version when closing version
       # @option options [String] grouping_strategy what strategy will be used to group files
@@ -64,7 +65,7 @@ module SdrClient
         end
       end
 
-      def child_files_match!
+      def child_files_match! # rubocop:disable Metrics/AbcSize
         # Files without request files.
         files.each do |filepath|
           raise "Request file not provided for #{filepath}" if request_files[filepath].nil?
@@ -92,7 +93,7 @@ module SdrClient
       # Map of absolute filepaths to Cocina::Models::RequestFiles
       def request_files
         @request_files ||=
-          if model.structural
+          if model.respond_to?(:structural) && model.structural
             model.structural.contains.map do |file_set|
               file_set.structural.contains.map do |file|
                 [file.filename, file]
@@ -108,7 +109,7 @@ module SdrClient
       end
 
       def filepath_map
-        @filepath_map ||= files.each_with_object({}) do |filepath, obj|
+        @filepath_map ||= options[:filepath_map] || files.each_with_object({}) do |filepath, obj|
           obj[filepath] = absolute_filepath_for(filepath)
         end
       end
