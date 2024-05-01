@@ -10,6 +10,7 @@ module SdrClient
       # @option options [String] label the required object label
       # @option options [String] view the access level for viewing the object
       # @option options [String] download the access level for downloading the object
+      # @option options [String] location the location for location-based access
       # @option options [String] type (https://cocina.sul.stanford.edu/models/object) the required object type.
       # @option options [String] use_and_reproduction the use and reproduction statement
       # @option options [String] copyright the copyright statement
@@ -93,13 +94,14 @@ module SdrClient
         end
       end
 
-      def access_struct # rubocop:disable Metrics/MethodLength
+      def access_struct # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         {
           view: view,
           download: download
         }.tap do |json|
           json[:useAndReproductionStatement] = use_and_reproduction if use_and_reproduction
           json[:copyright] = copyright if copyright
+          json[:location] = location if location
 
           if embargo_release_date
             json[:embargo] = {
@@ -117,6 +119,10 @@ module SdrClient
 
       def download
         options.fetch(:download, 'none')
+      end
+
+      def location
+        options[:location]
       end
 
       def label
