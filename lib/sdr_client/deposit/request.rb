@@ -15,6 +15,7 @@ module SdrClient
       def initialize(label: nil,
                      view: 'dark',
                      download: 'none',
+                     location: nil,
                      use_and_reproduction: nil,
                      copyright: nil,
                      apo:,
@@ -40,6 +41,7 @@ module SdrClient
         @embargo_download = embargo_download
         @view = view
         @download = download
+        @location = location
         @use_and_reproduction = use_and_reproduction
         @copyright = copyright
         @apo = apo
@@ -66,6 +68,7 @@ module SdrClient
         Request.new(label: label,
                     view: view,
                     download: download,
+                    location: location,
                     apo: apo,
                     collection: collection,
                     copyright: copyright,
@@ -88,6 +91,7 @@ module SdrClient
         metadata = files_metadata.fetch(filename, {}).with_indifferent_access
         metadata[:view] = view unless metadata.key?(:view)
         metadata[:download] = download unless metadata.key?(:download)
+        metadata[:location] = location unless metadata.key?(:location)
         metadata
       end
 
@@ -97,7 +101,7 @@ module SdrClient
 
       attr_reader :view, :label, :file_sets, :source_id, :catkey, :folio_instance_hrid, :apo, :collection,
                   :files_metadata, :embargo_release_date, :embargo_access, :embargo_download,
-                  :viewing_direction, :use_and_reproduction, :copyright, :download
+                  :viewing_direction, :use_and_reproduction, :copyright, :download, :location
 
       def administrative
         {
@@ -132,6 +136,7 @@ module SdrClient
         }.tap do |json|
           json[:useAndReproductionStatement] = use_and_reproduction if use_and_reproduction
           json[:copyright] = copyright if copyright
+          json[:location] = location if location
 
           if embargo_release_date
             json[:embargo] = {

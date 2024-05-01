@@ -34,7 +34,8 @@ RSpec.describe SdrClient::Deposit do
         sha1: 'bc59eae52d98e84f83f65fdea3d7857b9ec5c46c',
         use: 'transcription',
         view: 'dark',
-        download: 'none'
+        download: 'none',
+        location: nil
       ).and_call_original
       described_class.run(apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
@@ -192,6 +193,7 @@ RSpec.describe SdrClient::Deposit do
             embargo_release_date: nil,
             files_metadata: {},
             label: nil,
+            location: nil,
             source_id: 'googlebooks:12345',
             type: Cocina::Models::ObjectType.book,
             use_and_reproduction: nil,
@@ -219,6 +221,48 @@ RSpec.describe SdrClient::Deposit do
           .with(
             view: 'dark',
             download: 'none',
+            apo: 'druid:bc123df4567',
+            catkey: nil,
+            folio_instance_hrid: nil,
+            collection: 'druid:gh123df4567',
+            copyright: 'All rights reserved unless otherwise indicated.',
+            embargo_access: 'world',
+            embargo_download: 'world',
+            embargo_release_date: nil,
+            files_metadata: {},
+            label: nil,
+            location: nil,
+            source_id: 'googlebooks:12345',
+            type: Cocina::Models::ObjectType.book,
+            use_and_reproduction: 'Property rights reside with the repository...',
+            viewing_direction: nil
+          )
+
+        expect(process).to have_received(:run)
+      end
+    end
+
+    context 'with location based access' do
+      subject(:run) do
+        described_class.run(apo: 'druid:bc123df4567',
+                            collection: 'druid:gh123df4567',
+                            copyright: 'All rights reserved unless otherwise indicated.',
+                            use_and_reproduction: 'Property rights reside with the repository...',
+                            source_id: 'googlebooks:12345',
+                            url: 'http://example.com/',
+                            view: 'location-based',
+                            download: 'location-based',
+                            location: 'spec',
+                            grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
+      end
+
+      it 'runs the process with the specified grouping_strategy' do
+        run
+        expect(SdrClient::Deposit::Request).to have_received(:new)
+          .with(
+            view: 'location-based',
+            download: 'location-based',
+            location: 'spec',
             apo: 'druid:bc123df4567',
             catkey: nil,
             folio_instance_hrid: nil,

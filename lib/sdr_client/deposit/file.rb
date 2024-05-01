@@ -6,7 +6,7 @@ module SdrClient
     class File
       # rubocop:disable Metrics/ParameterLists
       def initialize(external_identifier:, label:, filename:,
-                     view: 'dark', download: 'none', preserve: true, shelve: true,
+                     view: 'dark', download: 'none', location: nil, preserve: true, shelve: true,
                      publish: true, mime_type: nil, md5: nil, sha1: nil,
                      use: nil)
         @external_identifier = external_identifier
@@ -14,6 +14,7 @@ module SdrClient
         @filename = filename
         @view = view
         @download = download
+        @location = location
         @preserve = preserve
         @shelve = view == 'dark' ? false : shelve
         @publish = publish
@@ -44,6 +45,7 @@ module SdrClient
         }.tap do |json|
           json['hasMimeType'] = @mime_type if @mime_type
           json['use'] = @use if @use
+          json[:access][:location] = @location if @location
         end
       end
 
