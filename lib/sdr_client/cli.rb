@@ -105,6 +105,8 @@ module SdrClient
     option :use_and_reproduction, desc: 'Use and reproduction statement'
     option :viewing_direction, enum: %w[left-to-right right-to-left], desc: 'Viewing direction (if a book)'
     option :view, enum: %w[world stanford location-based citation-only dark], desc: 'Access view level for the object'
+    option :download, enum: %w[world stanford location-based none], desc: 'Access download level for the object'
+    option :location, enum: %w[spec music ars art hoover m&m], desc: 'Access location for the object'
     option :files_metadata, desc: 'JSON string representing per-file metadata'
     option :grouping_strategy, enum: %w[default filename], desc: 'Strategy for grouping files into filesets'
     option :basepath, default: Dir.getwd, desc: 'Base path for the files'
