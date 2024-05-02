@@ -23,6 +23,11 @@ RSpec.describe SdrClient::RedesignedClient::Deposit do
   describe '.deposit_model' do
     let(:attributes) do
       {
+        access: {
+          view: 'location-based',
+          download: 'location-based',
+          location: 'spec'
+        },
         structural: {
           contains: [
             {
@@ -35,7 +40,7 @@ RSpec.describe SdrClient::RedesignedClient::Deposit do
                     type: Cocina::Models::ObjectType.file,
                     label: file_name,
                     filename: file_name,
-                    access: { 'view' => 'dark', 'download' => 'none' },
+                    access: { 'view' => 'location-based', 'download' => 'location-based', 'location' => 'spec' },
                     administrative: { 'publish' => false, 'sdrPreserve' => false, 'shelve' => false },
                     version: 1,
                     hasMessageDigests: []

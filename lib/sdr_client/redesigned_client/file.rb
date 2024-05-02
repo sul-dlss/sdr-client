@@ -10,6 +10,7 @@ module SdrClient
       # @param [Hash] options optional parameters
       # @option options [String] view the access level for viewing the object
       # @option options [String] download the access level for downloading the object
+      # @option options [String] location the location for location-based access
       # @option options [Boolean] preserve whether to preserve the file or not
       # @option options [Boolean] shelve whether to shelve the file or not
       # @option options [Boolean] publish whether to publish the file or not
@@ -44,6 +45,7 @@ module SdrClient
         }.tap do |json|
           json['hasMimeType'] = mime_type if mime_type
           json['use'] = use if use
+          json[:access]['location'] if location
         end
       end
 
@@ -64,6 +66,10 @@ module SdrClient
 
       def download
         options.fetch(:download, 'none')
+      end
+
+      def location
+        options[:location]
       end
 
       def preserve
