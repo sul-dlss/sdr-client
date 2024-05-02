@@ -35,7 +35,7 @@ module SdrClient
           return 'application/octet-stream' if content_type.blank?
 
           # ActiveStorage is expecting "application/x-stata-dta" not "application/x-stata-dta;version=14"
-          content_type = content_type.split(';')&.first
+          content_type = content_type.split(';').first
 
           content_type == 'application/json' ? 'application/x-stanford-json' : content_type
         end
