@@ -30,6 +30,9 @@ Naming/FileName:
   Exclude:
     - 'lib/sdr-client.rb'
 
+RSpec/MultipleExpectations:
+  Enabled: false
+
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
 

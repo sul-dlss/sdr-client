@@ -58,5 +58,12 @@ RSpec.describe SdrClient::RedesignedClient::UpdateResource do
 
       it { is_expected.to eq 9 }
     end
+
+    context 'with a user_versions' do
+      let(:optional_params) { { user_versions: 'none' } }
+      let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654?user_versions=none' }
+
+      it { is_expected.to eq 9 }
+    end
   end
 end

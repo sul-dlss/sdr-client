@@ -5,8 +5,8 @@ module SdrClient
     # Creates a resource (metadata) in SDR
     class CreateResource
       DRO_PATH = '/v1/resources'
-      def self.run(**args)
-        new(**args).run
+      def self.run(...)
+        new(...).run
       end
 
       # @param [Boolean] accession should the accessionWF be started
@@ -15,14 +15,16 @@ module SdrClient
       # @param [Hash<Symbol,String>] the result of the metadata call
       # @param [String] priority what processing priority should be used
       #                          either 'low' or 'default'
+      # @param [String] user_versions action (none, new, update) to take for user version when closing version
       # rubocop:disable Metrics/ParameterLists
-      def initialize(accession:, metadata:, logger:, connection:, assign_doi: false, priority: nil)
+      def initialize(accession:, metadata:, logger:, connection:, assign_doi: false, priority: nil, user_versions: nil)
         @accession = accession
         @priority = priority
         @assign_doi = assign_doi
         @metadata = metadata
         @logger = logger
         @connection = connection
+        @user_versions = user_versions
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -39,7 +41,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :logger, :connection, :priority
+      attr_reader :metadata, :logger, :connection, :priority, :user_versions
 
       def metadata_request
         json = metadata.to_json
@@ -62,6 +64,7 @@ module SdrClient
         params = { accession: accession? }
         params[:priority] = priority if priority
         params[:assign_doi] = true if assign_doi? # false is default
+        params[:user_versions] = user_versions if user_versions.present?
         DRO_PATH + '?' + params.map { |k, v| "#{k}=#{v}" }.join('&')
       end
     end

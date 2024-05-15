@@ -6,18 +6,20 @@ module SdrClient
     class UpdateResource
       DRO_PATH = '/v1/resources/%<id>s'
 
-      def self.run(metadata:, logger:, connection:, version_description: nil)
-        new(metadata: metadata, logger: logger, connection: connection, version_description: version_description).run
+      def self.run(...)
+        new(...).run
       end
 
       # @param [Cocina::Models::DRO] metadata
       # @param [Hash<Symbol,String>] the result of the metadata call
       # @param [String] version_description
-      def initialize(metadata:, logger:, connection:, version_description: nil)
+      # @param [String] user_versions action (none, new, update) to take for user version when closing version
+      def initialize(metadata:, logger:, connection:, version_description: nil, user_versions: nil)
         @metadata = metadata
         @logger = logger
         @connection = connection
         @version_description = version_description
+        @user_versions = user_versions
       end
 
       # @param [Hash<Symbol,String>] the result of the metadata call
@@ -33,8 +35,9 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :logger, :connection, :version_description
+      attr_reader :metadata, :logger, :connection, :version_description, :user_versions
 
+      # rubocop:disable Metrics/AbcSize
       def metadata_request
         json = metadata.to_json
         logger.debug("Starting update metadata: #{json}")
@@ -43,8 +46,10 @@ module SdrClient
                        'Content-Type' => 'application/json',
                        'X-Cocina-Models-Version' => Cocina::Models::VERSION) do |req|
                          req.params['versionDescription'] = version_description if version_description
+                         req.params['user_versions'] = user_versions if user_versions.present?
                        end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def path(metadata)
         format(DRO_PATH, id: metadata.externalIdentifier)

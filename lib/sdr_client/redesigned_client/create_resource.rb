@@ -14,11 +14,13 @@ module SdrClient
       # @param [Hash<Symbol,String>] the result of the metadata call
       # @param [String] priority what processing priority should be used
       #                          either 'low' or 'default'
-      def initialize(accession:, metadata:, assign_doi: false, priority: nil)
+      # @param [String] user_versions action (none, new, update) to take for user version when closing version
+      def initialize(accession:, metadata:, assign_doi: false, priority: nil, user_versions: nil)
         @accession = accession
         @priority = priority
         @assign_doi = assign_doi
         @metadata = metadata
+        @user_versions = user_versions
       end
 
       # @param [Hash<Symbol,String>] the result of the metadata call
@@ -41,7 +43,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :priority
+      attr_reader :metadata, :priority, :user_versions
 
       def logger
         SdrClient::RedesignedClient.config.logger
@@ -63,6 +65,7 @@ module SdrClient
         params = { accession: accession? }
         params[:priority] = priority if priority
         params[:assign_doi] = true if assign_doi? # false is default
+        params[:user_versions] = user_versions if user_versions.present?
         query_string = params.map { |k, v| "#{k}=#{v}" }.join('&')
         "/v1/resources?#{query_string}"
       end
