@@ -4,7 +4,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
   describe 'run' do
     subject(:request) do
       described_class.run(metadata: metadata, logger: logger, connection: connection,
-                          version_description: 'Updated metadata')
+                          version_description: 'Updated metadata', user_versions: 'new')
     end
 
     let(:dro_hash) do
@@ -32,7 +32,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
 
     context 'when it is successful' do
       before do
-        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata')
+        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&user_versions=new')
           .with(
             body: metadata.to_json
           )
@@ -44,7 +44,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
 
     context 'when there is an error' do
       before do
-        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata')
+        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&user_versions=new')
           .with(
             body: metadata.to_json
           )

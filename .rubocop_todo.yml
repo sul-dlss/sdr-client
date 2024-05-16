@@ -88,20 +88,6 @@ RSpec/MessageSpies:
   Exclude:
     - 'spec/sdr_client/deposit_spec.rb'
 
-# Offense count: 19
-# Configuration parameters: Max.
-RSpec/MultipleExpectations:
-  Exclude:
-    - 'spec/sdr_client/connection_spec.rb'
-    - 'spec/sdr_client/deposit/metadata_builder_spec.rb'
-    - 'spec/sdr_client/deposit_model_spec.rb'
-    - 'spec/sdr_client/deposit_spec.rb'
-    - 'spec/sdr_client/find_spec.rb'
-    - 'spec/sdr_client/login_spec.rb'
-    - 'spec/sdr_client/redesigned_client/deposit_spec.rb'
-    - 'spec/sdr_client/redesigned_client/job_status_spec.rb'
-    - 'spec/sdr_client/redesigned_client/upload_files_spec.rb'
-
 # Offense count: 24
 # Configuration parameters: EnforcedStyle, IgnoreSharedExamples.
 # SupportedStyles: always, named_only

@@ -20,7 +20,7 @@ RSpec.describe SdrClient::RedesignedClient::CreateResource do
   end
 
   describe '#run' do
-    subject(:creator) { described_class.new(accession: false, metadata: model) }
+    subject(:creator) { described_class.new(accession: false, metadata: model, user_versions: 'update') }
 
     let(:fake_connection) { instance_double(Faraday::Connection, post: fake_http_response) }
     let(:fake_http_response) do
@@ -43,7 +43,9 @@ RSpec.describe SdrClient::RedesignedClient::CreateResource do
 
     it 'posts the JSON to the API' do
       creator.run
-      expect(fake_connection).to have_received(:post).once
+      expect(fake_connection).to have_received(:post).once do |post|
+        expect(post).to eq('/v1/resources?accession=false&user_versions=update')
+      end
     end
 
     it 'logs the API response JSON' do
