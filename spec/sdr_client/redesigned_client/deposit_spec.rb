@@ -9,7 +9,7 @@ RSpec.describe SdrClient::RedesignedClient::Deposit do
   let(:file_name) { 'file1.txt' }
   let(:files) { [file_name] }
   let(:model) { build(:request_dro).new(**attributes) }
-  let(:options) { { priority: 'low', assign_doi: true } }
+  let(:options) { { priority: 'low', assign_doi: true, user_versions: 'none' } }
   let(:url) { 'https://sdr-api.example.edu' }
 
   before do
