@@ -22,6 +22,8 @@ RSpec.describe SdrClient::Update do
                   size: 11,
                   version: 1,
                   hasMimeType: 'text/plain',
+                  sdrGeneratedText: false,
+                  correctedForAccessibility: false,
                   hasMessageDigests: [
                     { type: 'sha1', digest: '5d39343e4bb48abd97f759828282f5ebbac56c5e' },
                     { type: 'md5', digest: '63b8812b0c05722a9d6c51cbd2bfb54b' }
