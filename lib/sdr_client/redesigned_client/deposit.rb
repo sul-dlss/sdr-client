@@ -15,6 +15,7 @@ module SdrClient
       # @param [Hash] options optional parameters
       # @option options [Boolean] assign_doi should a DOI be assigned to this item
       # @option options [String] priority what processing priority should be used ('low', 'default')
+      # @option options [String] user_versions action (none, new, update) to take for user version when closing version
       # @option options [String] grouping_strategy what strategy will be used to group files
       # @option options [String] file_set_strategy what strategy will be used to group file sets
       # @option options [RequestBuilder] request_builder a request builder instance
@@ -48,6 +49,7 @@ module SdrClient
         CreateResource.run(accession: accession,
                            priority: options[:priority],
                            assign_doi: options[:assign_doi],
+                           user_versions: options[:user_versions],
                            metadata: new_request_dro)
       end
 
