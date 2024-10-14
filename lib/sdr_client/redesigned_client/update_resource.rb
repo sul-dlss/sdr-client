@@ -13,10 +13,12 @@ module SdrClient
       # @param [Cocina::Models::DRO] model
       # @param [String] version_description
       # @param [String] user_versions action (none, new, update) to take for user version when closing version
-      def initialize(model:, version_description: nil, user_versions: nil)
+      # @param [Boolean] accession true if accessioning should be performed
+      def initialize(model:, version_description: nil, user_versions: nil, accession: true)
         @model = model
         @version_description = version_description
         @user_versions = user_versions
+        @accession = accession
       end
 
       # @return [String] job id for the background job result
@@ -39,7 +41,7 @@ module SdrClient
 
       private
 
-      attr_reader :model, :version_description, :user_versions
+      attr_reader :model, :version_description, :user_versions, :accession
 
       def client
         SdrClient::RedesignedClient.instance
@@ -56,7 +58,8 @@ module SdrClient
       def request_params
         {
           versionDescription: version_description,
-          user_versions: user_versions
+          user_versions: user_versions,
+          accession: accession ? true : nil
         }.compact
       end
     end
