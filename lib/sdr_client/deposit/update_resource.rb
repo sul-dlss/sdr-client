@@ -14,12 +14,14 @@ module SdrClient
       # @param [Hash<Symbol,String>] the result of the metadata call
       # @param [String] version_description
       # @param [String] user_versions action (none, new, update) to take for user version when closing version
-      def initialize(metadata:, logger:, connection:, version_description: nil, user_versions: nil)
+      # @param [Boolean] accession true if accessioning should be performed
+      def initialize(metadata:, logger:, connection:, version_description: nil, user_versions: nil, accession: true) # rubocop:disable Metrics/ParameterLists
         @metadata = metadata
         @logger = logger
         @connection = connection
         @version_description = version_description
         @user_versions = user_versions
+        @accession = accession
       end
 
       # @param [Hash<Symbol,String>] the result of the metadata call
@@ -35,7 +37,7 @@ module SdrClient
 
       private
 
-      attr_reader :metadata, :logger, :connection, :version_description, :user_versions
+      attr_reader :metadata, :logger, :connection, :version_description, :user_versions, :accession
 
       # rubocop:disable Metrics/AbcSize
       def metadata_request
@@ -47,6 +49,7 @@ module SdrClient
                        'X-Cocina-Models-Version' => Cocina::Models::VERSION) do |req|
                          req.params['versionDescription'] = version_description if version_description
                          req.params['user_versions'] = user_versions if user_versions.present?
+                         req.params['accession'] = true if accession
                        end
       end
       # rubocop:enable Metrics/AbcSize

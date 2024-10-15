@@ -32,7 +32,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
 
     context 'when it is successful' do
       before do
-        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&user_versions=new')
+        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&user_versions=new&accession=true')
           .with(
             body: metadata.to_json
           )
@@ -44,7 +44,7 @@ RSpec.describe SdrClient::Deposit::UpdateResource do
 
     context 'when there is an error' do
       before do
-        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&user_versions=new')
+        stub_request(:put, 'https://sdr-api-prod.stanford.edu/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&user_versions=new&accession=true')
           .with(
             body: metadata.to_json
           )

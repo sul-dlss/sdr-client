@@ -31,7 +31,7 @@ RSpec.describe SdrClient::RedesignedClient::UpdateResource do
     let(:response_body) { '{"jobId":9}' }
     let(:response_status) { 202 }
     let(:optional_params) { {} }
-    let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654' }
+    let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654?accession=true' }
 
     before do
       stub_request(:put, update_url)
@@ -54,14 +54,21 @@ RSpec.describe SdrClient::RedesignedClient::UpdateResource do
 
     context 'with a version description' do
       let(:optional_params) { { version_description: 'Updated metadata' } }
-      let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata' }
+      let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654?versionDescription=Updated%20metadata&accession=true' }
 
       it { is_expected.to eq 9 }
     end
 
     context 'with a user_versions' do
       let(:optional_params) { { user_versions: 'none' } }
-      let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654?user_versions=none' }
+      let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654?user_versions=none&accession=true' }
+
+      it { is_expected.to eq 9 }
+    end
+
+    context 'when not accessioning' do
+      let(:optional_params) { { accession: false } }
+      let(:update_url) { 'http://example.com/v1/resources/druid:gf123df7654' }
 
       it { is_expected.to eq 9 }
     end
