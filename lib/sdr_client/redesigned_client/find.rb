@@ -12,7 +12,7 @@ module SdrClient
 
       # @param [String] object_id an ID for an object
       def initialize(object_id:)
-        @object_id = object_id
+        @id = object_id
       end
 
       # @raise [Failed] if the find operation fails
@@ -24,7 +24,7 @@ module SdrClient
 
       private
 
-      attr_reader :object_id
+      attr_reader :id
 
       def logger
         SdrClient::RedesignedClient.config.logger
@@ -35,7 +35,7 @@ module SdrClient
       end
 
       def path
-        format('/v1/resources/%<object_id>s', object_id: object_id)
+        format('/v1/resources/%<id>s', id: id)
       end
     end
   end
