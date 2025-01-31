@@ -9,6 +9,12 @@ SimpleCov.start do
   add_filter 'lib/sdr_client/cli/'
   add_filter 'lib/sdr_client/redesigned_client/cli.rb'
   add_filter 'lib/sdr_client/redesigned_client/cli/'
+
+  if ENV['CI']
+    require 'simplecov_json_formatter'
+
+    formatter SimpleCov::Formatter::JSONFormatter
+  end
 end
 
 require 'bundler/setup'
