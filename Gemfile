@@ -14,7 +14,7 @@ group :development do
   gem 'rspec', '~> 3.0'
   gem 'rubocop', '~> 1.24'
   gem 'rubocop-rake'
-  gem 'rubocop-rspec', '~> 2.1'
+  gem 'rubocop-rspec'
   gem 'simplecov'
   gem 'thor'
   gem 'webmock', '~> 3.7'
