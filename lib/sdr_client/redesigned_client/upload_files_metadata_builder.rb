@@ -7,18 +7,21 @@ module SdrClient
       # @param [Array<String>] files a list of relative filepaths to upload
       # @param [Hash<String,String>] mime_types a map of filenames to mime types
       # @param [String] basepath path to which files are relative
+      # @param [Hash<String,String>] filepath_map map of relative filepaths to absolute filepaths
       # @return [Hash<String, DirectUploadRequest>] the metadata for uploading the files
-      def self.build(files:, mime_types:, basepath:)
-        new(files: files, mime_types: mime_types, basepath: basepath).build
+      def self.build(files:, mime_types:, basepath:, filepath_map: {})
+        new(files: files, mime_types: mime_types, basepath: basepath, filepath_map: filepath_map).build
       end
 
       # @param [Array<String>] files a list of absolute filepaths to upload
       # @param [Hash<String,String>] mime_types a map of filenames to mime types
       # @param [String] basepath path to which files are relative
-      def initialize(files:, mime_types:, basepath:)
+      # @param [Hash<String,String>] filepath_map map of relative filepaths to absolute filepaths
+      def initialize(files:, mime_types:, basepath:, filepath_map:)
         @files = files
         @mime_types = mime_types
         @basepath = basepath
+        @filepath_map = filepath_map
       end
 
       attr_reader :files, :mime_types, :basepath
@@ -33,7 +36,7 @@ module SdrClient
       end
 
       def absolute_filepath_for(filepath)
-        ::File.join(basepath, filepath)
+        filepath_map.fetch(filepath) { ::File.join(basepath, filepath) }
       end
     end
   end
