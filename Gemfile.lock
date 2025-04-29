@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sdr-client (2.20.1)
+    sdr-client (2.21.0)
       activesupport
       cocina-models (~> 0.101.1)
       config
