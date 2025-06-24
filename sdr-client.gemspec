@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activesupport'
-  spec.add_dependency 'cocina-models', '~> 0.103.2'
+  spec.add_dependency 'cocina-models', '~> 0.104.0'
   spec.add_dependency 'config'
   spec.add_dependency 'dry-monads'
   spec.add_dependency 'faraday', '>= 0.16'
