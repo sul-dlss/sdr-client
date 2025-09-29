@@ -155,7 +155,7 @@ module SdrClient
               view: options[:view],
               download: options[:download],
               location: options[:location],
-              controlledDigitalLending: !!options[:cdl] # rubocop:disable Style/DoubleNegation
+              controlledDigitalLending: !!options[:cdl]
             ),
             structural: cocina_object.structural.new(
               contains: cocina_object.structural.contains.map do |file_set|
@@ -167,7 +167,7 @@ module SdrClient
                           view: options[:view],
                           download: options[:download],
                           location: options[:location],
-                          controlledDigitalLending: !!options[:cdl] # rubocop:disable Style/DoubleNegation
+                          controlledDigitalLending: !!options[:cdl]
                         ),
                         administrative: options[:view] == 'dark' ?
                           { publish: false, shelve: false, sdrPreserve: file.administrative.sdrPreserve } :
