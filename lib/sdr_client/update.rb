@@ -144,7 +144,6 @@ module SdrClient
       )
     end
 
-    # rubocop:disable Style/DoubleNegation
     # Update the access of a Cocina item if the options specify a new one, else return the original
     def update_access(cocina_object)
       return cocina_object unless options[:view] || options[:download] || options[:location] || options[:cdl]
@@ -179,6 +178,5 @@ module SdrClient
         )
       )
     end
-    # rubocop:enable Style/DoubleNegation
   end
 end
