@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sdr-client (2.27.0)
+    sdr-client (2.27.1)
       activesupport
       cocina-models (~> 0.108.0)
       config
@@ -35,7 +35,7 @@ GEM
     byebug (12.0.0)
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.108.0)
+    cocina-models (0.108.1)
       activesupport
       deprecation
       dry-struct (~> 1.0)
