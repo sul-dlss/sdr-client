@@ -53,8 +53,8 @@ module SdrClient
           .fetch(filename, {})
           .with_indifferent_access
           .tap do |metadata|
-            metadata[:view] = view unless metadata.key?(:view)
-            metadata[:download] = download unless metadata.key?(:download)
+          metadata[:view] = view unless metadata.key?(:view)
+          metadata[:download] = download unless metadata.key?(:download)
         end
       end
 
