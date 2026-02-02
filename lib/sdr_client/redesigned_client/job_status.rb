@@ -37,7 +37,7 @@ module SdrClient
       # @param [Integer] timeout_in_secs (180) timeout after this many secs
       # @param [Float] backoff_factor (2.0) how quickly to backoff. This should be > 1.0 and probably ought to be <= 2.0
       # @return [Boolean] true if successful false if unsuccessful.
-      def wait_until_complete(secs_between_requests: 3.0, # rubocop:disable Metrics/MethodLength
+      def wait_until_complete(secs_between_requests: 3.0, # rubocop:disable Metrics/MethodLength, Naming/PredicateMethod
                               timeout_in_secs: 180,
                               backoff_factor: 2.0,
                               max_secs_between_requests: 60)
