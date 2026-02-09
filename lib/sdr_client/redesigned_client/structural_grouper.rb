@@ -45,10 +45,10 @@ module SdrClient
           .run(uploads: uploads)
           .map
           .with_index(1) do |upload_group, i|
-          SdrClient::RedesignedClient::FileSet.new(uploads: upload_group,
-                                                   uploads_metadata: metadata_group(upload_group),
-                                                   label: label(i),
-                                                   type_strategy: file_set_strategy)
+            SdrClient::RedesignedClient::FileSet.new(uploads: upload_group,
+                                                     uploads_metadata: metadata_group(upload_group),
+                                                     label: label(i),
+                                                     type_strategy: file_set_strategy)
         end
       end
 
