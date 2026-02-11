@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module SdrClient
-  VERSION = '2.27.3'
+  VERSION = '2.28.0'
 end
