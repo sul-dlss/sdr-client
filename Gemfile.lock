@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sdr-client (2.29.0)
+    sdr-client (2.30.0)
       activesupport
       cocina-models (~> 0.112.0)
       config
@@ -127,8 +127,6 @@ GEM
     net-http (0.9.1)
       uri (>= 0.11.1)
     nokogiri (1.19.1-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.19.1-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.1-x86_64-linux-gnu)
       racc (~> 1.4)
