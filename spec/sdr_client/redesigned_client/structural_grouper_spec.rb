@@ -81,7 +81,7 @@ RSpec.describe SdrClient::RedesignedClient::StructuralGrouper do
           'file1.txt' => {
             view: 'stanford',
             download: 'stanford',
-            preserve: false,
+            preserve: true,
             shelve: true,
             publish: false
           }
