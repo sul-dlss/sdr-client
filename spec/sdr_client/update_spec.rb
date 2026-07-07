@@ -51,7 +51,7 @@ RSpec.describe SdrClient::Update do
     let(:dro) do
       build(
         :dro,
-        type: Cocina::Models::ObjectType.document, id: 'druid:bw581ng3176', label: 'Something something better title',
+        type: Cocina::Models::ObjectType.document, id: 'druid:bw581ng3176', title: 'Something something better title',
         admin_policy_id: 'druid:bc875mg8658', source_id: 'sul:123'
       ).new(
         access: access, structural: structural
@@ -313,7 +313,7 @@ RSpec.describe SdrClient::Update do
       let(:new_cocina) do
         build(
           :dro,
-          id: 'druid:bw581ng3176', label: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658', source_id: 'sul:123'
+          id: 'druid:bw581ng3176', title: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658', source_id: 'sul:123'
         ).new(
           access: {
             copyright: 'More Rights Reserved',
@@ -380,7 +380,7 @@ RSpec.describe SdrClient::Update do
           build(
             :dro,
             id: 'druid:bw581ng3179', # this is different from above
-            label: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658'
+            title: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658'
           ).new(
             access: {
               copyright: 'More Rights Reserved',
@@ -405,7 +405,7 @@ RSpec.describe SdrClient::Update do
       let(:new_cocina) do
         build(
           :dro,
-          id: 'druid:bw581ng3176', label: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658', source_id: 'sul:123'
+          id: 'druid:bw581ng3176', title: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658', source_id: 'sul:123'
         ).new(
           access: {
             copyright: 'More Rights Reserved',
@@ -457,7 +457,7 @@ RSpec.describe SdrClient::Update do
           build(
             :dro,
             id: 'druid:bw581ng3179', # this is different from above
-            label: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658'
+            title: 'An EVEN better title', admin_policy_id: 'druid:bc875mg8658'
           ).new(
             access: {
               copyright: 'More Rights Reserved',

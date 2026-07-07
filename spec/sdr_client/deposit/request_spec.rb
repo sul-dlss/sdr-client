@@ -3,7 +3,7 @@
 RSpec.describe SdrClient::Deposit::Request do
   context 'with all options set' do
     let(:instance) do
-      described_class.new(label: 'This is my object',
+      described_class.new(title: 'This is my object',
                           type: Cocina::Models::ObjectType.book,
                           apo: 'druid:bc123df4567',
                           collection: 'druid:gh123df4567',
@@ -116,7 +116,7 @@ RSpec.describe SdrClient::Deposit::Request do
       let(:expected) do
         {
           type: Cocina::Models::ObjectType.book,
-          label: 'This is my object',
+          description: { title: [{ value: 'This is my object' }] },
           version: 1,
           access: expected_access,
           administrative: { hasAdminPolicy: 'druid:bc123df4567' },
@@ -135,7 +135,7 @@ RSpec.describe SdrClient::Deposit::Request do
 
   context 'with minimal options set' do
     let(:instance) do
-      described_class.new(label: 'This is my object',
+      described_class.new(title: 'This is my object',
                           type: Cocina::Models::ObjectType.object,
                           apo: 'druid:bc123df4567',
                           source_id: 'googlebooks:12345')
@@ -147,7 +147,7 @@ RSpec.describe SdrClient::Deposit::Request do
       let(:expected) do
         {
           type: Cocina::Models::ObjectType.object,
-          label: 'This is my object',
+          description: { title: [{ value: 'This is my object' }] },
           access: {
             view: 'dark',
             download: 'none'
@@ -165,7 +165,7 @@ RSpec.describe SdrClient::Deposit::Request do
 
   context 'with minimal options set along with just a catkey' do
     let(:instance) do
-      described_class.new(label: 'This is my object',
+      described_class.new(title: 'This is my object',
                           type: Cocina::Models::ObjectType.object,
                           apo: 'druid:bc123df4567',
                           catkey: '11991',
@@ -178,7 +178,7 @@ RSpec.describe SdrClient::Deposit::Request do
       let(:expected) do
         {
           type: Cocina::Models::ObjectType.object,
-          label: 'This is my object',
+          description: { title: [{ value: 'This is my object' }] },
           access: {
             view: 'dark',
             download: 'none'
@@ -197,7 +197,7 @@ RSpec.describe SdrClient::Deposit::Request do
 
   context 'with minimal options set along with just a folio_instance_hrid' do
     let(:instance) do
-      described_class.new(label: 'This is my object',
+      described_class.new(title: 'This is my object',
                           type: Cocina::Models::ObjectType.object,
                           apo: 'druid:bc123df4567',
                           folio_instance_hrid: 'a11991',
@@ -210,7 +210,7 @@ RSpec.describe SdrClient::Deposit::Request do
       let(:expected) do
         {
           type: Cocina::Models::ObjectType.object,
-          label: 'This is my object',
+          description: { title: [{ value: 'This is my object' }] },
           access: {
             view: 'dark',
             download: 'none'

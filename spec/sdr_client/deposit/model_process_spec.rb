@@ -47,7 +47,7 @@ RSpec.describe SdrClient::Deposit::ModelProcess do
 
   let(:request_dro) do
     build(
-      :request_dro, type: Cocina::Models::ObjectType.book, label: 'This is my object'
+      :request_dro, type: Cocina::Models::ObjectType.book, title: 'This is my object'
     ).new(
       access: { 'view' => 'world', 'download' => 'none' },
       structural: structural

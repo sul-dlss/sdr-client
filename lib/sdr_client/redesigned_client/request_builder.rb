@@ -7,7 +7,7 @@ module SdrClient
       # @param [String] apo the object ID of the administrative policy object
       # @param [String] source_id the source ID of the object
       # @param [Hash] options optional parameters
-      # @option options [String] label the required object label
+      # @option options [String] title the required object title
       # @option options [String] view the access level for viewing the object
       # @option options [String] download the access level for downloading the object
       # @option options [String] location the location for location-based access
@@ -38,7 +38,7 @@ module SdrClient
           identification: identification,
           structural: structural,
           version: 1,
-          label: label.nil? ? ':auto' : label
+          description: { title: [{ value: title }] }
         }
       end
 
@@ -125,8 +125,8 @@ module SdrClient
         options[:location]
       end
 
-      def label
-        options[:label]
+      def title
+        options[:title]
       end
 
       def use_and_reproduction

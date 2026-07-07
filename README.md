@@ -45,7 +45,7 @@ sdr version
 Register a new object:
 ```
 sdr register file1.png file2.png --url https://sdr-api-server:3000 \
-  --label 'hey there' \
+  --title 'hey there' \
   --admin-policy 'druid:bk123gh4567' \
   --collection 'druid:gh456kw9876' \
   --source-id 'googlebooks:stanford_12345'
@@ -54,7 +54,7 @@ sdr register file1.png file2.png --url https://sdr-api-server:3000 \
 Deposit (register + accession) a new object:
 ```
 sdr deposit file1.png file2.png --url https://sdr-api-server:3000 \
-  --label 'hey there' \
+  --title 'hey there' \
   --admin-policy 'druid:bk123gh4567' \
   --collection 'druid:gh456kw9876' \
   --source-id 'googlebooks:stanford_12345'
@@ -63,7 +63,7 @@ sdr deposit file1.png file2.png --url https://sdr-api-server:3000 \
 Deposit a new object, providing metadata for files:
 ```
 sdr deposit image42.jp2 ocr.html --url https://sdr-api-server:3000 \
-  --label 'hey there' \
+  --title 'hey there' \
   --files-metadata '{"image42.jp2":{"mime_type":"image/jp2"},"ocr.html":{"use":"transcription"}}'
   --admin-policy 'druid:bk123gh4567' \
   --collection 'druid:gh456kw9876' \
@@ -73,7 +73,7 @@ sdr deposit image42.jp2 ocr.html --url https://sdr-api-server:3000 \
 View the object:
 ```
 sdr get druid:bw581ng3176 --url https://sdr-api-server:3000
-{"type":"https://cocina.sul.stanford.edu/models/document","externalIdentifier":"druid:bw581ng3176","label":"Something something better title","version":1,"access":{"view":"stanford","copyright":"This work is copyrighted by the creator.","download":"stanford","useAndReproductionStatement":"This document is available only to the Stanford faculty, staff and student community."},"administrative":{"hasAdminPolicy":"druid:zx485kb6348"},"description":{"title":[{"value":"Something something better title"}],"contributor":[{"name":[{"value":"Hodge, Amy"}],"type":"person","role":[{"value":"Author"},{"value":"author","uri":"http://id.loc.gov/vocabulary/relators/aut","source":{"code":"marcrelator","uri":"http://id.loc.gov/vocabulary/relators/"}},{"value":"Creator"}]}],"form":[{"structuredValue":[{"value":"Text","type":"type"},{"value":"Report","type":"subtype"}],"type":"resource type","source":{"value":"Stanford self-deposit resource types"}},{"value":"reports","type":"genre","uri":"http://vocab.getty.edu/aat/300027267","source":{"code":"aat"}},{"value":"text","type":"resource type","source":{"value":"MODS resource types"}}],"note":[{"value":";alkdfjlsadkjf;l","type":"summary"},{"value":"amyhodge@stanford.edu","type":"contact","displayLabel":"Contact"}],"subject":[{"value":"lkfj","type":"topic"},{"value":";kfj","type":"topic"},{"value":"fjwelkb","type":"topic"}]},"identification":{"sourceId":"hydrus:20"},"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/resources/file","externalIdentifier":"bw581ng3176_1","label":"Test file","version":1,"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/file","externalIdentifier":"druid:bw581ng3176/test.txt","label":"test.txt","filename":"test.txt","size":11,"version":1,"hasMimeType":"text/plain","hasMessageDigests":[{"type":"sha1","digest":"5d39343e4bb48abd97f759828282f5ebbac56c5e"},{"type":"md5","digest":"63b8812b0c05722a9d6c51cbd2bfb54b"}],"access":{"view":"world","download":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}]}}
+{"type":"https://cocina.sul.stanford.edu/models/document","externalIdentifier":"druid:bw581ng3176","version":1,"access":{"view":"stanford","copyright":"This work is copyrighted by the creator.","download":"stanford","useAndReproductionStatement":"This document is available only to the Stanford faculty, staff and student community."},"administrative":{"hasAdminPolicy":"druid:zx485kb6348"},"description":{"title":[{"value":"Something something better title"}],"contributor":[{"name":[{"value":"Hodge, Amy"}],"type":"person","role":[{"value":"Author"},{"value":"author","uri":"http://id.loc.gov/vocabulary/relators/aut","source":{"code":"marcrelator","uri":"http://id.loc.gov/vocabulary/relators/"}},{"value":"Creator"}]}],"form":[{"structuredValue":[{"value":"Text","type":"type"},{"value":"Report","type":"subtype"}],"type":"resource type","source":{"value":"Stanford self-deposit resource types"}},{"value":"reports","type":"genre","uri":"http://vocab.getty.edu/aat/300027267","source":{"code":"aat"}},{"value":"text","type":"resource type","source":{"value":"MODS resource types"}}],"note":[{"value":";alkdfjlsadkjf;l","type":"summary"},{"value":"amyhodge@stanford.edu","type":"contact","displayLabel":"Contact"}],"subject":[{"value":"lkfj","type":"topic"},{"value":";kfj","type":"topic"},{"value":"fjwelkb","type":"topic"}]},"identification":{"sourceId":"hydrus:20"},"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/resources/file","externalIdentifier":"bw581ng3176_1","label":"Test file","version":1,"structural":{"contains":[{"type":"https://cocina.sul.stanford.edu/models/file","externalIdentifier":"druid:bw581ng3176/test.txt","label":"test.txt","filename":"test.txt","size":11,"version":1,"hasMimeType":"text/plain","hasMessageDigests":[{"type":"sha1","digest":"5d39343e4bb48abd97f759828282f5ebbac56c5e"},{"type":"md5","digest":"63b8812b0c05722a9d6c51cbd2bfb54b"}],"access":{"view":"world","download":"world"},"administrative":{"sdrPreserve":true,"shelve":true}}]}}]}}
 ```
 
 Update an object:

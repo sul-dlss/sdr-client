@@ -10,7 +10,7 @@ module SdrClient
     # params [String] basepath filepath to which filepaths are relative, defaults to current directory
     # params [Hash<String,Hash>] file_metadata relative filepath, hash of metadata per-file metadata
     # @return [String] job id for the background job result
-    def self.run(label: nil,
+    def self.run(title:,
                  type: BOOK_TYPE,
                  viewing_direction: nil,
                  view: 'dark',
@@ -37,7 +37,7 @@ module SdrClient
                  logger: Logger.new($stdout))
       # augmented_metadata is a map of relative filepaths to file metadata
       augmented_metadata = FileMetadataBuilder.build(files: files, files_metadata: files_metadata, basepath: basepath)
-      request = Request.new(label: label,
+      request = Request.new(title: title,
                             type: type,
                             view: view,
                             download: download,
