@@ -12,6 +12,7 @@ RSpec.describe SdrClient::RedesignedClient::Metadata do
   describe 'end-to-end test' do
     subject(:metadata_depositor) do
       described_class.new(
+        title: 'My object',
         apo: 'druid:bc123df4567',
         basepath: basepath,
         source_id: 'googlebooks:12345',

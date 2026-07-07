@@ -92,7 +92,7 @@ module SdrClient
                             desc: 'Print out job ID instead of polling for result'
       option :apo, required: true, desc: 'Druid identifier of the admin policy object', aliases: '--admin-policy'
       option :source_id, required: true, desc: 'Source ID for this object'
-      option :label, desc: 'Object label'
+      option :title, required: true, desc: 'Object title'
       option :type, enum: %w[image book document map manuscript media three_dimensional object collection admin_policy],
                     desc: 'The object type'
       option :collection, desc: 'Druid identifier of the collection object'
@@ -116,7 +116,7 @@ module SdrClient
                             desc: 'Print out job ID instead of polling for result'
       option :apo, required: true, desc: 'Druid identifier of the admin policy object', aliases: '--admin-policy'
       option :source_id, required: true, desc: 'Source ID for this object'
-      option :label, desc: 'Object label'
+      option :title, required: true, desc: 'Object title'
       option :type, enum: %w[image book document map manuscript media three_dimensional object collection admin_policy],
                     desc: 'The object type'
       option :collection, desc: 'Druid identifier of the collection object'

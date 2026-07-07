@@ -2,7 +2,7 @@
 
 RSpec.describe SdrClient::Deposit::Process do
   let(:metadata) do
-    SdrClient::Deposit::Request.new(label: 'This is my object',
+    SdrClient::Deposit::Request.new(title: 'This is my object',
                                     type: Cocina::Models::ObjectType.book,
                                     view: 'world',
                                     download: 'none',
@@ -108,7 +108,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
       let(:request_dro) do
         build(
-          :request_dro, type: Cocina::Models::ObjectType.book, label: 'This is my object'
+          :request_dro, type: Cocina::Models::ObjectType.book, title: 'This is my object', label: ''
         ).new(
           access: access, structural: structural
         )
@@ -167,7 +167,7 @@ RSpec.describe SdrClient::Deposit::Process do
             .to_return(status: 204)
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
-            .with(body: request_dro.to_h.except(:description).to_json, headers: { 'Content-Type' => 'application/json' })
+            .with(body: request_dro.to_h.to_json, headers: { 'Content-Type' => 'application/json' })
             .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end
@@ -321,7 +321,7 @@ RSpec.describe SdrClient::Deposit::Process do
             .to_return(status: 204)
 
           stub_request(:post, "http://example.com:3000/v1/resources?accession=#{accession}")
-            .with(body: request_dro.to_h.except(:description).to_json, headers: { 'Content-Type' => 'application/json' })
+            .with(body: request_dro.to_h.to_json, headers: { 'Content-Type' => 'application/json' })
             .to_return(status: 201, body: '{"jobId":"1"}',
                        headers: { 'Location' => 'http://example.com/background_job/1' })
         end

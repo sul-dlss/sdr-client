@@ -4,7 +4,7 @@ module SdrClient
   module Deposit
     # This represents the metadata that we send to the server for doing a deposit
     class Request
-      # @param [String] label the required object label
+      # @param [String] title the required object title
       # @param [Time|nil] embargo_release_date when the item should be released from embargo or nil if no embargo
       # @param [String] embargo_access access after embargo has expired if embargoed
       # @param [String] type (https://cocina.sul.stanford.edu/models/object) the required object type.
@@ -12,7 +12,7 @@ module SdrClient
       # @param [Hash<String, Hash<String, String>>] files_metadata file name, hash of additional file metadata
       # Additional metadata includes access, preserve, shelve, publish, md5, sha1
       # rubocop:disable Metrics/ParameterLists
-      def initialize(label: nil,
+      def initialize(title:,
                      view: 'dark',
                      download: 'none',
                      location: nil,
@@ -30,7 +30,7 @@ module SdrClient
                      viewing_direction: nil,
                      file_sets: [],
                      files_metadata: {})
-        @label = label
+        @title = title
         @type = type
         @source_id = source_id
         @collection = collection
@@ -59,13 +59,13 @@ module SdrClient
           identification: identification,
           structural: structural,
           version: 1,
-          label: label.nil? ? ':auto' : label
+          description: { title: [{ value: title }] }
         }
       end
 
       # @return [Request] a clone of this request with the file_sets added
       def with_file_sets(file_sets)
-        Request.new(label: label,
+        Request.new(title: title,
                     view: view,
                     download: download,
                     location: location,
@@ -99,7 +99,7 @@ module SdrClient
 
       private
 
-      attr_reader :view, :label, :file_sets, :source_id, :catkey, :folio_instance_hrid, :apo, :collection,
+      attr_reader :view, :title, :file_sets, :source_id, :catkey, :folio_instance_hrid, :apo, :collection,
                   :files_metadata, :embargo_release_date, :embargo_access, :embargo_download,
                   :viewing_direction, :use_and_reproduction, :copyright, :download, :location
 

@@ -37,21 +37,24 @@ RSpec.describe SdrClient::Deposit do
         download: 'none',
         location: nil
       ).and_call_original
-      described_class.run(apo: 'druid:bc123df4567',
-                          collection: 'druid:gh123df4567',
-                          source_id: 'googlebooks:12345',
-                          url: 'http://example.com/',
-                          files: ['file four.txt'],
-                          basepath: basepath,
-                          files_metadata: {
-                            'file four.txt' => {
-                              'mime_type' => 'text/plain',
-                              'use' => 'transcription'
-                            }
-                          },
-                          accession: true,
-                          priority: 'low',
-                          grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy)
+      described_class.run(
+        title: 'My object',
+        apo: 'druid:bc123df4567',
+        collection: 'druid:gh123df4567',
+        source_id: 'googlebooks:12345',
+        url: 'http://example.com/',
+        files: ['file four.txt'],
+        basepath: basepath,
+        files_metadata: {
+          'file four.txt' => {
+            'mime_type' => 'text/plain',
+            'use' => 'transcription'
+          }
+        },
+        accession: true,
+        priority: 'low',
+        grouping_strategy: SdrClient::Deposit::MatchingFileGroupingStrategy
+      )
     end
   end
 
@@ -67,7 +70,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'without a grouping_strategy' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/')
@@ -92,7 +96,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'with a grouping_strategy' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/',
@@ -118,7 +123,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'without a file_set_type_strategy' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/')
@@ -143,7 +149,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'with a file_set_type_strategy' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/',
@@ -169,7 +176,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'with a viewing_direction' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             source_id: 'googlebooks:12345',
                             url: 'http://example.com/',
@@ -192,7 +200,7 @@ RSpec.describe SdrClient::Deposit do
             embargo_download: 'world',
             embargo_release_date: nil,
             files_metadata: {},
-            label: nil,
+            title: 'My object',
             location: nil,
             source_id: 'googlebooks:12345',
             type: Cocina::Models::ObjectType.book,
@@ -206,7 +214,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'with copyright and use_statement' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             copyright: 'All rights reserved unless otherwise indicated.',
                             use_and_reproduction: 'Property rights reside with the repository...',
@@ -230,7 +239,7 @@ RSpec.describe SdrClient::Deposit do
             embargo_download: 'world',
             embargo_release_date: nil,
             files_metadata: {},
-            label: nil,
+            title: 'My object',
             location: nil,
             source_id: 'googlebooks:12345',
             type: Cocina::Models::ObjectType.book,
@@ -244,7 +253,8 @@ RSpec.describe SdrClient::Deposit do
 
     context 'with location based access' do
       subject(:run) do
-        described_class.run(apo: 'druid:bc123df4567',
+        described_class.run(title: 'My object',
+                            apo: 'druid:bc123df4567',
                             collection: 'druid:gh123df4567',
                             copyright: 'All rights reserved unless otherwise indicated.',
                             use_and_reproduction: 'Property rights reside with the repository...',
@@ -272,7 +282,7 @@ RSpec.describe SdrClient::Deposit do
             embargo_download: 'world',
             embargo_release_date: nil,
             files_metadata: {},
-            label: nil,
+            title: 'My object',
             source_id: 'googlebooks:12345',
             type: Cocina::Models::ObjectType.book,
             use_and_reproduction: 'Property rights reside with the repository...',

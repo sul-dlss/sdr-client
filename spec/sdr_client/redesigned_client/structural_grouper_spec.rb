@@ -72,6 +72,7 @@ RSpec.describe SdrClient::RedesignedClient::StructuralGrouper do
       SdrClient::RedesignedClient::RequestBuilder.new(
         apo: 'druid:bc123df4567',
         source_id: 'sul:123',
+        title: 'My object',
         **request_builder_options
       )
     end

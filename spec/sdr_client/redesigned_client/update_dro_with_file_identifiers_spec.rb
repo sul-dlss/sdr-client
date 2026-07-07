@@ -12,7 +12,6 @@ RSpec.describe SdrClient::RedesignedClient::UpdateDroWithFileIdentifiers do
       cocinaVersion: Cocina::Models::VERSION,
       externalIdentifier: druid,
       type: Cocina::Models::ObjectType.book,
-      label: 'Test DRO',
       version: 1,
       description: {
         title: [{ value: 'Test DRO' }],
