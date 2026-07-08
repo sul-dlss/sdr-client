@@ -108,7 +108,7 @@ RSpec.describe SdrClient::Deposit::Process do
 
       let(:request_dro) do
         build(
-          :request_dro, type: Cocina::Models::ObjectType.book, title: 'This is my object', label: ''
+          :request_dro, type: Cocina::Models::ObjectType.book, title: 'This is my object'
         ).new(
           access: access, structural: structural
         )
