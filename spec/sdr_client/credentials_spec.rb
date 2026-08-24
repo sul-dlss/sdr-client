@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe SdrClient::Credentials do
+RSpec.describe SdrClient::Credentials, :real_credentials do
   describe '.read' do
     subject { described_class.read }
 
