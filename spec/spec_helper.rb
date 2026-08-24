@@ -32,6 +32,12 @@ RSpec.configure do |config|
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 
+  config.before do |example|
+    next if example.metadata[:real_credentials]
+
+    allow(SdrClient::Credentials).to receive(:read).and_return('test-token')
+  end
+
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
