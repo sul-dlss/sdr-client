@@ -4,8 +4,8 @@ module SdrClient
   # The namespace for the "update" command
   class Update
     # @return [String] job id for the background job result
-    def self.run(druid, **options)
-      new(druid, **options).run
+    def self.run(druid, **)
+      new(druid, **).run
     end
 
     def initialize(druid, **options)
