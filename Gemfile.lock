@@ -101,11 +101,11 @@ GEM
       activesupport (>= 3.0, < 9.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    faraday (2.14.4)
-      faraday-net_http (>= 2.0, < 3.5)
+    faraday (2.15.0)
+      faraday-net_http (>= 2.0, < 3.6)
       json
       logger
-    faraday-net_http (3.4.4)
+    faraday-net_http (3.5.0)
       net-http (~> 0.5)
     geo_coord (0.2.0)
     hashdiff (1.2.1)
@@ -115,10 +115,13 @@ GEM
     io-console (0.9.4)
     iso8601 (0.13.0)
     janeway-jsonpath (1.1.0)
-    json (3.0.2)
-    jsonschema_rs (0.58.6-arm64-darwin)
+    json (3.1.0)
+    jsonschema_rs (0.59.0)
       bigdecimal (>= 3.1, < 5)
-    jsonschema_rs (0.58.6-x86_64-linux)
+      rb_sys (~> 0.9.130)
+    jsonschema_rs (0.59.0-arm64-darwin)
+      bigdecimal (>= 3.1, < 5)
+    jsonschema_rs (0.59.0-x86_64-linux)
       bigdecimal (>= 3.1, < 5)
     language_server-protocol (3.17.0.6)
     launchy (3.1.1)
@@ -127,6 +130,7 @@ GEM
       logger (~> 1.6)
     lint_roller (1.1.0)
     logger (1.7.0)
+    mini_portile2 (2.8.9)
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
@@ -135,6 +139,9 @@ GEM
       uri (>= 0.11.1)
     net-protocol (0.4.0)
       timeout
+    nokogiri (1.19.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.19.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-gnu)
@@ -152,6 +159,9 @@ GEM
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.4.2)
+    rake-compiler-dock (1.12.0)
+    rb_sys (0.9.130)
+      rake-compiler-dock (= 1.12.0)
     regexp_parser (2.13.1)
     reline (0.7.0)
       io-console (~> 0.5)
@@ -207,7 +217,7 @@ GEM
       unicode-emoji (~> 4.3)
     unicode-emoji (4.3.0)
     uri (1.1.2)
-    webmock (3.29.0)
+    webmock (3.34.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -220,7 +230,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bundler (~> 2.0)
+  bundler (>= 2.0)
   byebug
   rake (~> 13.0)
   rspec (~> 3.0)
@@ -234,4 +244,4 @@ DEPENDENCIES
   webmock (~> 3.7)
 
 BUNDLED WITH
-   2.7.2
+  4.0.23
