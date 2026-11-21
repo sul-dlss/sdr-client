@@ -70,15 +70,7 @@ RSpec.describe SdrClient::RedesignedClient::Deposit do
 
     context 'with no structural metadata' do
       let(:files) { [] }
-      # NOTE: in the absence of cocina-models factories providing an easier way
-      #       to build a model *without* certain attrs...
-      let(:model) do
-        Cocina::Models.build_request(
-          build(:request_dro)
-            .to_h
-            .except(:structural)
-        )
-      end
+      let(:model) { build(:request_collection) }
 
       it 'does not raise' do
         expect { deposit }.not_to raise_error
@@ -177,6 +169,16 @@ RSpec.describe SdrClient::RedesignedClient::Deposit do
       expect(SdrClient::RedesignedClient::UploadFiles).to have_received(:upload).once
     end
 
+    it 'uses UpdateDroWithFileIdentifiers to rebuild the request model with file IDs' do
+      deposit
+      expect(SdrClient::RedesignedClient::UpdateDroWithFileIdentifiers).to have_received(:update).once
+    end
+
+    it 'uses CreateResource to deposit the request model' do
+      deposit
+      expect(SdrClient::RedesignedClient::CreateResource).to have_received(:run).once
+    end
+
     context 'when passed the `request_builder` option' do
       let(:fake_builder) { instance_double(SdrClient::RedesignedClient::RequestBuilder, for: {}) }
       let(:options) do
@@ -196,14 +198,20 @@ RSpec.describe SdrClient::RedesignedClient::Deposit do
       end
     end
 
-    it 'uses UpdateDroWithFileIdentifiers to rebuild the request model with file IDs' do
-      deposit
-      expect(SdrClient::RedesignedClient::UpdateDroWithFileIdentifiers).to have_received(:update).once
-    end
+    context 'when passed the `filepath_map` option' do
+      let(:filepath_map) do
+        {
+          'file3.txt' => File.expand_path('spec/fixtures/file3.txt')
+        }
+      end
+      let(:options) { { filepath_map: filepath_map } }
 
-    it 'uses CreateResource to deposit the request model' do
-      deposit
-      expect(SdrClient::RedesignedClient::CreateResource).to have_received(:run).once
+      it 'passes the option to UploadFiles' do
+        deposit
+        expect(SdrClient::RedesignedClient::UploadFiles).to have_received(:upload)
+          .once
+          .with(file_metadata: anything, filepath_map: filepath_map)
+      end
     end
   end
 end
